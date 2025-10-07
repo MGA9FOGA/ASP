@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\ASP.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\ASP.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\ASPEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\.vsconfig" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\ASP">
+      <UniqueIdentifier>{76086E11-042D-38C4-B9A1-BB3E92F103FD}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\ASP\ASP.Build.cs">
+      <Filter>Source\ASP</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\ASP\ASP.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\ASP.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\ASPCharacter.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\ASPCharacter.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\ASPGameMode.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\ASPGameMode.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\OGameManager.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\OGameManager.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

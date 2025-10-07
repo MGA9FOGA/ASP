@@ -1,0 +1,19 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\aspgamemode.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\aspeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\asp\\definitions.asp.h",
+            "d:\\github\\asp\\asp\\source\\asp\\aspgamemode.h",
+            "e:\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\gameframework\\gamemodebase.h",
+            "e:\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\engine\\serverstatreplicator.h",
+            "e:\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\serverstatreplicator.generated.h",
+            "e:\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\gamemodebase.generated.h",
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\aspgamemode.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

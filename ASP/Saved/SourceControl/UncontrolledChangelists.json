@@ -1,0 +1,18 @@
+{
+	"version": 1,
+	"changelists": [
+		{
+			"guid": "00000000000000000000000000000000",
+			"description": "Default Uncontrolled Changelist",
+			"files": [
+				"D:/Github/ASP/ASP/Content/StarterContent/Architecture/Floor_400x400.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/NewBlueprint.uasset",
+				"D:/Github/ASP/ASP/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Maps/ThirdPersonMap.umap",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/MyASPCharacter.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/NewBlueprint1.uasset",
+				"D:/Github/ASP/ASP/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/ZV/8ZYQEXUQ2HXL7DKHF3MPX1.uasset"
+			]
+		}
+	]
+}
