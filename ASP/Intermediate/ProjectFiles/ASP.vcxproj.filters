@@ -12,6 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <None Include="..\..\.vsconfig" />
+    <None Include="..\..\ASP.sln.DotSettings.user" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -54,10 +55,28 @@
     <ClCompile Include="..\..\Source\ASP\ASPGameMode.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ASP\OGameManager.cpp">
+    <ClCompile Include="..\..\Source\ASP\CustomMoveComponent.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ASP\OGameManager.h">
+    <ClCompile Include="..\..\Source\ASP\CustomMoveComponent.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\FightingGame_PlayerController.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\FightingGame_PlayerController.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\GameManager.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\GameManager.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\MoveableInterface.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\MoveableInterface.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
   </ItemGroup>

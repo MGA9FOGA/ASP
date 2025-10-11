@@ -2,8 +2,15 @@
 
 
 #include "GameManager.h"
+
+#include "ASPCharacter.h"
+#include "MoveableInterface.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+
+UGameManager::UGameManager()
+{
+}
 
 void UGameManager::Initialize(FSubsystemCollectionBase& _collection)
 {
@@ -28,15 +35,45 @@ void UGameManager::Deinitialize()
 	}
 }
 
-void UGameManager::FixedGameUpdate60Hz()
+void UGameManager::Tick(float _deltaTime)
+{
+	m_accumulatedTime += _deltaTime;
+
+	while (m_accumulatedTime >= FIXED_UPDATE_RATE)
+	{
+		FixedGameUpdate60Hz(FIXED_UPDATE_RATE);
+		m_accumulatedTime -= FIXED_UPDATE_RATE;
+	}
+}
+
+void UGameManager::FixedGameUpdate60Hz(float _fixedDeltatime)
 {
 	if (FrameNumber > 60)
 	{
 		FrameNumber = 0;
 		return;
 	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Yellow,
+	  FString::Printf(TEXT("Frame: %d | Player1: %s | Player2: %s"),
+	  FrameNumber,
+	  *GetNameSafe(Player1),
+	  *GetNameSafe(Player2)));
+
+	for (auto& movable : m_movables)
+	{
+		if (movable)
+		{
+			movable->FixedUpdate(_fixedDeltatime);
+		}
+	}
 	
 	FrameNumber++;
+}
+
+void UGameManager::RegisterMovable(TScriptInterface<IMoveableInterface> _movable)
+{
+	m_movables.Add(_movable);
 }
 
 void UGameManager::OnWorldInitialization(UWorld* _world, const UWorld::InitializationValues _ivs)
@@ -45,11 +82,11 @@ void UGameManager::OnWorldInitialization(UWorld* _world, const UWorld::Initializ
 
 	m_cachedWorld = _world;
 	
-	_world->GetTimerManager().SetTimer(
-		m_fixedUpdateHandle,
-		this,
-		&UGameManager::FixedGameUpdate60Hz,
-		FIXED_UPDATE_RATE,
-		true
-	);
+//	_world->GetTimerManager().SetTimer(
+//		m_fixedUpdateHandle,
+//		this,
+//		&UGameManager::FixedGameUpdate60Hz,
+//		FIXED_UPDATE_RATE,
+//		true
+//	);
 }

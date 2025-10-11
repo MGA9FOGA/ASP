@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameManager.h"
+#include "MoveableInterface.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "ASPCharacter.generated.h"
@@ -16,7 +18,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ASP_API AASPCharacter : public APawn
+class ASP_API AASPCharacter : public AActor, public IMoveableInterface
 {
 	GENERATED_BODY()
 
@@ -56,22 +58,23 @@ public:
 	static const FName CharacterMeshName;
 	static const FName CharacterColliderName;
 
-	void Update();
+	virtual void BeginPlay() override;
+	
+	virtual void FixedUpdate(float _deltaTime) override;
+	virtual UCustomMoveComponent* GetMovementComponent() const override{return m_movement;}
 
 protected:
 
-	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
+	/** Register Player to GameManager **/
+	void Register();
 			
 
 protected:
-
-	virtual void NotifyControllerChanged() override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(VisibleAnywhere)
+	class UCustomMoveComponent* m_movement;
+	//virtual void NotifyControllerChanged() override;
+//
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -79,4 +82,5 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
+
 
