@@ -7,23 +7,29 @@
 #include "UObject/GeneratedCppIncludes.h"
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeASP_init() {}
+	ASP_API UFunction* Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature();
+	ASP_API UFunction* Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature();
 	static FPackageRegistrationInfo Z_Registration_Info_UPackage__Script_ASP;
 	FORCENOINLINE UPackage* Z_Construct_UPackage__Script_ASP()
 	{
 		if (!Z_Registration_Info_UPackage__Script_ASP.OuterSingleton)
 		{
+			static UObject* (*const SingletonFuncArray[])() = {
+				(UObject* (*)())Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature,
+				(UObject* (*)())Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature,
+			};
 			static const UECodeGen_Private::FPackageParams PackageParams = {
 				"/Script/ASP",
-				nullptr,
-				0,
+				SingletonFuncArray,
+				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0x3B0E6DCE,
-				0x492B11FD,
+				0x6E1F0197,
+				0x8795CC65,
 				METADATA_PARAMS(0, nullptr)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_ASP.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_ASP.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_ASP(Z_Construct_UPackage__Script_ASP, TEXT("/Script/ASP"), Z_Registration_Info_UPackage__Script_ASP, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x3B0E6DCE, 0x492B11FD));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_ASP(Z_Construct_UPackage__Script_ASP, TEXT("/Script/ASP"), Z_Registration_Info_UPackage__Script_ASP, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x6E1F0197, 0x8795CC65));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

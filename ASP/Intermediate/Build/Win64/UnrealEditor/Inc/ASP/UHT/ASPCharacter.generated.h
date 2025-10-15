@@ -9,10 +9,20 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+class AActor;
+class UCapsuleComponent;
+struct FHitResult;
 #ifdef ASP_ASPCharacter_generated_h
 #error "ASPCharacter.generated.h already included, missing '#pragma once' in ASPCharacter.h"
 #endif
 #define ASP_ASPCharacter_generated_h
+
+#define FID_ASP_Source_ASP_ASPCharacter_h_23_RPC_WRAPPERS_NO_PURE_DECLS \
+	DECLARE_FUNCTION(execGetCapsuleComponent); \
+	DECLARE_FUNCTION(execHandleCustomOverlapEnd); \
+	DECLARE_FUNCTION(execHandleCustomOverlapBegin); \
+	DECLARE_FUNCTION(execHandleCustomHit);
+
 
 #define FID_ASP_Source_ASP_ASPCharacter_h_23_INCLASS_NO_PURE_DECLS \
 private: \
@@ -42,6 +52,7 @@ public: \
 #define FID_ASP_Source_ASP_ASPCharacter_h_23_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
+	FID_ASP_Source_ASP_ASPCharacter_h_23_RPC_WRAPPERS_NO_PURE_DECLS \
 	FID_ASP_Source_ASP_ASPCharacter_h_23_INCLASS_NO_PURE_DECLS \
 	FID_ASP_Source_ASP_ASPCharacter_h_23_ENHANCED_CONSTRUCTORS \
 private: \

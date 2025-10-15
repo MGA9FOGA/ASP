@@ -16,14 +16,14 @@ class IMoveableInterface;
 #endif
 #define ASP_GameManager_generated_h
 
-#define FID_ASP_Source_ASP_GameManager_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_GameManager_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execRegisterMovable); \
 	DECLARE_FUNCTION(execRegisterPlayer2); \
 	DECLARE_FUNCTION(execRegisterPlayer1); \
 	DECLARE_FUNCTION(execFixedGameUpdate60Hz);
 
 
-#define FID_ASP_Source_ASP_GameManager_h_17_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_GameManager_h_16_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUGameManager(); \
 	friend struct Z_Construct_UClass_UGameManager_Statics; \
@@ -32,7 +32,7 @@ public: \
 	DECLARE_SERIALIZER(UGameManager)
 
 
-#define FID_ASP_Source_ASP_GameManager_h_17_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_GameManager_h_16_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	UGameManager(UGameManager&&); \
@@ -44,13 +44,13 @@ public: \
 	NO_API virtual ~UGameManager();
 
 
-#define FID_ASP_Source_ASP_GameManager_h_14_PROLOG
-#define FID_ASP_Source_ASP_GameManager_h_17_GENERATED_BODY \
+#define FID_ASP_Source_ASP_GameManager_h_13_PROLOG
+#define FID_ASP_Source_ASP_GameManager_h_16_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_GameManager_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_GameManager_h_17_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_GameManager_h_17_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_GameManager_h_16_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_GameManager_h_16_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_GameManager_h_16_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

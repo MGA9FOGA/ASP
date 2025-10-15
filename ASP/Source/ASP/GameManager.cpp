@@ -4,9 +4,11 @@
 #include "GameManager.h"
 
 #include "ASPCharacter.h"
+#include "DynamicCamera.h"
 #include "MoveableInterface.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 
 UGameManager::UGameManager()
 {
@@ -38,7 +40,6 @@ void UGameManager::Deinitialize()
 void UGameManager::Tick(float _deltaTime)
 {
 	m_accumulatedTime += _deltaTime;
-
 	while (m_accumulatedTime >= FIXED_UPDATE_RATE)
 	{
 		FixedGameUpdate60Hz(FIXED_UPDATE_RATE);
@@ -54,11 +55,11 @@ void UGameManager::FixedGameUpdate60Hz(float _fixedDeltatime)
 		return;
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Yellow,
-	  FString::Printf(TEXT("Frame: %d | Player1: %s | Player2: %s"),
-	  FrameNumber,
-	  *GetNameSafe(Player1),
-	  *GetNameSafe(Player2)));
+//GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Yellow,
+//  FString::Printf(TEXT("Frame: %d | Player1: %s | Player2: %s"),
+//  FrameNumber,
+//  *GetNameSafe(Player1),
+//  *GetNameSafe(Player2)));
 
 	for (auto& movable : m_movables)
 	{
@@ -81,6 +82,19 @@ void UGameManager::OnWorldInitialization(UWorld* _world, const UWorld::Initializ
 	if (!_world || !_world->IsGameWorld()) return;
 
 	m_cachedWorld = _world;
+	
+	m_camera = UGameplayStatics::GetActorOfClass(_world, ADynamicCamera::StaticClass());
+	_world->GetTimerManager().SetTimerForNextTick([this, _world]()
+   {
+	   APlayerController* pc = UGameplayStatics::GetPlayerController(_world, 0);
+	   if (pc)
+	   {
+		   if (m_camera)
+		   {
+			   pc->SetViewTarget(m_camera);
+		   }
+	   }
+   });
 	
 //	_world->GetTimerManager().SetTimer(
 //		m_fixedUpdateHandle,

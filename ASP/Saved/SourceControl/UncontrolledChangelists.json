@@ -9,9 +9,20 @@
 				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/NewBlueprint.uasset",
 				"D:/Github/ASP/ASP/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset",
 				"D:/Github/ASP/ASP/Content/ThirdPerson/Maps/ThirdPersonMap.umap",
-				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/MyASPCharacter.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/BP_FightingGame_PlayerController.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/BP_ASPCharacter.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/BP_ASPCharacter2.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/BP_ASPCharacter3.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/BP_ASPCharacter4.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/BP_Gamemode.uasset",
+				"D:/Github/ASP/ASP/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/F/37/PX788I4AE2O0WDIHZT2P5M.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/BP_DynamicCamera.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Input/IMC_Default.uasset",
+				"D:/Github/ASP/ASP/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/6/HF/9H7TKAXH9DD8KI3TIXGI2I.uasset",
 				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/NewBlueprint1.uasset",
 				"D:/Github/ASP/ASP/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/ZV/8ZYQEXUQ2HXL7DKHF3MPX1.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Input/Actions/IA_Look.uasset",
+				"D:/Github/ASP/ASP/Content/ThirdPerson/Blueprints/MyASPCharacter.uasset",
 				"D:/Github/ASP/ASP/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/0/2E/GFBM3Y83B44ALQ7J4MQDIM.uasset"
 			]
 		}

@@ -61,6 +61,12 @@
     <ClCompile Include="..\..\Source\ASP\CustomMoveComponent.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\DynamicCamera.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\DynamicCamera.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\FightingGame_PlayerController.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>

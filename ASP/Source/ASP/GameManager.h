@@ -7,7 +7,6 @@
 #include "GameManager.generated.h"
 
 class IMoveableInterface;
-class AASPCharacter;
 /**
  * 
  */
@@ -20,8 +19,9 @@ class ASP_API UGameManager : public UGameInstanceSubsystem, public FTickableGame
 public:
 	virtual void Initialize(FSubsystemCollectionBase& _collection) override;
 	virtual void Deinitialize() override;
+	
+	//*FTickableGameObject Functions*//
 	virtual void Tick(float _deltaTime) override;
-
 	virtual TStatId GetStatId() const override
 	{
 		RETURN_QUICK_DECLARE_CYCLE_STAT(UGameManager, STATGROUP_Tickables);
@@ -35,27 +35,33 @@ public:
 	void FixedGameUpdate60Hz(float _fixedDeltatime);
 	//Register Player
 	UFUNCTION()
-	void RegisterPlayer1(AASPCharacter* _player){Player1 = _player;}
+	void RegisterPlayer1(class AASPCharacter* _player){m_player1 = _player;}
 	UFUNCTION()
-	void RegisterPlayer2(AASPCharacter* _player){Player2 = _player;}
+	void RegisterPlayer2(class AASPCharacter* _player){m_player2 = _player;}
 	UFUNCTION()
 	void RegisterMovable(TScriptInterface<IMoveableInterface> _movable);
 
+	FORCEINLINE class AASPCharacter* GetPlayer1() const { return m_player1; }
+	FORCEINLINE class AASPCharacter* GetPlayer2() const { return m_player2; }
+	FORCEINLINE class AActor* GetCamera() const {return m_camera;}
+	FORCEINLINE float GetFixedDeltatime() const {return FIXED_UPDATE_RATE;}
 private:
 	void OnWorldInitialization(UWorld* _world, const UWorld::InitializationValues _ivs);
 
 public:
 	const float FIXED_UPDATE_RATE = 1.0f / 60.0f;
 	
-	//Player1
-	class AASPCharacter* Player1 = nullptr;
-	//Player2
-	class AASPCharacter* Player2 = nullptr;
 	int32 FrameNumber = 0;
+
 private:
 	TArray<TScriptInterface<IMoveableInterface>> m_movables;
 	FTimerHandle m_fixedUpdateHandle;
 	TWeakObjectPtr<UWorld> m_cachedWorld;
 	float m_accumulatedTime = 0.0f;
-	
+	AActor* m_camera;
+
+	//Player1
+	class AASPCharacter* m_player1 = nullptr;
+	//Player2
+	class AASPCharacter* m_player2 = nullptr;
 };
