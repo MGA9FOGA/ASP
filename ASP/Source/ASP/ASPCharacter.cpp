@@ -11,6 +11,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "FightingGame_PlayerController.h"
 #include "GameManager.h"
 #include "InputActionValue.h"
 
@@ -67,6 +68,39 @@ void AASPCharacter::FixedUpdate(float _deltaTime)
 	m_movement->SetLineTraceOnGroundStart(GetActorLocation());
 	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 100.0f));
 	m_movement->FixedUpdate(_deltaTime);
+	m_playerController->Update(_deltaTime);
+}
+
+void AASPCharacter::PerformAction(EAction _action)
+{
+	if (!m_playerController) return;
+	switch (_action)
+	{
+	case EAction::MoveForward:
+		m_playerController->Move(1.0f);
+		break;
+	case EAction::MoveBackwards:
+		m_playerController->Move(-1.0f);
+		break;
+	case EAction::UpMoveForward:
+		m_playerController->Move(1.0f);
+		break;
+	case EAction::UpMoveBackwards:
+		m_playerController->Move(-1.0f);
+		break;
+	case EAction::CrouchMoveForward:
+		m_playerController->Move(1.0f);
+		break;
+	case EAction::CrouchMoveBackwards:
+		m_playerController->Move(-1.0f);
+		break;
+	case EAction::Jump:
+		m_playerController->Jump(500.0f);
+		break;
+	default:
+		m_playerController->StopMove();
+		break;
+	}
 }
 
 void AASPCharacter::BeginPlay()
@@ -94,12 +128,12 @@ void AASPCharacter::Register()
 	{
 		if (!gm->GetPlayer1())
 		{
-			gm->RegisterPlayer1(this);
+			gm->RegisterPlayer1(this, 0);
 			return;
 		}
 		else if (!gm->GetPlayer2())
 		{
-			gm->RegisterPlayer2(this);
+			gm->RegisterPlayer2(this, 1);
 		}
 	}
 }

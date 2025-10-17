@@ -11,7 +11,6 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeGameManager() {}
 
 // Begin Cross Module References
-ASP_API UClass* Z_Construct_UClass_AASPCharacter_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UGameManager();
 ASP_API UClass* Z_Construct_UClass_UGameManager_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UMoveableInterface_NoRegister();
@@ -76,7 +75,13 @@ struct Z_Construct_UFunction_UGameManager_RegisterMovable_Statics
 	};
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "//Register Player\n" },
+#endif
 		{ "ModuleRelativePath", "GameManager.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Register Player" },
+#endif
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FInterfacePropertyParams NewProp__movable;
@@ -109,96 +114,6 @@ DEFINE_FUNCTION(UGameManager::execRegisterMovable)
 }
 // End Class UGameManager Function RegisterMovable
 
-// Begin Class UGameManager Function RegisterPlayer1
-struct Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics
-{
-	struct GameManager_eventRegisterPlayer1_Parms
-	{
-		AASPCharacter* _player;
-	};
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//Register Player\n" },
-#endif
-		{ "ModuleRelativePath", "GameManager.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Register Player" },
-#endif
-	};
-#endif // WITH_METADATA
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__player;
-	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-	static const UECodeGen_Private::FFunctionParams FuncParams;
-};
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::NewProp__player = { "_player", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GameManager_eventRegisterPlayer1_Parms, _player), Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::NewProp__player,
-};
-static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::PropPointers) < 2048);
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UGameManager, nullptr, "RegisterPlayer1", nullptr, nullptr, Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::PropPointers), sizeof(Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::GameManager_eventRegisterPlayer1_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::Function_MetaDataParams), Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::Function_MetaDataParams) };
-static_assert(sizeof(Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::GameManager_eventRegisterPlayer1_Parms) < MAX_uint16);
-UFunction* Z_Construct_UFunction_UGameManager_RegisterPlayer1()
-{
-	static UFunction* ReturnFunction = nullptr;
-	if (!ReturnFunction)
-	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UGameManager_RegisterPlayer1_Statics::FuncParams);
-	}
-	return ReturnFunction;
-}
-DEFINE_FUNCTION(UGameManager::execRegisterPlayer1)
-{
-	P_GET_OBJECT(AASPCharacter,Z_Param__player);
-	P_FINISH;
-	P_NATIVE_BEGIN;
-	P_THIS->RegisterPlayer1(Z_Param__player);
-	P_NATIVE_END;
-}
-// End Class UGameManager Function RegisterPlayer1
-
-// Begin Class UGameManager Function RegisterPlayer2
-struct Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics
-{
-	struct GameManager_eventRegisterPlayer2_Parms
-	{
-		AASPCharacter* _player;
-	};
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
-		{ "ModuleRelativePath", "GameManager.h" },
-	};
-#endif // WITH_METADATA
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__player;
-	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-	static const UECodeGen_Private::FFunctionParams FuncParams;
-};
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::NewProp__player = { "_player", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GameManager_eventRegisterPlayer2_Parms, _player), Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::NewProp__player,
-};
-static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::PropPointers) < 2048);
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UGameManager, nullptr, "RegisterPlayer2", nullptr, nullptr, Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::PropPointers), sizeof(Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::GameManager_eventRegisterPlayer2_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::Function_MetaDataParams), Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::Function_MetaDataParams) };
-static_assert(sizeof(Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::GameManager_eventRegisterPlayer2_Parms) < MAX_uint16);
-UFunction* Z_Construct_UFunction_UGameManager_RegisterPlayer2()
-{
-	static UFunction* ReturnFunction = nullptr;
-	if (!ReturnFunction)
-	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UGameManager_RegisterPlayer2_Statics::FuncParams);
-	}
-	return ReturnFunction;
-}
-DEFINE_FUNCTION(UGameManager::execRegisterPlayer2)
-{
-	P_GET_OBJECT(AASPCharacter,Z_Param__player);
-	P_FINISH;
-	P_NATIVE_BEGIN;
-	P_THIS->RegisterPlayer2(Z_Param__player);
-	P_NATIVE_END;
-}
-// End Class UGameManager Function RegisterPlayer2
-
 // Begin Class UGameManager
 void UGameManager::StaticRegisterNativesUGameManager()
 {
@@ -206,8 +121,6 @@ void UGameManager::StaticRegisterNativesUGameManager()
 	static const FNameNativePtrPair Funcs[] = {
 		{ "FixedGameUpdate60Hz", &UGameManager::execFixedGameUpdate60Hz },
 		{ "RegisterMovable", &UGameManager::execRegisterMovable },
-		{ "RegisterPlayer1", &UGameManager::execRegisterPlayer1 },
-		{ "RegisterPlayer2", &UGameManager::execRegisterPlayer2 },
 	};
 	FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 }
@@ -232,9 +145,7 @@ struct Z_Construct_UClass_UGameManager_Statics
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
 		{ &Z_Construct_UFunction_UGameManager_FixedGameUpdate60Hz, "FixedGameUpdate60Hz" }, // 2812028369
-		{ &Z_Construct_UFunction_UGameManager_RegisterMovable, "RegisterMovable" }, // 1276652833
-		{ &Z_Construct_UFunction_UGameManager_RegisterPlayer1, "RegisterPlayer1" }, // 1650854184
-		{ &Z_Construct_UFunction_UGameManager_RegisterPlayer2, "RegisterPlayer2" }, // 3349749873
+		{ &Z_Construct_UFunction_UGameManager_RegisterMovable, "RegisterMovable" }, // 2691433291
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -282,10 +193,10 @@ UGameManager::~UGameManager() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UGameManager, UGameManager::StaticClass, TEXT("UGameManager"), &Z_Registration_Info_UClass_UGameManager, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGameManager), 2967235361U) },
+		{ Z_Construct_UClass_UGameManager, UGameManager::StaticClass, TEXT("UGameManager"), &Z_Registration_Info_UClass_UGameManager, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGameManager), 1433309414U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_376752944(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_14488435(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

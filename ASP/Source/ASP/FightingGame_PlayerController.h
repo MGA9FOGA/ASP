@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputHandler.h"
 #include "GameFramework/PlayerController.h"
 #include "FightingGame_PlayerController.generated.h"
 
@@ -10,17 +11,6 @@
  * 
  */
 
-USTRUCT()
-struct FInputPacket
-{
-	GENERATED_BODY()
-
-	int32 FrameNumber;
-	int8 Buttons;
-	int8 ExtraFlags;
-	int16 RandomSeed;
-	
-};
 UCLASS()
 class ASP_API AFightingGame_PlayerController : public APlayerController
 {
@@ -30,14 +20,27 @@ private:
 	void SpawnCharacter();
 public:
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupInputComponent() override;
 
-	void OnMovement(const struct FInputActionValue& _value);
-	void OnReleased(const FInputActionValue& _value);
-	UFUNCTION()
-	void Jump();
-	void Crouch();
+	void Update(float _deltatime);
+	void OnPressedMovement(const struct FInputActionValue& _value);
+	void OnMoveReleased();
+	void OnPressedJump();
+	void OnJumpReleased();
+	void OnPressedCrouch();
+	void OnCrouchReleased();
+	void OnPressedAttack1();
+	void OnAttack1Released();
+	void OnPressedAttack2();
+	void OnAttack1Released2();
+	void OnPressedBlock();
+	void OnBlockReleased();
+
+	void Move(float _value);
+	void StopMove();
+	void Jump(float _value);
+	
+	FORCEINLINE class AASPCharacter* GetPlayer() const {return m_playerCharacter;}
 private:
 	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_playerCharacter;
@@ -52,12 +55,18 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UGameManager* m_gameManager;
 
-	//Movement Left/Right
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	bool bNeutralizeOnConflict = true;
+	//Movement Bools
 	bool b_leftPressed = false;
 	bool b_rightPressed = false;
-	float m_lastInputDirection = 0.0f;
+	bool b_downPressed = false;
+	bool b_upPressed = false;
+	bool b_jumpPressed = false;
+	bool b_Attack1Pressed = false;
+	bool b_Attack2Pressed = false;
+	bool b_blockPressed = false;
+
+	//Deadzone
+	float m_deadzone =0.3f;
 	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -75,4 +84,6 @@ public:
 	
 	
 };
+
+
 

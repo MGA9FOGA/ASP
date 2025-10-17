@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameManager.h"
+#include "InputHandler.h"
 #include "MoveableInterface.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
@@ -39,6 +39,12 @@ public:
 	virtual void FixedUpdate(float _deltaTime) override;
 	virtual UCustomMoveComponent* GetMovementComponent() const override{return m_movement;}
 
+	void PerformAction(EAction _action);
+
+	FORCEINLINE class AFightingGame_PlayerController* GetPlayerController() const {return m_playerController;}
+	FORCEINLINE void SetPlayerController(AFightingGame_PlayerController* _playerController) {m_playerController = _playerController;}
+	FORCEINLINE float GetPlayerID() const {return m_playerID;}
+	FORCEINLINE void SetPlayerID(float _playerID) {m_playerID = _playerID;}
 protected:
 
 	/** Register Player to GameManager **/
@@ -53,7 +59,10 @@ protected:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	class UCustomMoveComponent* m_movement;
-
+	UPROPERTY(VisibleAnywhere)
+	class AFightingGame_PlayerController* m_playerController;
+	UPROPERTY(VisibleAnywhere)
+	float m_playerID;
 public:
 	UFUNCTION(BlueprintCallable)
 	UCapsuleComponent* GetCapsuleComponent(){return Capsule;}

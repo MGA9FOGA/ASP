@@ -7,6 +7,7 @@
         "Includes": [
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\asp\\definitions.asp.h",
             "d:\\github\\asp\\asp\\source\\asp\\fightinggame_playercontroller.h",
+            "d:\\github\\asp\\asp\\source\\asp\\inputhandler.h",
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\fightinggame_playercontroller.generated.h"
         ],
         "ImportedModules": [],

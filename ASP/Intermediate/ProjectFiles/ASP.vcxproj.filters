@@ -79,6 +79,12 @@
     <ClCompile Include="..\..\Source\ASP\GameManager.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\InputHandler.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\InputHandler.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\MoveableInterface.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
