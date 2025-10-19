@@ -81,7 +81,9 @@
             "d:\\github\\asp\\asp\\source\\asp\\fightinggame_playercontroller.h",
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\fightinggame_playercontroller.generated.h",
             "d:\\github\\asp\\asp\\source\\asp\\gamemanager.h",
-            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\gamemanager.generated.h"
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\gamemanager.generated.h",
+            "d:\\github\\asp\\asp\\source\\asp\\statemachine.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacterbasestate.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

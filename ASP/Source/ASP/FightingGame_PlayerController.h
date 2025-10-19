@@ -11,6 +11,8 @@
  * 
  */
 
+class UGameManager;
+
 UCLASS()
 class ASP_API AFightingGame_PlayerController : public APlayerController
 {
@@ -39,8 +41,11 @@ public:
 	void Move(float _value);
 	void StopMove();
 	void Jump(float _value);
+
+	FRawInput Input;
 	
 	FORCEINLINE class AASPCharacter* GetPlayer() const {return m_playerCharacter;}
+	FORCEINLINE UGameManager* GetGameManager() const {return m_gameManager;}
 private:
 	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_playerCharacter;
@@ -56,14 +61,14 @@ private:
 	class UGameManager* m_gameManager;
 
 	//Movement Bools
-	bool b_leftPressed = false;
-	bool b_rightPressed = false;
-	bool b_downPressed = false;
-	bool b_upPressed = false;
-	bool b_jumpPressed = false;
-	bool b_Attack1Pressed = false;
-	bool b_Attack2Pressed = false;
-	bool b_blockPressed = false;
+	bool b_leftPressed		= false;
+	bool b_rightPressed		= false;
+	bool b_downPressed		= false;
+	bool b_upPressed		= false;
+	bool b_jumpPressed		= false;
+	bool b_Attack1Pressed	= false;
+	bool b_Attack2Pressed	= false;
+	bool b_blockPressed		= false;
 
 	//Deadzone
 	float m_deadzone =0.3f;
@@ -84,6 +89,7 @@ public:
 	
 	
 };
+
 
 
 

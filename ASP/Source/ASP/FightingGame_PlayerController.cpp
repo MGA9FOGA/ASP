@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameManager.h"
 #include "InputHandler.h"
+#include "StateMachine.h"
 
 void AFightingGame_PlayerController::SpawnCharacter()
 {
@@ -29,6 +30,7 @@ void AFightingGame_PlayerController::SpawnCharacter()
 				m_playerCharacter->SetActorLocationAndRotation(pos,rot);
 				m_forwardDirection = m_playerCharacter->GetActorForwardVector();
 				m_playerCharacter->SetPlayerController(this);
+				m_playerCharacter->GetStateMachine()->SetPlayerController(this);
 			}
 		}
 	}
@@ -79,17 +81,16 @@ void AFightingGame_PlayerController::SetupInputComponent()
 
 void AFightingGame_PlayerController::Update(float _deltatime)
 {
-	FRawInput raw;
-	raw.Left = b_leftPressed;
-	raw.Right = b_rightPressed;
-	raw.Up = b_upPressed;
-	raw.Down = b_downPressed;
-	raw.Jump = b_jumpPressed;
-	raw.Attack1 = b_Attack1Pressed;
-	raw.Attack2 = b_Attack2Pressed;
-	raw.Block = b_blockPressed;
+	Input.Left = b_leftPressed;
+	Input.Right = b_rightPressed;
+	Input.Up = b_upPressed;
+	Input.Down = b_downPressed;
+	Input.Jump = b_jumpPressed;
+	Input.Attack1 = b_Attack1Pressed;
+	Input.Attack2 = b_Attack2Pressed;
+	Input.Block = b_blockPressed;
 
-	uint8 encoded = InputHandler::EncodeInput(raw);
+	uint8 encoded = InputHandler::EncodeInput(Input);
 
 	FInputPacket packet(m_gameManager->FrameNumber, encoded, 0, 0);
 

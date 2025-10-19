@@ -135,8 +135,7 @@ public:
 			if (Input.Left) return EAction::UpMoveBackwards;
 			return EAction::Up;
 		}
-
-		// 
+		
 		if (Input.Down)
 		{
 			if (Input.Right) return EAction::CrouchMoveForward;

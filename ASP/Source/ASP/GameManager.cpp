@@ -7,6 +7,7 @@
 #include "DynamicCamera.h"
 #include "FightingGame_PlayerController.h"
 #include "MoveableInterface.h"
+#include "StateMachine.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -71,12 +72,12 @@ void UGameManager::ProcessInputs()
 	{
 		int PlayerIndex = pair.Key;
 		EAction action = CheckForCombo(PlayerIndex);
-		if (action == EAction::None)
+		if (action == EAction::None || action == EAction::Idle)
 			continue;
-
+		
 		AASPCharacter* character = (PlayerIndex == 0) ? GetPlayer1() : GetPlayer2();
 		if (character)
-			character->PerformAction(action);
+			character->GetStateMachine()->SetAction(action);
 	}
 }
 

@@ -14,6 +14,7 @@
 #include "FightingGame_PlayerController.h"
 #include "GameManager.h"
 #include "InputActionValue.h"
+#include "StateMachine.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -59,8 +60,18 @@ AASPCharacter::AASPCharacter()
 
 	//MovmentComp for the Actor
 	m_movement = CreateDefaultSubobject<UCustomMoveComponent>(TEXT("MoveComponent"));
+	m_stateMachine = new FFightingStateMachine();
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void AASPCharacter::Tick(float _deltaSeconds)
+{
+	Super::Tick(_deltaSeconds);
+	if (m_stateMachine != nullptr)
+	{
+		m_stateMachine->Update(_deltaSeconds);
+	}
 }
 
 void AASPCharacter::FixedUpdate(float _deltaTime)
@@ -71,7 +82,7 @@ void AASPCharacter::FixedUpdate(float _deltaTime)
 	m_playerController->Update(_deltaTime);
 }
 
-void AASPCharacter::PerformAction(EAction _action)
+void AASPCharacter::PerformAction(EAction _action) const
 {
 	if (!m_playerController) return;
 	switch (_action)

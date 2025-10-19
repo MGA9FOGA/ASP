@@ -9,6 +9,7 @@
 #include "Logging/LogMacros.h"
 #include "ASPCharacter.generated.h"
 
+class FFightingStateMachine;
 class FOnCustomOverlapBegin;
 class USpringArmComponent;
 class UCameraComponent;
@@ -30,7 +31,7 @@ class ASP_API AASPCharacter : public AActor, public IMoveableInterface
 
 public:
 	AASPCharacter();
-
+virtual void Tick(float _deltaSeconds) override;
 	static const FName CharacterMeshName;
 	static const FName CharacterColliderName;
 	
@@ -39,12 +40,13 @@ public:
 	virtual void FixedUpdate(float _deltaTime) override;
 	virtual UCustomMoveComponent* GetMovementComponent() const override{return m_movement;}
 
-	void PerformAction(EAction _action);
+	void PerformAction(EAction _action) const;
 
 	FORCEINLINE class AFightingGame_PlayerController* GetPlayerController() const {return m_playerController;}
 	FORCEINLINE void SetPlayerController(AFightingGame_PlayerController* _playerController) {m_playerController = _playerController;}
 	FORCEINLINE float GetPlayerID() const {return m_playerID;}
 	FORCEINLINE void SetPlayerID(float _playerID) {m_playerID = _playerID;}
+	FORCEINLINE FFightingStateMachine* GetStateMachine() const {return m_stateMachine;}
 protected:
 
 	/** Register Player to GameManager **/
@@ -63,6 +65,7 @@ protected:
 	class AFightingGame_PlayerController* m_playerController;
 	UPROPERTY(VisibleAnywhere)
 	float m_playerID;
+	FFightingStateMachine* m_stateMachine;
 public:
 	UFUNCTION(BlueprintCallable)
 	UCapsuleComponent* GetCapsuleComponent(){return Capsule;}

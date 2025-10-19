@@ -53,7 +53,9 @@
             "e:\\ue_5.5\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputsubsysteminterface.generated.h",
             "e:\\ue_5.5\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\enhancedinputsubsystems.generated.h",
             "d:\\github\\asp\\asp\\source\\asp\\gamemanager.h",
-            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\gamemanager.generated.h"
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\gamemanager.generated.h",
+            "d:\\github\\asp\\asp\\source\\asp\\statemachine.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacterbasestate.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

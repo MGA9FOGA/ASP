@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define ASP_FightingGame_PlayerController_generated_h
 
-#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_17_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_19_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAFightingGame_PlayerController(); \
 	friend struct Z_Construct_UClass_AFightingGame_PlayerController_Statics; \
@@ -23,7 +23,7 @@ public: \
 	DECLARE_SERIALIZER(AFightingGame_PlayerController)
 
 
-#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_17_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_19_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AFightingGame_PlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 private: \
@@ -37,12 +37,12 @@ public: \
 	NO_API virtual ~AFightingGame_PlayerController();
 
 
-#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_14_PROLOG
-#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_17_GENERATED_BODY \
+#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_16_PROLOG
+#define FID_ASP_Source_ASP_FightingGame_PlayerController_h_19_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_FightingGame_PlayerController_h_17_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_FightingGame_PlayerController_h_17_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_FightingGame_PlayerController_h_19_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_FightingGame_PlayerController_h_19_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

@@ -91,5 +91,17 @@
     <ClCompile Include="..\..\Source\ASP\MoveableInterface.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\StateMachine.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\StateMachine.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterBaseState.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterBaseState.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
