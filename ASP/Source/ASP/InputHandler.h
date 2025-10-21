@@ -73,16 +73,19 @@ enum EAction
 	ForwardAttack2		= 11,
 	BackAttack2			= 12,
 	Attack2				= 13,
-	MoveForward			= 14,
-	MoveBackwards		= 15,
+	MoveRight			= 14,
+	MoveLeft			= 15,
 	Up					= 16,
 	UpAttack1			= 17,
 	UpAttack2			= 18,
-	UpMoveForward		= 19,
-	UpMoveBackwards		= 20,
-	CrouchMoveForward	= 21,
-	CrouchMoveBackwards	= 22,
-	Idle				= 23,
+	UpMoveRight			= 19,
+	UpMoveLeft			= 20,
+	CrouchMoveRight		= 21,
+	CrouchMoveLeft		= 22,
+	Moving				= 23,
+	Idle				= 24,
+	JumpRight			= 25,
+	JumpLeft			= 26,
 };
 
 class ASP_API InputHandler
@@ -125,21 +128,23 @@ public:
 		if (Input.Block) return EAction::Block;
 		if (Input.Jump)
 		{
+			if (Input.Right) return EAction::JumpRight;
+			if (Input.Left) return EAction::JumpLeft;
 			return EAction::Jump;
 		}
 		
 		// Jump
 		if (Input.Up)
 		{
-			if (Input.Right) return EAction::UpMoveForward;
-			if (Input.Left) return EAction::UpMoveBackwards;
+			if (Input.Right) return EAction::UpMoveRight;
+			if (Input.Left) return EAction::UpMoveLeft;
 			return EAction::Up;
 		}
 		
 		if (Input.Down)
 		{
-			if (Input.Right) return EAction::CrouchMoveForward;
-			if (Input.Left) return EAction::CrouchMoveBackwards;
+			if (Input.Right) return EAction::CrouchMoveRight;
+			if (Input.Left) return EAction::CrouchMoveLeft;
 			return EAction::Crouch;
 		}
 
@@ -155,8 +160,8 @@ public:
 		}
 
 		// Movement
-		if (Input.Right) return EAction::MoveForward;
-		if (Input.Left)  return EAction::MoveBackwards;
+		if (Input.Right) return EAction::MoveRight;
+		if (Input.Left)  return EAction::MoveLeft;
 
 		return EAction::Idle;
 	}

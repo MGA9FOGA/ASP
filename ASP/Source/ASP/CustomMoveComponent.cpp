@@ -10,6 +10,13 @@
 
 UCustomMoveComponent::UCustomMoveComponent()
 {
+
+}
+
+void UCustomMoveComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
+	FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
 void UCustomMoveComponent::BeginPlay()
@@ -77,15 +84,15 @@ void UCustomMoveComponent::ApplyGravity(float _deltaTime)
 	Velocity.Z -= Gravity * _deltaTime;
 }
 
-void UCustomMoveComponent::Move(FVector _direction, float _speed)
+void UCustomMoveComponent::Move(float _value, float _speed)
 {
 	//Calculate Velocity
 	//if (Velocity.Y > 200.0f || Velocity.Y < - 200.0f) return;
 	//Velocity += _direction * _speed;
-	Velocity.Y = _direction.Y * _speed;
+	Velocity.Y = _value * _speed;
 }
 
-void UCustomMoveComponent::StopMove(float _speed, float _deltatime)
+void UCustomMoveComponent::StopMove()
 {
 	Velocity.Y = 0.0f;
 }

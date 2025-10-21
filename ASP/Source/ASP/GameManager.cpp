@@ -2,7 +2,6 @@
 
 
 #include "GameManager.h"
-
 #include "ASPCharacter.h"
 #include "DynamicCamera.h"
 #include "FightingGame_PlayerController.h"
@@ -10,9 +9,10 @@
 #include "StateMachine.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "UFighting_GameGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
-UGameManager::UGameManager()
+UGameManager::UGameManager(): GI(nullptr), m_camera(nullptr)
 {
 }
 
@@ -34,7 +34,6 @@ void UGameManager::Deinitialize()
 
 	if (m_cachedWorld.IsValid())
 	{
-		m_cachedWorld->GetTimerManager().ClearTimer(m_fixedUpdateHandle);
 		m_cachedWorld = nullptr;
 	}
 }
@@ -49,13 +48,61 @@ void UGameManager::Tick(float _deltaTime)
 	}
 }
 
+void UGameManager::BeginPlaySetup()
+{
+
+	GI = Cast<UFighting_GameGameInstance>(GetGameInstance());
+	if (!GI)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SpawnCharacterForController: GameInstance ist NULL!"));
+		return;
+	}
+	
+	if (!m_cachedWorld.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GameManager: World noch nicht verfügbar."));
+		return;
+	}
+
+	// PlayerController 
+	m_playerController1 = Cast<AFightingGame_PlayerController>(
+		UGameplayStatics::GetPlayerController(m_cachedWorld.Get(), 0)
+	);
+
+	m_playerController2 = Cast<AFightingGame_PlayerController>(
+		UGameplayStatics::GetPlayerController(m_cachedWorld.Get(), 1)
+	);
+
+	if (!m_playerController1 /* || !m_playerController2*/)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayerController(s) existieren noch nicht."));
+		// Try aigan
+		m_cachedWorld->GetTimerManager().SetTimerForNextTick([this]()
+		{
+			BeginPlaySetup();
+		});
+		return;
+	}
+	m_playerController1->SetPlayerID(0);
+	//m_playerController2->SetPlayerID(1);
+
+	// Spawn Characters
+	SpawnCharacterForController(m_playerController1, m_player1, m_player1Position, m_player1Rotation);
+	//SpawnCharacterForController(m_playerController2, m_player2, m_player2Position, m_player2Rotation);
+
+	InitializeFighters(m_player1, m_playerController1);
+	//InitializeFighters(m_player2, m_playerController2);
+
+	UE_LOG(LogTemp, Log, TEXT("GameManager: Beide Spieler initialisiert"));
+}
+
 void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet)
 {
 	int32 PlayerIndex = _playerController->GetPlayer()->GetPlayerID();
 	TArray<FInputPacket>& queue = m_playerInputQueues.FindOrAdd(PlayerIndex);
 
 	queue.Add(_packet);
-	if (queue.Num() > 60) 
+	if (queue.Num() > 60)
 	{
 		queue.RemoveAt(0);
 	}
@@ -72,9 +119,9 @@ void UGameManager::ProcessInputs()
 	{
 		int PlayerIndex = pair.Key;
 		EAction action = CheckForCombo(PlayerIndex);
-		if (action == EAction::None || action == EAction::Idle)
+		if (action == EAction::None)
 			continue;
-		
+		UE_LOG(LogTemp, Warning, TEXT("SetAction: %d"), action);
 		AASPCharacter* character = (PlayerIndex == 0) ? GetPlayer1() : GetPlayer2();
 		if (character)
 			character->GetStateMachine()->SetAction(action);
@@ -159,26 +206,50 @@ void UGameManager::OnWorldInitialization(UWorld* _world, const UWorld::Initializ
 {
 	if (!_world || !_world->IsGameWorld()) return;
 
-	m_cachedWorld = _world;
-
+	m_cachedWorld = _world;	
 	m_camera = UGameplayStatics::GetActorOfClass(_world, ADynamicCamera::StaticClass());
-	_world->GetTimerManager().SetTimerForNextTick([this, _world]()
-	{
-		APlayerController* pc = UGameplayStatics::GetPlayerController(_world, 0);
-		if (pc)
-		{
-			if (m_camera)
-			{
-				pc->SetViewTarget(m_camera);
-			}
-		}
-	});
+}
 
-	//	_world->GetTimerManager().SetTimer(
-	//		m_fixedUpdateHandle,
-	//		this,
-	//		&UGameManager::FixedGameUpdate60Hz,
-	//		FIXED_UPDATE_RATE,
-	//		true
-	//	);
+void UGameManager::SpawnCharacterForController(AFightingGame_PlayerController* _pc, 
+											   AASPCharacter*& _outCharacter, 
+											   const FVector& _spawnPos, const FRotator& _spawnRot)
+{
+	if (!_pc || !GI)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SpawnCharacterForController: PlayerController oder GameInstance ist NULL!"));
+		return;
+	}
+
+	if (!GI->SelectedPlayer1Class || !GI->SelectedPlayer2Class)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SpawnCharacterForController: CharacterClasses sind NULL!"));
+		return;
+	}
+
+	TSubclassOf<AASPCharacter> classToSpawn = (_pc->GetPlayerID() == 0) ? GI->SelectedPlayer1Class : GI->SelectedPlayer2Class;
+
+	_outCharacter = m_cachedWorld->SpawnActor<AASPCharacter>(classToSpawn, _spawnPos, _spawnRot);
+
+	if (!_outCharacter)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GameManager: Character konnte nicht gespawnt werden!"));
+		return;
+	}
+
+	_pc->SetCharacterRef(_outCharacter);
+	_pc->SetGameManager(this);
+	_pc->Start();
+}
+
+void UGameManager::InitializeFighters(AASPCharacter* _character, AFightingGame_PlayerController* _pc)
+{
+	if (!_character || !_pc) return;
+
+	FFightingStateMachine* fsm = _character->GetStateMachine();
+	if (!fsm) return;
+
+	fsm->SetPlayerController(_pc);
+	_character->SetPlayerController(_pc);
+	_pc->ResetInputBuffer();
+	//_character->SetHealth(_character->GetMaxHealth());
 }

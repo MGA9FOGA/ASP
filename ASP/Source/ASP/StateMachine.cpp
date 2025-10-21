@@ -6,6 +6,8 @@
 #include "GameManager.h"
 #include "UCharacterBaseState.h"
 #include "UCharacterState_Idle.h"
+#include "UCharacterState_Jump.h"
+#include "UCharacterState_Move.h"
 
 
 FFightingStateMachine::FFightingStateMachine()
@@ -13,11 +15,22 @@ FFightingStateMachine::FFightingStateMachine()
 #pragma region Idle
 	//IDLE STATE CREATION
 	m_idle_State.State = MakeShared<UCharacterState_Idle>();
-	m_idle_State.Transitions.Add(FStateTransition(EAction::MoveForward, [this]()-> bool { return IdleToWalkingForwad(this); }));
-
+	m_idle_State.Transitions.Add(FStateTransition(EAction::Moving, [this]()-> bool { return IdleToMoving(*this); }));
+	m_idle_State.Transitions.Add(FStateTransition(EAction::Jump, [this]()-> bool { return IdleOrWalkToJump(*this); }));
+#pragma endregion
+#pragma region Move 
+	m_moving_State.State = MakeShared<UCharacterState_Move>();
+	m_moving_State.Transitions.Add(FStateTransition(EAction::Jump, [this]()-> bool { return IdleOrWalkToJump(*this); }));
+	m_moving_State.Transitions.Add(FStateTransition(EAction::Idle, [this]()-> bool { return WalkingToIdle(*this); }));
+#pragma endregion
+#pragma region Jump 
+	m_jumping_State.State = MakeShared<UCharacterState_Jump>();
+	m_jumping_State.Transitions.Add(FStateTransition(EAction::Idle, [this]()-> bool { return JumpToIdle(*this); }));
 #pragma endregion
 
 	m_stateMap.Add(EAction::Idle, m_idle_State);
+	m_stateMap.Add(EAction::Moving, m_moving_State);
+	m_stateMap.Add(EAction::Jump, m_jumping_State);
 	CurrentState = m_idle_State.State.Get();
 }
 
@@ -66,7 +79,8 @@ void FFightingStateMachine::TryTransitions()
 		// Condition() kann jetzt direkt Input benutzen!
 		if (Transition.Condition && Transition.Condition())
 		{
-			ChangeState(Transition.TargetState);
+			UE_LOG(LogTemp, Warning, TEXT("Transition TRUE -> Changing to %d"), (int)Transition.TargetStateAction);
+			ChangeState(Transition.TargetStateAction);
 			break;
 		}
 	}

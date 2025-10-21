@@ -1,0 +1,15 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\github\\asp\\asp\\source\\asp\\ufighting_gamegameinstance.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\aspeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\asp\\definitions.asp.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ufighting_gamegameinstance.h",
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\ufighting_gamegameinstance.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

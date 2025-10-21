@@ -11,6 +11,7 @@
  * 
  */
 
+class AASPCharacter;
 class UGameManager;
 
 UCLASS()
@@ -18,10 +19,9 @@ class ASP_API AFightingGame_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-private:
-	void SpawnCharacter();
 public:
 	virtual void BeginPlay() override;
+	void Start();
 	virtual void SetupInputComponent() override;
 
 	void Update(float _deltatime);
@@ -37,26 +37,18 @@ public:
 	void OnAttack1Released2();
 	void OnPressedBlock();
 	void OnBlockReleased();
-
-	void Move(float _value);
-	void StopMove();
-	void Jump(float _value);
-
+	void SetCharacterRef(AASPCharacter* _character);
+	void ResetInputBuffer();
 	FRawInput Input;
 	
 	FORCEINLINE class AASPCharacter* GetPlayer() const {return m_playerCharacter;}
+	FORCEINLINE float GetPlayerID() const {return m_playerID;}
+	FORCEINLINE void SetPlayerID(float _playerID) {m_playerID = _playerID;}
+	FORCEINLINE void SetGameManager(UGameManager* _gameManager) {m_gameManager = _gameManager;}
 	FORCEINLINE UGameManager* GetGameManager() const {return m_gameManager;}
 private:
 	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_playerCharacter;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> playerClass;
-	UPROPERTY(EditAnywhere)
-	float m_jumpSpeed = 10.0f;
-	UPROPERTY(EditAnywhere)
-	float m_moveSpeed = 200.0f;
-	UPROPERTY(EditAnywhere)
-	FVector m_forwardDirection;
 	UPROPERTY(EditAnywhere)
 	class UGameManager* m_gameManager;
 
@@ -72,7 +64,8 @@ private:
 
 	//Deadzone
 	float m_deadzone =0.3f;
-	
+	//ID
+	int m_playerID;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;

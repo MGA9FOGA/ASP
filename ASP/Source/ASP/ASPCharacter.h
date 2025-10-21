@@ -31,14 +31,21 @@ class ASP_API AASPCharacter : public AActor, public IMoveableInterface
 
 public:
 	AASPCharacter();
-virtual void Tick(float _deltaSeconds) override;
+
+	void StartFSM();
+	virtual void Tick(float _deltaSeconds) override;
 	static const FName CharacterMeshName;
 	static const FName CharacterColliderName;
 	
 	virtual void BeginPlay() override;
-	
+	void Start();
+
 	virtual void FixedUpdate(float _deltaTime) override;
 	virtual UCustomMoveComponent* GetMovementComponent() const override{return m_movement;}
+
+	void Move(float _value) const;
+	void StopMove() const;
+	void Jump();
 
 	void PerformAction(EAction _action) const;
 
@@ -66,6 +73,10 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	float m_playerID;
 	FFightingStateMachine* m_stateMachine;
+	UPROPERTY(EditAnywhere)
+	float m_jumpStrength = 10.0f;
+	UPROPERTY(EditAnywhere)
+	float m_moveSpeed = 200.0f;
 public:
 	UFUNCTION(BlueprintCallable)
 	UCapsuleComponent* GetCapsuleComponent(){return Capsule;}

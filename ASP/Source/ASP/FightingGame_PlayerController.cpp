@@ -10,51 +10,26 @@
 #include "InputHandler.h"
 #include "StateMachine.h"
 
-void AFightingGame_PlayerController::SpawnCharacter()
-{
-	if (UWorld* world = GetWorld())
-	{
-		if (playerClass && m_gameManager)
-		{
-			m_playerCharacter = world->SpawnActor<AASPCharacter>(playerClass, FVector::ZeroVector,
-			                                                     FRotator::ZeroRotator);
-			if (m_playerCharacter)
-			{
-				FVector pos = (m_playerCharacter->GetPlayerID() == 0)
-					              ? m_gameManager->GetPlayer1SpawnPos() 
-					              : m_gameManager->GetPlayer2SpawnPos(); 
-				FRotator rot = (m_playerCharacter->GetPlayerID() == 0)
-					               ? m_gameManager->GetPlayer1SpawnRotation() 
-					               : m_gameManager->GetPlayer2SpawnRotation(); 
-
-				m_playerCharacter->SetActorLocationAndRotation(pos,rot);
-				m_forwardDirection = m_playerCharacter->GetActorForwardVector();
-				m_playerCharacter->SetPlayerController(this);
-				m_playerCharacter->GetStateMachine()->SetPlayerController(this);
-			}
-		}
-	}
-}
-
 void AFightingGame_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	if (UGameManager* GM = GetGameInstance()->GetSubsystem<UGameManager>())
+	{
+		GM->BeginPlaySetup();
+	}
+	Start();
+}
+
+void AFightingGame_PlayerController::Start()
+{
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
-		GetLocalPlayer()))
+	GetLocalPlayer()))
 	{
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
-	m_gameManager = GetGameInstance()->GetSubsystem<UGameManager>();
-	FTimerHandle timerHandle;
-
-	GetWorld()->GetTimerManager().SetTimer(
-		timerHandle,
-		this,
-		&AFightingGame_PlayerController::SpawnCharacter,
-		3.0f,
-		false
-	);
 }
+
+
 
 void AFightingGame_PlayerController::SetupInputComponent()
 {
@@ -81,16 +56,17 @@ void AFightingGame_PlayerController::SetupInputComponent()
 
 void AFightingGame_PlayerController::Update(float _deltatime)
 {
-	Input.Left = b_leftPressed;
-	Input.Right = b_rightPressed;
-	Input.Up = b_upPressed;
-	Input.Down = b_downPressed;
-	Input.Jump = b_jumpPressed;
-	Input.Attack1 = b_Attack1Pressed;
-	Input.Attack2 = b_Attack2Pressed;
-	Input.Block = b_blockPressed;
+	FRawInput raw;
+	raw.Left = b_leftPressed;
+	raw.Right = b_rightPressed;
+	raw.Up = b_upPressed;
+	raw.Down = b_downPressed;
+	raw.Jump = b_jumpPressed;
+	raw.Attack1 = b_Attack1Pressed;
+	raw.Attack2 = b_Attack2Pressed;
+	raw.Block = b_blockPressed;
 
-	uint8 encoded = InputHandler::EncodeInput(Input);
+	uint8 encoded = InputHandler::EncodeInput(raw);
 
 	FInputPacket packet(m_gameManager->FrameNumber, encoded, 0, 0);
 
@@ -168,26 +144,20 @@ void AFightingGame_PlayerController::OnBlockReleased()
 	b_blockPressed = false;
 }
 
-void AFightingGame_PlayerController::Move(float _value)
+void AFightingGame_PlayerController::SetCharacterRef(AASPCharacter* _character)
 {
-	if (m_playerCharacter->GetClass()->ImplementsInterface(UMoveableInterface::StaticClass()))
+	m_playerCharacter = _character;
+	if (_character)
 	{
-		m_playerCharacter->GetMovementComponent()->Move(FVector(0.0f, _value, 0.0), m_moveSpeed);
+		_character->SetPlayerController(this);
+		_character->GetStateMachine()->SetPlayerController(this);
 	}
 }
 
-void AFightingGame_PlayerController::StopMove()
+void AFightingGame_PlayerController::ResetInputBuffer()
 {
-	if (m_playerCharacter->GetClass()->ImplementsInterface(UMoveableInterface::StaticClass()))
-	{
-		m_playerCharacter->GetMovementComponent()->StopMove(m_moveSpeed, m_gameManager->GetFixedDeltatime());
-	}
+	b_leftPressed = b_rightPressed = b_upPressed = b_downPressed = false;
+	b_jumpPressed = b_Attack1Pressed = b_Attack2Pressed = b_blockPressed = false;
+	Input = FRawInput();
 }
 
-void AFightingGame_PlayerController::Jump(float _value)
-{
-	if (m_playerCharacter->GetClass()->ImplementsInterface(UMoveableInterface::StaticClass()))
-	{
-		m_playerCharacter->GetMovementComponent()->Jump(_value);
-	}
-}

@@ -17,7 +17,7 @@ class ASP_API UCharacterBaseState
 public:
 	UCharacterBaseState();
 	virtual ~UCharacterBaseState();
-
+	FString Name;
 	virtual void EnterState(FFightingStateMachine* _stateMachine) ;
 	virtual void ExitState(FFightingStateMachine* _stateMachine) ;
 	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) ;

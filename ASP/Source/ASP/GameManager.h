@@ -8,6 +8,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "GameManager.generated.h"
 
+class UFighting_GameGameInstance;
 class AFightingGame_PlayerController;
 class IMoveableInterface;
 
@@ -34,6 +35,8 @@ public:
 	virtual bool IsTickableWhenPaused() const override { return false; }
 	virtual bool IsTickableInEditor() const override { return false; }
 
+	void BeginPlaySetup();
+	
 	//For Player Input Handling
 	void AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet);
 	const TArray<FInputPacket>& GetInputQueue(int _playerIndex) const;
@@ -46,6 +49,7 @@ public:
 	//Register Player
 	UFUNCTION()
 	void RegisterMovable(TScriptInterface<IMoveableInterface> _movable);
+	// Player Registration
 	FORCEINLINE void RegisterPlayer1(class AASPCharacter* _player, float _number){m_player1 = _player; m_player1->SetPlayerID(_number);}
 	FORCEINLINE void RegisterPlayer2(class AASPCharacter* _player, float _number){m_player2 = _player; m_player1->SetPlayerID(_number);}
 	//Getter & Setter
@@ -53,32 +57,42 @@ public:
 	FORCEINLINE class AASPCharacter* GetPlayer2() const { return m_player2; }
 	FORCEINLINE class AActor* GetCamera() const {return m_camera;}
 	FORCEINLINE float GetFixedDeltatime() const {return FIXED_UPDATE_RATE;}
-	FORCEINLINE FVector GetPlayer1SpawnPos() const {return m_player1Position;}
-	FORCEINLINE FVector GetPlayer2SpawnPos() const {return m_player2Position;}
-	FORCEINLINE FRotator GetPlayer1SpawnRotation() const {return m_player1Rotation;}
-	FORCEINLINE FRotator GetPlayer2SpawnRotation() const {return m_player2Rotation;}
 	
 private:
 	void OnWorldInitialization(UWorld* _world, const UWorld::InitializationValues _ivs);
+	void SpawnCharacterForController(AFightingGame_PlayerController* _pc, AASPCharacter*& _outCharacter,
+	                                 const FVector& _spawnPos, const FRotator& _spawnRot);
+	void InitializeFighters(AASPCharacter* _character, AFightingGame_PlayerController* _pc);
 
 public:
 	const float FIXED_UPDATE_RATE = 1.0f / 60.0f;
-	
+	UPROPERTY(EditAnywhere)
+	UFighting_GameGameInstance* GI;
 	int32 FrameNumber = 0;
 
 private:
 	TArray<TScriptInterface<IMoveableInterface>> m_movables;
-	FTimerHandle m_fixedUpdateHandle;
 	TWeakObjectPtr<UWorld> m_cachedWorld;
 	float m_accumulatedTime = 0.0f;
+	UPROPERTY(EditAnywhere)
 	AActor* m_camera;
 	
 	//Input Queue
 	TMap<int32, TArray<FInputPacket>> m_playerInputQueues; // z. B. 0 = P1, 1 = P2
 	//Player1
+	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_player1 = nullptr;
+	UPROPERTY(EditAnywhere)
+	AFightingGame_PlayerController* m_playerController1 = nullptr;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AASPCharacter> m_characterClass1;
 	//Player2
+	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_player2 = nullptr;
+	UPROPERTY(EditAnywhere)
+	AFightingGame_PlayerController* m_playerController2 = nullptr;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AASPCharacter> m_characterClass2;
 	//Spawnpoints
 	FVector m_player1Position = FVector(730.0f,1230.0f,1800.0f);
 	FRotator m_player1Rotation = FRotator(0.0f,0.0f,0.0f);

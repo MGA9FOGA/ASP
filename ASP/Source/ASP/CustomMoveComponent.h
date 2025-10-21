@@ -19,11 +19,12 @@ class ASP_API UCustomMoveComponent : public UActorComponent
 
 	UCustomMoveComponent();
 public:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void BeginPlay() override;
 	void FixedUpdate(float _deltaTime);
 	void ApplyGravity(float _deltaTime);
-	void Move(FVector _direction, float _speed);
-	void StopMove(float _speed, float _deltatime);
+	void Move(float _value, float _speed);
+	void StopMove();
 	void Jump(float _jumpStrength);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

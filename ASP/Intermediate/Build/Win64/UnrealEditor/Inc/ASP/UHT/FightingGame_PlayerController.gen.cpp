@@ -14,9 +14,6 @@ ASP_API UClass* Z_Construct_UClass_AASPCharacter_NoRegister();
 ASP_API UClass* Z_Construct_UClass_AFightingGame_PlayerController();
 ASP_API UClass* Z_Construct_UClass_AFightingGame_PlayerController_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UGameManager_NoRegister();
-COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
-COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
-ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_APlayerController();
 ENHANCEDINPUT_API UClass* Z_Construct_UClass_UInputAction_NoRegister();
 ENHANCEDINPUT_API UClass* Z_Construct_UClass_UInputMappingContext_NoRegister();
@@ -41,22 +38,6 @@ struct Z_Construct_UClass_AFightingGame_PlayerController_Statics
 		{ "ModuleRelativePath", "FightingGame_PlayerController.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_playerCharacter_MetaData[] = {
-		{ "Category", "FightingGame_PlayerController" },
-		{ "ModuleRelativePath", "FightingGame_PlayerController.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_playerClass_MetaData[] = {
-		{ "Category", "FightingGame_PlayerController" },
-		{ "ModuleRelativePath", "FightingGame_PlayerController.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_jumpSpeed_MetaData[] = {
-		{ "Category", "FightingGame_PlayerController" },
-		{ "ModuleRelativePath", "FightingGame_PlayerController.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_moveSpeed_MetaData[] = {
-		{ "Category", "FightingGame_PlayerController" },
-		{ "ModuleRelativePath", "FightingGame_PlayerController.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_forwardDirection_MetaData[] = {
 		{ "Category", "FightingGame_PlayerController" },
 		{ "ModuleRelativePath", "FightingGame_PlayerController.h" },
 	};
@@ -99,10 +80,6 @@ struct Z_Construct_UClass_AFightingGame_PlayerController_Statics
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_playerCharacter;
-	static const UECodeGen_Private::FClassPropertyParams NewProp_playerClass;
-	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_jumpSpeed;
-	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_moveSpeed;
-	static const UECodeGen_Private::FStructPropertyParams NewProp_m_forwardDirection;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_gameManager;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_DefaultMappingContext;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_JumpAction;
@@ -115,20 +92,12 @@ struct Z_Construct_UClass_AFightingGame_PlayerController_Statics
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_playerCharacter = { "m_playerCharacter", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_playerCharacter), Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_playerCharacter_MetaData), NewProp_m_playerCharacter_MetaData) };
-const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_playerClass = { "playerClass", nullptr, (EPropertyFlags)0x0044000000000001, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, playerClass), Z_Construct_UClass_UClass, Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_playerClass_MetaData), NewProp_playerClass_MetaData) };
-const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_jumpSpeed = { "m_jumpSpeed", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_jumpSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_jumpSpeed_MetaData), NewProp_m_jumpSpeed_MetaData) };
-const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_moveSpeed = { "m_moveSpeed", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_moveSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_moveSpeed_MetaData), NewProp_m_moveSpeed_MetaData) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_forwardDirection = { "m_forwardDirection", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_forwardDirection), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_forwardDirection_MetaData), NewProp_m_forwardDirection_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_gameManager = { "m_gameManager", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_gameManager), Z_Construct_UClass_UGameManager_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_gameManager_MetaData), NewProp_m_gameManager_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_DefaultMappingContext = { "DefaultMappingContext", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, DefaultMappingContext), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultMappingContext_MetaData), NewProp_DefaultMappingContext_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_JumpAction = { "JumpAction", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, JumpAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_JumpAction_MetaData), NewProp_JumpAction_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_MoveAction = { "MoveAction", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, MoveAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MoveAction_MetaData), NewProp_MoveAction_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFightingGame_PlayerController_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_playerCharacter,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_playerClass,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_jumpSpeed,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_moveSpeed,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_forwardDirection,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_gameManager,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_DefaultMappingContext,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_JumpAction,
@@ -176,10 +145,10 @@ AFightingGame_PlayerController::~AFightingGame_PlayerController() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFightingGame_PlayerController, AFightingGame_PlayerController::StaticClass, TEXT("AFightingGame_PlayerController"), &Z_Registration_Info_UClass_AFightingGame_PlayerController, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFightingGame_PlayerController), 1138136110U) },
+		{ Z_Construct_UClass_AFightingGame_PlayerController, AFightingGame_PlayerController::StaticClass, TEXT("AFightingGame_PlayerController"), &Z_Registration_Info_UClass_AFightingGame_PlayerController, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFightingGame_PlayerController), 2403428758U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_1889444817(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_2016143244(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

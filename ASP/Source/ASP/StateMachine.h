@@ -40,11 +40,11 @@ struct FCharacterState
 
 struct FStateTransition
 {
-	EAction TargetState;
+	EAction TargetStateAction;
 	TFunction<bool()> Condition;
 
 	FStateTransition(EAction _inTarget, TFunction<bool()> _inCondition)
-	 : TargetState(_inTarget), Condition(_inCondition) {}
+	 : TargetStateAction(_inTarget), Condition(_inCondition) {}
 };
 
 struct FStateDefinition
@@ -64,19 +64,19 @@ public:
 	FFightingStateMachine();
 	//CurrentState
 	UCharacterBaseState* CurrentState;
-	FCharacterState CurrentCharacterStateInfo = FCharacterState(FVector::ZeroVector, FVector::ZeroVector, None, 0.0f, 1, new FAnimationMontageState());
+	FCharacterState CurrentCharacterStateInfo = FCharacterState(FVector::ZeroVector, FVector::ZeroVector, Idle, 0.0f, 1, new FAnimationMontageState());
 
 	//Main Funcitons
 	void Update(float _deltaTime);
 	void ChangeState(EAction _newAction);
 	void TryTransitions();
-	void SetAction(EAction _newAction){m_ECurrentInputAction = _newAction;}
+	
+	FORCEINLINE void SetAction(EAction _newAction){m_ECurrentInputAction = _newAction;}
 	FORCEINLINE EAction GetAction() const {return m_ECurrentInputAction;}
-
 	
 	FORCEINLINE void SetPlayerController(AFightingGame_PlayerController* _playerController){m_playerController = _playerController;}
 	FORCEINLINE AFightingGame_PlayerController* GetPlayerController() const {return m_playerController;}
-	
+	FORCEINLINE TMap<EAction, FStateDefinition> GetMap() const {return m_stateMap;}
 private:
 	TMap<EAction, FStateDefinition> m_stateMap;
 	AFightingGame_PlayerController* m_playerController;

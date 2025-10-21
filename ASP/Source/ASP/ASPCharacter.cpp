@@ -61,17 +61,25 @@ AASPCharacter::AASPCharacter()
 	//MovmentComp for the Actor
 	m_movement = CreateDefaultSubobject<UCustomMoveComponent>(TEXT("MoveComponent"));
 	m_stateMachine = new FFightingStateMachine();
+
+	m_moveSpeed = 10000.0f;
+	m_jumpStrength = 500.0f;
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void AASPCharacter::StartFSM()
+{
+	if (m_stateMachine)
+	{
+		m_stateMachine->GetMap()[m_stateMachine->CurrentCharacterStateInfo.EAction].State->EnterState(m_stateMachine);
+	}
 }
 
 void AASPCharacter::Tick(float _deltaSeconds)
 {
 	Super::Tick(_deltaSeconds);
-	if (m_stateMachine != nullptr)
-	{
-		m_stateMachine->Update(_deltaSeconds);
-	}
 }
 
 void AASPCharacter::FixedUpdate(float _deltaTime)
@@ -80,39 +88,60 @@ void AASPCharacter::FixedUpdate(float _deltaTime)
 	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 100.0f));
 	m_movement->FixedUpdate(_deltaTime);
 	m_playerController->Update(_deltaTime);
+	if (m_stateMachine != nullptr)
+	{
+		m_stateMachine->Update(_deltaTime);
+	}
 }
 
 void AASPCharacter::PerformAction(EAction _action) const
 {
-	if (!m_playerController) return;
-	switch (_action)
-	{
-	case EAction::MoveForward:
-		m_playerController->Move(1.0f);
-		break;
-	case EAction::MoveBackwards:
-		m_playerController->Move(-1.0f);
-		break;
-	case EAction::UpMoveForward:
-		m_playerController->Move(1.0f);
-		break;
-	case EAction::UpMoveBackwards:
-		m_playerController->Move(-1.0f);
-		break;
-	case EAction::CrouchMoveForward:
-		m_playerController->Move(1.0f);
-		break;
-	case EAction::CrouchMoveBackwards:
-		m_playerController->Move(-1.0f);
-		break;
-	case EAction::Jump:
-		m_playerController->Jump(500.0f);
-		break;
-	default:
-		m_playerController->StopMove();
-		break;
-	}
+	//if (!m_playerController) return;
+	//switch (_action)
+	//{
+	//case EAction::MoveRight:
+	//	m_playerController->Move(1.0f);
+	//	break;
+	//case EAction::MoveLeft:
+	//	m_playerController->Move(-1.0f);
+	//	break;
+	//case EAction::UpMoveRight:
+	//	m_playerController->Move(1.0f);
+	//	break;
+	//case EAction::UpMoveLeft:
+	//	m_playerController->Move(-1.0f);
+	//	break;
+	//case EAction::CrouchMoveRight:
+	//	m_playerController->Move(1.0f);
+	//	break;
+	//case EAction::CrouchMoveLeft:
+	//	m_playerController->Move(-1.0f);
+	//	break;
+	//case EAction::Jump:
+	//	m_playerController->Jump(500.0f);
+	//	break;
+	//default:
+	//	m_playerController->StopMove();
+	//	break;
+	//}
 }
+
+void AASPCharacter::Move(float _value) const
+{
+	GetMovementComponent()->Move(m_moveSpeed * _value, m_playerController->GetGameManager()->GetFixedDeltatime());
+}
+
+void AASPCharacter::StopMove() const
+{
+	if (!m_movement) return;
+	GetMovementComponent()->StopMove();
+}
+
+void AASPCharacter::Jump()
+{
+	GetMovementComponent()->Jump(m_jumpStrength);
+}
+
 
 void AASPCharacter::BeginPlay()
 {
@@ -130,8 +159,21 @@ void AASPCharacter::BeginPlay()
 		}
 		Register();
 	}
+	FTimerHandle timerHandle;
+
+	GetWorld()->GetTimerManager().SetTimer(
+		timerHandle,
+		this,
+		&AASPCharacter::Start,
+		0.5f,
+		false
+	);
 }
 
+void AASPCharacter::Start()
+{
+	m_stateMachine->GetMap()[m_stateMachine->CurrentCharacterStateInfo.EAction].State->EnterState(m_stateMachine);
+}
 
 void AASPCharacter::Register()
 {
@@ -151,15 +193,16 @@ void AASPCharacter::Register()
 
 void AASPCharacter::HandleCustomHit(const FHitResult& _hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Character got hit event from component, hit actor: %s"), *_hit.GetActor()->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("Character got hit event from component, hit actor: %s"),
+	       *_hit.GetActor()->GetName());
 }
 
-void AASPCharacter::HandleCustomOverlapBegin(AActor * _otherActor)
+void AASPCharacter::HandleCustomOverlapBegin(AActor* _otherActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Character BeginOverlap with %s"), *_otherActor->GetName());
 }
 
-void AASPCharacter::HandleCustomOverlapEnd(AActor * _otherActor)
+void AASPCharacter::HandleCustomOverlapEnd(AActor* _otherActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Character EndOverlap with %s"), *_otherActor->GetName());
 }
