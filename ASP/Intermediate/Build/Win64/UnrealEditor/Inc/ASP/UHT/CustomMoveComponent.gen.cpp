@@ -715,10 +715,6 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 		{ "Category", "CustomMoveComponent" },
 		{ "ModuleRelativePath", "CustomMoveComponent.h" },
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Velocity_MetaData[] = {
-		{ "Category", "CustomMoveComponent" },
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Capsule_MetaData[] = {
 #if !UE_BUILD_SHIPPING
 		{ "Comment", "//Ref on Character Capsule\n" },
@@ -787,9 +783,18 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 		{ "Category", "CustomMoveComponent" },
 		{ "ModuleRelativePath", "CustomMoveComponent.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_newLocation_MetaData[] = {
+		{ "AllowPrivateAccess", "TRUE" },
+		{ "Category", "CustomMoveComponent" },
+		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_velocity_MetaData[] = {
+		{ "AllowPrivateAccess", "TRUE" },
+		{ "Category", "CustomMoveComponent" },
+		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_Gravity;
-	static const UECodeGen_Private::FStructPropertyParams NewProp_Velocity;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Capsule;
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomHit;
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomBeginOverlap;
@@ -803,6 +808,8 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 	static const UECodeGen_Private::FStructPropertyParams NewProp_m_start;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_m_end;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_m_hitResult;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_m_newLocation;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_m_velocity;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
@@ -825,7 +832,6 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Gravity = { "Gravity", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, Gravity), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Gravity_MetaData), NewProp_Gravity_MetaData) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Velocity = { "Velocity", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, Velocity), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Velocity_MetaData), NewProp_Velocity_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Capsule = { "Capsule", nullptr, (EPropertyFlags)0x0010000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, Capsule), Z_Construct_UClass_UCapsuleComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Capsule_MetaData), NewProp_Capsule_MetaData) };
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomHit = { "OnCustomHit", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomHit), Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomHit_MetaData), NewProp_OnCustomHit_MetaData) }; // 854795097
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomBeginOverlap = { "OnCustomBeginOverlap", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomBeginOverlap), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomBeginOverlap_MetaData), NewProp_OnCustomBeginOverlap_MetaData) }; // 878664543
@@ -848,9 +854,10 @@ const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UCustomMoveCompo
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_start = { "m_start", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_start), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_start_MetaData), NewProp_m_start_MetaData) };
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_end = { "m_end", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_end), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_end_MetaData), NewProp_m_end_MetaData) };
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_hitResult = { "m_hitResult", nullptr, (EPropertyFlags)0x0040008000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_hitResult), Z_Construct_UScriptStruct_FHitResult, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_hitResult_MetaData), NewProp_m_hitResult_MetaData) }; // 4100991306
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_newLocation = { "m_newLocation", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_newLocation), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_newLocation_MetaData), NewProp_m_newLocation_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_velocity = { "m_velocity", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_velocity), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_velocity_MetaData), NewProp_m_velocity_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UCustomMoveComponent_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Gravity,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Velocity,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Capsule,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomHit,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomBeginOverlap,
@@ -861,6 +868,8 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UCustomMo
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_start,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_end,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_hitResult,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_newLocation,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_velocity,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_UCustomMoveComponent_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_UCustomMoveComponent_Statics::DependentSingletons[])() = {
@@ -903,10 +912,10 @@ UCustomMoveComponent::~UCustomMoveComponent() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 3522745128U) },
+		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 3826462822U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_2860054283(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_3339585161(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

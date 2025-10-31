@@ -11,6 +11,8 @@
             "d:\\github\\asp\\asp\\source\\asp\\ucharacterbasestate.h",
             "d:\\github\\asp\\asp\\source\\asp\\conditions.h",
             "d:\\github\\asp\\asp\\source\\asp\\aspcharacter.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacteranimationset.h",
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\ucharacteranimationset.generated.h",
             "d:\\github\\asp\\asp\\source\\asp\\moveableinterface.h",
             "e:\\ue_5.5\\engine\\source\\runtime\\coreuobject\\public\\uobject\\noexporttypes.h",
             "e:\\ue_5.5\\engine\\source\\runtime\\coreuobject\\public\\uobject\\propertyaccessutil.h",
@@ -34,14 +36,15 @@
             "d:\\github\\asp\\asp\\source\\asp\\fightinggame_playercontroller.h",
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\fightinggame_playercontroller.generated.h",
             "d:\\github\\asp\\asp\\source\\asp\\gamemanager.h",
+            "d:\\github\\asp\\asp\\source\\asp\\frollbackmanager.h",
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\gamemanager.generated.h",
             "e:\\ue_5.5\\engine\\plugins\\enhancedinput\\source\\enhancedinput\\public\\inputtriggers.h",
             "e:\\ue_5.5\\engine\\plugins\\enhancedinput\\source\\enhancedinput\\public\\inputactionvalue.h",
             "e:\\ue_5.5\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\inputactionvalue.generated.h",
             "e:\\ue_5.5\\engine\\plugins\\enhancedinput\\intermediate\\build\\win64\\unrealeditor\\inc\\enhancedinput\\uht\\inputtriggers.generated.h",
-            "d:\\github\\asp\\asp\\source\\asp\\ucharacterstate_idle.h",
-            "d:\\github\\asp\\asp\\source\\asp\\ucharacterstate_jump.h",
-            "d:\\github\\asp\\asp\\source\\asp\\ucharacterstate_move.h"
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacterstate_logic_idle.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacterstate_logic_jump.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacterstate_logic_move.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

@@ -14,6 +14,7 @@ void EmptyLinkFunctionForGeneratedCodeASPCharacter() {}
 ASP_API UClass* Z_Construct_UClass_AASPCharacter();
 ASP_API UClass* Z_Construct_UClass_AASPCharacter_NoRegister();
 ASP_API UClass* Z_Construct_UClass_AFightingGame_PlayerController_NoRegister();
+ASP_API UClass* Z_Construct_UClass_UCharacterAnimationSet_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UCustomMoveComponent_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UMoveableInterface_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
@@ -67,6 +68,50 @@ DEFINE_FUNCTION(AASPCharacter::execGetCapsuleComponent)
 	P_NATIVE_END;
 }
 // End Class AASPCharacter Function GetCapsuleComponent
+
+// Begin Class AASPCharacter Function GetSkeletalMeshComponent
+struct Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics
+{
+	struct ASPCharacter_eventGetSkeletalMeshComponent_Parms
+	{
+		USkeletalMeshComponent* ReturnValue;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "ASPCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_ReturnValue_MetaData[] = {
+		{ "EditInline", "true" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_ReturnValue;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000080588, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ASPCharacter_eventGetSkeletalMeshComponent_Parms, ReturnValue), Z_Construct_UClass_USkeletalMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_ReturnValue_MetaData), NewProp_ReturnValue_MetaData) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::NewProp_ReturnValue,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AASPCharacter, nullptr, "GetSkeletalMeshComponent", nullptr, nullptr, Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::PropPointers), sizeof(Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::ASPCharacter_eventGetSkeletalMeshComponent_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::Function_MetaDataParams), Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::Function_MetaDataParams) };
+static_assert(sizeof(Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::ASPCharacter_eventGetSkeletalMeshComponent_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(AASPCharacter::execGetSkeletalMeshComponent)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	*(USkeletalMeshComponent**)Z_Param__Result=P_THIS->GetSkeletalMeshComponent();
+	P_NATIVE_END;
+}
+// End Class AASPCharacter Function GetSkeletalMeshComponent
 
 // Begin Class AASPCharacter Function HandleCustomHit
 struct Z_Construct_UFunction_AASPCharacter_HandleCustomHit_Statics
@@ -203,6 +248,7 @@ void AASPCharacter::StaticRegisterNativesAASPCharacter()
 	UClass* Class = AASPCharacter::StaticClass();
 	static const FNameNativePtrPair Funcs[] = {
 		{ "GetCapsuleComponent", &AASPCharacter::execGetCapsuleComponent },
+		{ "GetSkeletalMeshComponent", &AASPCharacter::execGetSkeletalMeshComponent },
 		{ "HandleCustomHit", &AASPCharacter::execHandleCustomHit },
 		{ "HandleCustomOverlapBegin", &AASPCharacter::execHandleCustomOverlapBegin },
 		{ "HandleCustomOverlapEnd", &AASPCharacter::execHandleCustomOverlapEnd },
@@ -242,10 +288,6 @@ struct Z_Construct_UClass_AASPCharacter_Statics
 		{ "Category", "ASPCharacter" },
 		{ "ModuleRelativePath", "ASPCharacter.h" },
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_playerID_MetaData[] = {
-		{ "Category", "ASPCharacter" },
-		{ "ModuleRelativePath", "ASPCharacter.h" },
-	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_jumpStrength_MetaData[] = {
 		{ "Category", "ASPCharacter" },
 		{ "ModuleRelativePath", "ASPCharacter.h" },
@@ -254,18 +296,23 @@ struct Z_Construct_UClass_AASPCharacter_Statics
 		{ "Category", "ASPCharacter" },
 		{ "ModuleRelativePath", "ASPCharacter.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_animationSet_MetaData[] = {
+		{ "Category", "Animation" },
+		{ "ModuleRelativePath", "ASPCharacter.h" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Mesh;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Capsule;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_movement;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_playerController;
-	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_playerID;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_jumpStrength;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_moveSpeed;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_animationSet;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
 		{ &Z_Construct_UFunction_AASPCharacter_GetCapsuleComponent, "GetCapsuleComponent" }, // 862520768
+		{ &Z_Construct_UFunction_AASPCharacter_GetSkeletalMeshComponent, "GetSkeletalMeshComponent" }, // 4283073157
 		{ &Z_Construct_UFunction_AASPCharacter_HandleCustomHit, "HandleCustomHit" }, // 3577566205
 		{ &Z_Construct_UFunction_AASPCharacter_HandleCustomOverlapBegin, "HandleCustomOverlapBegin" }, // 2601317895
 		{ &Z_Construct_UFunction_AASPCharacter_HandleCustomOverlapEnd, "HandleCustomOverlapEnd" }, // 3224541007
@@ -281,17 +328,17 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_Capsule = { "Capsule", nullptr, (EPropertyFlags)0x01440000000a001d, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, Capsule), Z_Construct_UClass_UCapsuleComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Capsule_MetaData), NewProp_Capsule_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_movement = { "m_movement", nullptr, (EPropertyFlags)0x00200800000a0009, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_movement), Z_Construct_UClass_UCustomMoveComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_movement_MetaData), NewProp_m_movement_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_playerController = { "m_playerController", nullptr, (EPropertyFlags)0x0020080000020001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_playerController), Z_Construct_UClass_AFightingGame_PlayerController_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_playerController_MetaData), NewProp_m_playerController_MetaData) };
-const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_playerID = { "m_playerID", nullptr, (EPropertyFlags)0x0020080000020001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_playerID), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_playerID_MetaData), NewProp_m_playerID_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_jumpStrength = { "m_jumpStrength", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_jumpStrength), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_jumpStrength_MetaData), NewProp_m_jumpStrength_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_moveSpeed = { "m_moveSpeed", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_moveSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_moveSpeed_MetaData), NewProp_m_moveSpeed_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_animationSet = { "m_animationSet", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_animationSet), Z_Construct_UClass_UCharacterAnimationSet_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_animationSet_MetaData), NewProp_m_animationSet_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AASPCharacter_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_Mesh,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_Capsule,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_movement,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_playerController,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_playerID,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_jumpStrength,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_moveSpeed,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_animationSet,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_AASPCharacter_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_AASPCharacter_Statics::DependentSingletons[])() = {
@@ -337,10 +384,10 @@ AASPCharacter::~AASPCharacter() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AASPCharacter, AASPCharacter::StaticClass, TEXT("AASPCharacter"), &Z_Registration_Info_UClass_AASPCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AASPCharacter), 3311254905U) },
+		{ Z_Construct_UClass_AASPCharacter, AASPCharacter::StaticClass, TEXT("AASPCharacter"), &Z_Registration_Info_UClass_AASPCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AASPCharacter), 761580993U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_2883795444(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_1233585810(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

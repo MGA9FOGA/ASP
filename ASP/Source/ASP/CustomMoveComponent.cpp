@@ -69,8 +69,8 @@ void UCustomMoveComponent::FixedUpdate(float _deltaTime)
 	{
 		FColor LineColor = b_OnGround ? FColor::Red : FColor::Green;
 		DrawDebugLine(GetWorld(), m_start, m_end, LineColor, false, 1.0f, 0, 2.0f);
-		FVector newLocation = GetOwner()->GetActorLocation() + Velocity * _deltaTime;
-		owner->SetActorLocation(newLocation, true);
+		m_newLocation = GetOwner()->GetActorLocation() + m_velocity * _deltaTime;
+		owner->SetActorLocation(m_newLocation, true);
 		//UE_LOG(LogTemp, Warning, TEXT("Update"));
 	}
 	b_JustJumped = false;
@@ -81,7 +81,7 @@ void UCustomMoveComponent::FixedUpdate(float _deltaTime)
 void UCustomMoveComponent::ApplyGravity(float _deltaTime)
 {
 	//Calculate Gravitiy Velocity
-	Velocity.Z -= Gravity * _deltaTime;
+	m_velocity.Z -= Gravity * _deltaTime;
 }
 
 void UCustomMoveComponent::Move(float _value, float _speed)
@@ -89,19 +89,19 @@ void UCustomMoveComponent::Move(float _value, float _speed)
 	//Calculate Velocity
 	//if (Velocity.Y > 200.0f || Velocity.Y < - 200.0f) return;
 	//Velocity += _direction * _speed;
-	Velocity.Y = _value * _speed;
+	m_velocity.Y = _value * _speed;
 }
 
 void UCustomMoveComponent::StopMove()
 {
-	Velocity.Y = 0.0f;
+	m_velocity.Y = 0.0f;
 }
 
 void UCustomMoveComponent::Jump(float _jumpStrength)
 {
 	if (!b_OnGround) return;
 	UE_LOG(LogTemp, Warning, TEXT("Jump"));
-	Velocity.Z = _jumpStrength;
+	m_velocity.Z = _jumpStrength;
 	b_OnGround = false;
 	b_JustJumped = true;
 }
@@ -118,7 +118,7 @@ void UCustomMoveComponent::OnHit(UPrimitiveComponent* _hitComp, AActor* _otherAc
 
 	if (_otherActor && _otherActor->Tags.Contains(FName("Ground")) && _otherActor != GetOwner())
 	{
-		Velocity.Z = 0.0f;
+		m_velocity.Z = 0.0f;
 	}
 }
 

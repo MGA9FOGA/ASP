@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ASPCharacter.h"
+#include "FRollbackManager.h"
 #include "InputHandler.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "GameManager.generated.h"
@@ -41,7 +42,13 @@ public:
 	void AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet);
 	const TArray<FInputPacket>& GetInputQueue(int _playerIndex) const;
 	void ProcessInputs(); 
-	EAction CheckForCombo(int _playerIndex);
+	EInputAction CheckForCombo(int _playerIndex);
+	
+	FRollbackManager RollbackManager = FRollbackManager();
+	
+	// Rollback-Resimulation
+	void PerformRollback(int32 _targetFrame);
+
 	
 	//Fixed Update
 	UFUNCTION()
@@ -50,8 +57,8 @@ public:
 	UFUNCTION()
 	void RegisterMovable(TScriptInterface<IMoveableInterface> _movable);
 	// Player Registration
-	FORCEINLINE void RegisterPlayer1(class AASPCharacter* _player, float _number){m_player1 = _player; m_player1->SetPlayerID(_number);}
-	FORCEINLINE void RegisterPlayer2(class AASPCharacter* _player, float _number){m_player2 = _player; m_player1->SetPlayerID(_number);}
+	//FORCEINLINE void RegisterPlayer1(class AASPCharacter* _player, float _number){m_player1 = _player; m_player1->SetPlayerID(_number);}
+	//FORCEINLINE void RegisterPlayer2(class AASPCharacter* _player, float _number){m_player2 = _player; m_player1->SetPlayerID(_number);}
 	//Getter & Setter
 	FORCEINLINE class AASPCharacter* GetPlayer1() const { return m_player1; }
 	FORCEINLINE class AASPCharacter* GetPlayer2() const { return m_player2; }
@@ -63,7 +70,7 @@ private:
 	void SpawnCharacterForController(AFightingGame_PlayerController* _pc, AASPCharacter*& _outCharacter,
 	                                 const FVector& _spawnPos, const FRotator& _spawnRot);
 	void InitializeFighters(AASPCharacter* _character, AFightingGame_PlayerController* _pc);
-
+	void SaveCurrentFrame(AASPCharacter* _player);
 public:
 	const float FIXED_UPDATE_RATE = 1.0f / 60.0f;
 	UPROPERTY(EditAnywhere)

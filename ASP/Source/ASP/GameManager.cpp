@@ -3,8 +3,10 @@
 
 #include "GameManager.h"
 #include "ASPCharacter.h"
+#include "CustomMoveComponent.h"
 #include "DynamicCamera.h"
 #include "FightingGame_PlayerController.h"
+#include "LogicStateMachine.h"
 #include "MoveableInterface.h"
 #include "StateMachine.h"
 #include "Engine/World.h"
@@ -92,13 +94,13 @@ void UGameManager::BeginPlaySetup()
 
 	InitializeFighters(m_player1, m_playerController1);
 	//InitializeFighters(m_player2, m_playerController2);
-
+	UE_LOG(LogTemp, Warning, TEXT("GetPlayer1(): m_player1 ist %s"), *m_playerController1->GetPlayer()->GetName());
 	UE_LOG(LogTemp, Log, TEXT("GameManager: Beide Spieler initialisiert"));
 }
 
 void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet)
 {
-	int32 PlayerIndex = _playerController->GetPlayer()->GetPlayerID();
+	int32 PlayerIndex = _playerController->GetPlayerID();
 	TArray<FInputPacket>& queue = m_playerInputQueues.FindOrAdd(PlayerIndex);
 
 	queue.Add(_packet);
@@ -118,35 +120,35 @@ void UGameManager::ProcessInputs()
 	for (auto& pair : m_playerInputQueues)
 	{
 		int PlayerIndex = pair.Key;
-		EAction action = CheckForCombo(PlayerIndex);
-		if (action == EAction::None)
+		EInputAction action = CheckForCombo(PlayerIndex);
+		if (action == EInputAction::None)
 			continue;
-		UE_LOG(LogTemp, Warning, TEXT("SetAction: %d"), action);
+		//UE_LOG(LogTemp, Warning, TEXT("SetAction: %d"), action);
 		AASPCharacter* character = (PlayerIndex == 0) ? GetPlayer1() : GetPlayer2();
 		if (character)
 			character->GetStateMachine()->SetAction(action);
 	}
 }
 
-EAction UGameManager::CheckForCombo(int _playerIndex)
+EInputAction UGameManager::CheckForCombo(int _playerIndex)
 {
 	constexpr int COMBOWINDOW = 4;
 
 	const TArray<FInputPacket>* queuePtr = m_playerInputQueues.Find(_playerIndex);
 	if (!queuePtr || queuePtr->Num() < 2)
 	{
-		return EAction::Idle;
+		return EInputAction::Idle;
 	}
 
 	const TArray<FInputPacket>& queueRef = *queuePtr;
 	int32 startIndex = FMath::Max(0, queueRef.Num() - COMBOWINDOW);
 
-	TArray<EAction> recentActions;
+	TArray<EInputAction> recentActions;
 	for (int32 i = startIndex; i < queueRef.Num(); i++)
 	{
 		FRawInput raw = InputHandler::DecodeInput(queueRef[i].Buttons);
-		EAction action = InputHandler::NormalizeInput(raw);
-		if (action != EAction::Idle)
+		EInputAction action = InputHandler::NormalizeInput(raw);
+		if (action != EInputAction::Idle)
 		{
 			recentActions.Add(action);
 		}
@@ -168,7 +170,72 @@ EAction UGameManager::CheckForCombo(int _playerIndex)
 		if (recentActions.Contains(Attack2)) return LowAttack2;
 	}
 
-	return recentActions.Num() > 0 ? recentActions.Last() : EAction::Idle;
+	return recentActions.Num() > 0 ? recentActions.Last() : EInputAction::Idle;
+}
+
+void UGameManager::PerformRollback(int32 _targetFrame)
+{
+	if (_targetFrame < 0 || _targetFrame >= FrameNumber)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Rollback: Ungültiger Ziel-Frame %d"), _targetFrame);
+		return;
+	}
+	
+	TArray<AASPCharacter*> players;
+	if (m_player1) players.Add(m_player1);
+	if (m_player2) players.Add(m_player2);
+
+	RollbackManager.RollbackToFrame(_targetFrame, players);
+	
+	for (AASPCharacter* player : players)
+	{
+		if (!player) continue;
+
+		FInputPacket restoredInput;
+		RollbackManager.LoadFrame(_targetFrame, player, restoredInput);
+		//maybe enter state einfügen
+		FRawInput raw = InputHandler::DecodeInput(restoredInput.Buttons);
+		EInputAction action = InputHandler::NormalizeInput(raw);
+		player->GetStateMachine()->SetAction(action);
+	}
+	
+	//simulate forward
+	for (int32 frame = _targetFrame + 1; frame <= FrameNumber; ++frame)
+	{
+		for (AASPCharacter* player : players)
+		{
+			if (!player) continue;
+
+			FInputPacket replayInput;
+			RollbackManager.LoadFrame(frame, player, replayInput);
+			
+			FRawInput raw = InputHandler::DecodeInput(replayInput.Buttons);
+			EInputAction action = InputHandler::NormalizeInput(raw);
+			player->GetStateMachine()->SetAction(action);
+			player->FixedUpdate(FIXED_UPDATE_RATE);
+		}
+	}
+}
+
+void UGameManager::SaveCurrentFrame(AASPCharacter* _player)
+{
+	if (_player) return;
+	
+	const TArray<FInputPacket>& queue1 = m_playerInputQueues.FindOrAdd(0);
+	//const TArray<FInputPacket>& queue2 = m_playerInputQueues.FindOrAdd(1);
+
+	FInputPacket input1 = queue1.Num() > 0 ? queue1.Last() : FInputPacket();
+	//FInputPacket input2 = Queue2.Num() > 0 ? queue2.Last() : FInputPacket();
+
+	if (m_player1)
+	{
+		RollbackManager.SaveFrame(FrameNumber, m_player1, input1);
+	}
+	
+	//if (m_player2)
+	//{
+	//	RollbackManager.SaveFrame(FrameNumber, m_player2, input2);
+	//}
 }
 
 void UGameManager::FixedGameUpdate60Hz(float _fixedDeltatime)
@@ -193,7 +260,8 @@ void UGameManager::FixedGameUpdate60Hz(float _fixedDeltatime)
 			ProcessInputs();
 		}
 	}
-
+	//if (m_player1)
+	//	SaveCurrentFrame(m_player1);
 	FrameNumber++;
 }
 
@@ -251,5 +319,6 @@ void UGameManager::InitializeFighters(AASPCharacter* _character, AFightingGame_P
 	fsm->SetPlayerController(_pc);
 	_character->SetPlayerController(_pc);
 	_pc->ResetInputBuffer();
+	//fsm->GetMap()[fsm->GetCurrentState()].State->EnterState(fsm);
 	//_character->SetHealth(_character->GetMaxHealth());
 }

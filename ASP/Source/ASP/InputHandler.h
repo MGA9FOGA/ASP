@@ -11,7 +11,10 @@
 
 struct FInputPacket
 {
-	FInputPacket();
+	FInputPacket(): FrameNumber(0), Buttons(0), ExtraFlags(0), RandomSeed(0)
+	{
+	}
+
 	FInputPacket(const int32 _inFrameNumber, const int8 _inButtons, const int8 _inExtraFlags, const int16 _inRandomSeed)
 	: FrameNumber(_inFrameNumber)
 	, Buttons(_inButtons)
@@ -57,7 +60,7 @@ struct FRawInput
 };
 
 /*PlayerActions*/
-enum EAction
+enum EInputAction
 {
 	None				= 0,
 	Block				= 1,
@@ -82,7 +85,6 @@ enum EAction
 	UpMoveLeft			= 20,
 	CrouchMoveRight		= 21,
 	CrouchMoveLeft		= 22,
-	Moving				= 23,
 	Idle				= 24,
 	JumpRight			= 25,
 	JumpLeft			= 26,
@@ -123,46 +125,46 @@ public:
 		return Out;
 	}
 
-	static EAction NormalizeInput(const FRawInput& Input)
+	static EInputAction NormalizeInput(const FRawInput& Input)
 	{
-		if (Input.Block) return EAction::Block;
+		if (Input.Block) return EInputAction::Block;
 		if (Input.Jump)
 		{
-			if (Input.Right) return EAction::JumpRight;
-			if (Input.Left) return EAction::JumpLeft;
-			return EAction::Jump;
+			if (Input.Right) return EInputAction::JumpRight;
+			if (Input.Left) return EInputAction::JumpLeft;
+			return EInputAction::Jump;
 		}
 		
 		// Jump
 		if (Input.Up)
 		{
-			if (Input.Right) return EAction::UpMoveRight;
-			if (Input.Left) return EAction::UpMoveLeft;
-			return EAction::Up;
+			if (Input.Right) return EInputAction::UpMoveRight;
+			if (Input.Left) return EInputAction::UpMoveLeft;
+			return EInputAction::Up;
 		}
 		
 		if (Input.Down)
 		{
-			if (Input.Right) return EAction::CrouchMoveRight;
-			if (Input.Left) return EAction::CrouchMoveLeft;
-			return EAction::Crouch;
+			if (Input.Right) return EInputAction::CrouchMoveRight;
+			if (Input.Left) return EInputAction::CrouchMoveLeft;
+			return EInputAction::Crouch;
 		}
 
 		// Normal Attacks
 		if (Input.Attack1)
 		{
-			return EAction::Attack1;
+			return EInputAction::Attack1;
 		}
 
 		if (Input.Attack2)
 		{
-			return EAction::Attack2;
+			return EInputAction::Attack2;
 		}
 
 		// Movement
-		if (Input.Right) return EAction::MoveRight;
-		if (Input.Left)  return EAction::MoveLeft;
+		if (Input.Right) return EInputAction::MoveRight;
+		if (Input.Left)  return EInputAction::MoveLeft;
 
-		return EAction::Idle;
+		return EInputAction::Idle;
 	}
 };

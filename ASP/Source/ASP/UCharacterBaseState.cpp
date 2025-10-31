@@ -2,11 +2,19 @@
 
 
 #include "UCharacterBaseState.h"
+
+#include "ASPCharacter.h"
+#include "FightingGame_PlayerController.h"
 #include "StateMachine.h"
 
 
 UCharacterBaseState::UCharacterBaseState()
 {}
+
+UCharacterBaseState::UCharacterBaseState(EStates _state)
+{
+	State = _state;
+}
 
 UCharacterBaseState::~UCharacterBaseState()
 {}
@@ -22,3 +30,4 @@ void UCharacterBaseState::ExitState(FFightingStateMachine* _stateMachine)
 void UCharacterBaseState::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
 {
 }
+

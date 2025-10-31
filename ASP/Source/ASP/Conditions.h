@@ -1,3 +1,4 @@
+#pragma once
 #include "ASPCharacter.h"
 #include "CustomMoveComponent.h"
 #include "FightingGame_PlayerController.h"
@@ -8,19 +9,20 @@
 
 inline bool IdleToMoving(FFightingStateMachine& _statemachine)
 {
-	if (_statemachine.GetAction() == EAction::MoveRight || _statemachine.GetAction() == EAction::MoveLeft) return true;
-	return false;
+	EInputAction action = _statemachine.GetAction();
+	return (action == EInputAction::MoveRight || action == EInputAction::MoveLeft);
 }
 
 inline bool IdleOrWalkToJump(FFightingStateMachine& _statemachine)
 {
-	if (_statemachine.GetAction() == EAction::JumpLeft || _statemachine.GetAction() == EAction::JumpRight) return true;
+	if (_statemachine.GetAction() == EInputAction::JumpLeft || _statemachine.GetAction() == EInputAction::JumpRight ||
+		_statemachine.GetAction() == Jump) return true;
 	return false;
 }
 
 inline bool WalkingToIdle(FFightingStateMachine& _statemachine)
 {
-	if (_statemachine.GetAction() == EAction::Idle) return true;
+	if (_statemachine.GetAction() == EInputAction::Idle || _statemachine.GetAction() == EInputAction::None ) return true;
 	return false;
 }
 

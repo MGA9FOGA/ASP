@@ -2,20 +2,17 @@
 
 #include "ASPCharacter.h"
 
+#include "AnimationStateMachine.h"
 #include "CustomMoveComponent.h"
 #include "Engine/LocalPlayer.h"
-#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
-#include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h"
 #include "FightingGame_PlayerController.h"
+#include "FRollbackManager.h"
 #include "GameManager.h"
-#include "InputActionValue.h"
 #include "StateMachine.h"
-
+#include "FRollbackManager.h"
+#include "LogicStateMachine.h"
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -60,8 +57,9 @@ AASPCharacter::AASPCharacter()
 
 	//MovmentComp for the Actor
 	m_movement = CreateDefaultSubobject<UCustomMoveComponent>(TEXT("MoveComponent"));
-	m_stateMachine = new FFightingStateMachine();
-
+	m_logicStateMachine = new LogicStateMachine();
+	m_animationStateMachine = new AnimationStateMachine(*m_logicStateMachine, *this);
+	
 	m_moveSpeed = 10000.0f;
 	m_jumpStrength = 500.0f;
 	
@@ -71,9 +69,9 @@ AASPCharacter::AASPCharacter()
 
 void AASPCharacter::StartFSM()
 {
-	if (m_stateMachine)
+	if (m_logicStateMachine)
 	{
-		m_stateMachine->GetMap()[m_stateMachine->CurrentCharacterStateInfo.EAction].State->EnterState(m_stateMachine);
+		m_logicStateMachine->GetMap()[m_logicStateMachine->GetCurrentState()].State->EnterState(m_logicStateMachine);
 	}
 }
 
@@ -88,13 +86,13 @@ void AASPCharacter::FixedUpdate(float _deltaTime)
 	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 100.0f));
 	m_movement->FixedUpdate(_deltaTime);
 	m_playerController->Update(_deltaTime);
-	if (m_stateMachine != nullptr)
+	if (m_logicStateMachine != nullptr)
 	{
-		m_stateMachine->Update(_deltaTime);
+		m_logicStateMachine->Update(_deltaTime);
 	}
 }
 
-void AASPCharacter::PerformAction(EAction _action) const
+void AASPCharacter::PerformAction(EInputAction _action) const
 {
 	//if (!m_playerController) return;
 	//switch (_action)
@@ -137,7 +135,7 @@ void AASPCharacter::StopMove() const
 	GetMovementComponent()->StopMove();
 }
 
-void AASPCharacter::Jump()
+void AASPCharacter::Jump() const
 {
 	GetMovementComponent()->Jump(m_jumpStrength);
 }
@@ -157,39 +155,59 @@ void AASPCharacter::BeginPlay()
 		{
 			gm->RegisterMovable(this);
 		}
-		Register();
+		//Register();
 	}
 	FTimerHandle timerHandle;
 
-	GetWorld()->GetTimerManager().SetTimer(
-		timerHandle,
-		this,
-		&AASPCharacter::Start,
-		0.5f,
-		false
-	);
+	//GetWorld()->GetTimerManager().SetTimer(
+	//	timerHandle,
+	//	this,
+	//	&AASPCharacter::Start,
+	//	0.5f,
+	//	false
+	//);
 }
 
 void AASPCharacter::Start()
 {
-	m_stateMachine->GetMap()[m_stateMachine->CurrentCharacterStateInfo.EAction].State->EnterState(m_stateMachine);
+	m_logicStateMachine->GetMap()[m_logicStateMachine->GetCurrentState()].State->EnterState(m_logicStateMachine);
 }
 
-void AASPCharacter::Register()
-{
-	if (UGameManager* gm = GetGameInstance()->GetSubsystem<UGameManager>())
-	{
-		if (!gm->GetPlayer1())
-		{
-			gm->RegisterPlayer1(this, 0);
-			return;
-		}
-		else if (!gm->GetPlayer2())
-		{
-			gm->RegisterPlayer2(this, 1);
-		}
-	}
-}
+//void AASPCharacter::Register()
+//{
+//	if (UGameManager* gm = GetGameInstance()->GetSubsystem<UGameManager>())
+//	{Unreal Engine reflection macro
+     //UPROPERTY
+     //
+     //
+     //Properties are declared using standard C++ variable syntax, preceded by the UPROPERTY macro which defines property metadata and variable specifiers.
+     //
+     //Remarks:
+     //
+     //The UPROPERTY macro enables a member variable of a UCLASS or a USTRUCT to be used as a UPROPERTY.
+     //A UPROPERTY has many uses. It can allow the variable to be replicated, serialized, and accessed from Blueprints. They are also used by the garbage collector to keep track of how many references there are to a UObject.
+     //Learn more: Properties, Property Specifiers.
+     //
+     //Example:
+     //
+     //
+     //
+     //UPROPERTY([specifier, specifier, ...], [meta(key=value, key=value, ...)])
+     //Type VariableName;
+     //
+     // Src.Caches.UE53_generated_header.h
+//		if (!gm->GetPlayer1())
+//		{
+//			gm->RegisterPlayer1(this, 0);
+//			UE_LOG(LogTemp, Warning, TEXT("GetPlayer1(): m_player1 ist %s"), *gm->GetPlayer1()->GetName());
+//		}
+//		else if (!gm->GetPlayer2())
+//		{
+//			gm->RegisterPlayer2(this, 1);
+//			UE_LOG(LogTemp, Warning, TEXT("GetPlayer2(): m_player1 ist %s"), *gm->GetPlayer2()->GetName());
+//		}
+//	}
+//}
 
 void AASPCharacter::HandleCustomHit(const FHitResult& _hit)
 {

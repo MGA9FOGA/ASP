@@ -1,0 +1,18 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\ucharacteranimationset.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\aspeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\asp\\definitions.asp.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacteranimationset.h",
+            "d:\\github\\asp\\asp\\source\\asp\\statemachine.h",
+            "d:\\github\\asp\\asp\\source\\asp\\inputhandler.h",
+            "d:\\github\\asp\\asp\\source\\asp\\ucharacterbasestate.h",
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\ucharacteranimationset.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

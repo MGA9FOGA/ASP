@@ -30,9 +30,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Gravity = 980.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Velocity = FVector::ZeroVector;
-
 	//Getter / Setter
 	UFUNCTION(BlueprintCallable)
 	bool GetBoolOnGround () const {return b_OnGround;}
@@ -72,7 +69,11 @@ public:
 	FOnCustomOverlap OnCustomEndOverlap;
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex);
-	
+
+	FORCEINLINE FVector GetLocation() const {return m_newLocation;}
+	FORCEINLINE void SetLocation(FVector _location) {m_newLocation = _location;}
+	FORCEINLINE FVector GetVelocity() const {return m_velocity;}
+	FORCEINLINE void SetVelocity(FVector _velocity) {m_velocity = _velocity;}
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
 	bool b_OnGround = false;
@@ -88,6 +89,10 @@ private:
 	FVector m_end;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
 	FHitResult m_hitResult;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
+	FVector m_newLocation;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess=true))
+	FVector m_velocity = FVector::ZeroVector;
 
 	void LineTraceIgnoreClass(UWorld* _world, TSubclassOf<class AASPCharacter> _ignoreClass);
 	bool CheckIfOnGround(UWorld* _world, FHitResult& _outHit, FVector _start, FVector _end, FCollisionQueryParams _params) const;

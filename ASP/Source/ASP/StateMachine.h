@@ -2,48 +2,33 @@
 
 #pragma once
 
+
+UENUM(BlueprintType)
+enum class EStates : uint8
+{
+	NONE        UMETA(DisplayName="None"),
+	IDLE        UMETA(DisplayName="Idle"),
+	MOVING      UMETA(DisplayName="Moving"),
+	JUMPING     UMETA(DisplayName="Jumping"),
+	STARTJUMP   UMETA(DisplayName="StartJump"),
+	FALLING     UMETA(DisplayName="Falling"),
+	ATTACKING   UMETA(DisplayName="Attacking"),
+	CROUCHING   UMETA(DisplayName="Crouching"),
+	HITTED      UMETA(DisplayName="Hitted")
+};
+
 #include "CoreMinimal.h"
 #include "InputHandler.h"
 #include "UCharacterBaseState.h"
 class AFightingGame_PlayerController;
 
 
-struct FAnimationMontageState
+struct FStateTransition 
 {
-	FAnimationMontageState(): MontageID(0), Time(0)
-	{
-	}
-
-	FAnimationMontageState(int32 _id, float _time): MontageID(_id), Time(_time) {};
-
-	int32 MontageID; //f.e. Attack1_Montage
-	float Time; //progess in Secounds
-};
-
-struct FCharacterState
-{
-	FCharacterState();
-	FCharacterState(FVector _pos, FVector _vel, EAction _act, float _timer, int32 _facing,
-						 FAnimationMontageState* _montageState): Position(_pos), Velocity(_vel), EAction(_act),
-						                                         StateTimer(_timer), Facing(_facing),
-						                                         AnimationMontage(nullptr)
-	{
-	}
-
-	FVector Position;
-	FVector Velocity;
-	EAction EAction;
-	float StateTimer; // duration in the current State
-	int32 Facing; //-1 left, +1 right
-	FAnimationMontageState* AnimationMontage;
-};
-
-struct FStateTransition
-{
-	EAction TargetStateAction;
+	EStates TargetStateAction;
 	TFunction<bool()> Condition;
 
-	FStateTransition(EAction _inTarget, TFunction<bool()> _inCondition)
+	FStateTransition(EStates _inTarget, TFunction<bool()> _inCondition)
 	 : TargetStateAction(_inTarget), Condition(_inCondition) {}
 };
 
@@ -57,36 +42,30 @@ struct FStateDefinition
 /**
  * 
  */
-class ASP_API FFightingStateMachine final
+class ASP_API FFightingStateMachine
 {
 public:
 	virtual ~FFightingStateMachine() = default;
 	FFightingStateMachine();
 	//CurrentState
 	UCharacterBaseState* CurrentState;
-	FCharacterState CurrentCharacterStateInfo = FCharacterState(FVector::ZeroVector, FVector::ZeroVector, Idle, 0.0f, 1, new FAnimationMontageState());
-
+	
 	//Main Funcitons
 	void Update(float _deltaTime);
-	void ChangeState(EAction _newAction);
+	void ChangeState(EStates _newAction);
 	void TryTransitions();
 	
-	FORCEINLINE void SetAction(EAction _newAction){m_ECurrentInputAction = _newAction;}
-	FORCEINLINE EAction GetAction() const {return m_ECurrentInputAction;}
+	FORCEINLINE void SetAction(EInputAction _newAction){m_ECurrentInputAction = _newAction;}
+	FORCEINLINE EInputAction GetAction() const {return m_ECurrentInputAction;}
 	
 	FORCEINLINE void SetPlayerController(AFightingGame_PlayerController* _playerController){m_playerController = _playerController;}
 	FORCEINLINE AFightingGame_PlayerController* GetPlayerController() const {return m_playerController;}
-	FORCEINLINE TMap<EAction, FStateDefinition> GetMap() const {return m_stateMap;}
-private:
-	TMap<EAction, FStateDefinition> m_stateMap;
+	FORCEINLINE TMap<EStates, FStateDefinition> GetMap() const {return m_stateMap;}
+	FORCEINLINE EStates GetCurrentState() const {return m_ECurrentState;}
+	FORCEINLINE void SetCurrentState(EStates _state) {m_ECurrentState = _state;}
+protected:
+	TMap<EStates, FStateDefinition> m_stateMap;
 	AFightingGame_PlayerController* m_playerController;
-	EAction m_ECurrentInputAction = EAction::None;
-	
-	/* States */
-	FStateDefinition m_idle_State			= FStateDefinition();
-	FStateDefinition m_moving_State			= FStateDefinition();
-	FStateDefinition m_jumping_State		= FStateDefinition();
-	FStateDefinition m_attackig1_State		= FStateDefinition();
-	FStateDefinition m_attackig2_State		= FStateDefinition();
-	FStateDefinition m_crouching_State		= FStateDefinition();
+	EInputAction m_ECurrentInputAction = EInputAction::None;
+	EStates m_ECurrentState = EStates::NONE;
 };

@@ -8,16 +8,17 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameManager.h"
 #include "InputHandler.h"
+#include "LogicStateMachine.h"
 #include "StateMachine.h"
 
 void AFightingGame_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	Start();
 	if (UGameManager* GM = GetGameInstance()->GetSubsystem<UGameManager>())
 	{
 		GM->BeginPlaySetup();
 	}
-	Start();
 }
 
 void AFightingGame_PlayerController::Start()
