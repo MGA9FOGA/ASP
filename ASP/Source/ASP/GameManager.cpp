@@ -94,8 +94,11 @@ void UGameManager::BeginPlaySetup()
 
 	InitializeFighters(m_player1, m_playerController1);
 	//InitializeFighters(m_player2, m_playerController2);
+
+	m_player1->Start();
 	UE_LOG(LogTemp, Warning, TEXT("GetPlayer1(): m_player1 ist %s"), *m_playerController1->GetPlayer()->GetName());
 	UE_LOG(LogTemp, Log, TEXT("GameManager: Beide Spieler initialisiert"));
+	
 }
 
 void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet)
@@ -126,7 +129,7 @@ void UGameManager::ProcessInputs()
 		//UE_LOG(LogTemp, Warning, TEXT("SetAction: %d"), action);
 		AASPCharacter* character = (PlayerIndex == 0) ? GetPlayer1() : GetPlayer2();
 		if (character)
-			character->GetStateMachine()->SetAction(action);
+			character->GetLogicStateMachine()->SetAction(action);
 	}
 }
 
@@ -196,7 +199,7 @@ void UGameManager::PerformRollback(int32 _targetFrame)
 		//maybe enter state einfügen
 		FRawInput raw = InputHandler::DecodeInput(restoredInput.Buttons);
 		EInputAction action = InputHandler::NormalizeInput(raw);
-		player->GetStateMachine()->SetAction(action);
+		player->GetLogicStateMachine()->SetAction(action);
 	}
 	
 	//simulate forward
@@ -211,7 +214,7 @@ void UGameManager::PerformRollback(int32 _targetFrame)
 			
 			FRawInput raw = InputHandler::DecodeInput(replayInput.Buttons);
 			EInputAction action = InputHandler::NormalizeInput(raw);
-			player->GetStateMachine()->SetAction(action);
+			player->GetLogicStateMachine()->SetAction(action);
 			player->FixedUpdate(FIXED_UPDATE_RATE);
 		}
 	}
@@ -313,10 +316,10 @@ void UGameManager::InitializeFighters(AASPCharacter* _character, AFightingGame_P
 {
 	if (!_character || !_pc) return;
 
-	FFightingStateMachine* fsm = _character->GetStateMachine();
-	if (!fsm) return;
-
-	fsm->SetPlayerController(_pc);
+	//FFightingStateMachine* fsm = _character->GetLogicStateMachine();
+	//if (!fsm) return;
+//
+	//fsm->SetPlayerController(_pc);
 	_character->SetPlayerController(_pc);
 	_pc->ResetInputBuffer();
 	//fsm->GetMap()[fsm->GetCurrentState()].State->EnterState(fsm);

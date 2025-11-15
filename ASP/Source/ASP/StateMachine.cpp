@@ -14,6 +14,8 @@ FFightingStateMachine::FFightingStateMachine()
 {
 }
 
+
+
 void FFightingStateMachine::Update(float _deltaTime)
 {
 	if (m_stateMap.Contains(m_ECurrentState))
@@ -31,7 +33,9 @@ void FFightingStateMachine::Update(float _deltaTime)
 void FFightingStateMachine::ChangeState(EStates _newState)
 {
 	if (m_ECurrentState == _newState) return;
-
+	
+	m_EPreviousState = m_EPreviousState;
+	
 	// Exit des alten States
 	if (m_stateMap.Contains(m_ECurrentState) && m_stateMap[m_ECurrentState].State.IsValid())
 	{
@@ -65,4 +69,20 @@ void FFightingStateMachine::TryTransitions()
 		}
 	}
 }
+
+void FFightingStateMachine::BuildStates()
+{
+}
+
+void FFightingStateMachine::Start()
+{
+	m_ECurrentState = EStates::IDLE;
+	if (auto* StatePair = m_stateMap.Find(EStates::IDLE))
+	{
+		if (StatePair->State.IsValid())
+			m_currentState = StatePair->State.Get();
+	}
+	m_currentState->EnterState(this);
+}
+
 

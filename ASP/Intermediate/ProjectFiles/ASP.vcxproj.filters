@@ -34,6 +34,12 @@
     <Filter Include="Source\ASP">
       <UniqueIdentifier>{76086E11-042D-38C4-B9A1-BB3E92F103FD}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\ASP\AnimationStateMachine.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\AnimationStateMachine.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <None Include="..\..\Source\ASP\ASP.Build.cs">
       <Filter>Source\ASP</Filter>
     </None>
@@ -55,6 +61,15 @@
     <ClCompile Include="..\..\Source\ASP\ASPGameMode.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\CharacterAnimInstance.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\CharacterAnimInstance.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\Conditions.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\CustomMoveComponent.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
@@ -73,16 +88,34 @@
     <ClCompile Include="..\..\Source\ASP\FightingGame_PlayerController.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\FRollbackManager.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\FRollbackManager.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\GameManager.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\GameManager.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\Idle_End_AnimNotify.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\Idle_End_AnimNotify.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\InputHandler.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\InputHandler.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\LogicStateMachine.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\LogicStateMachine.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\MoveableInterface.cpp">
@@ -97,10 +130,46 @@
     <ClCompile Include="..\..\Source\ASP\StateMachine.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterAnimationBaseState.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterAnimationBaseState.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterAnimationSet.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterAnimationSet.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterBaseState.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterBaseState.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Idle.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Jump.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Move.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Logic_Idle.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Logic_Jump.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Logic_Move.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UFighting_GameGameInstance.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UFighting_GameGameInstance.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
   </ItemGroup>

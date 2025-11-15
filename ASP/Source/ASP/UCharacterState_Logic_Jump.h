@@ -3,7 +3,7 @@
 #include "FightingGame_PlayerController.h"
 #include "UCharacterBaseState.h"
 
-class UCharacterState_Logic_Jump : public UCharacterBaseState
+class ASP_API UCharacterState_Logic_Jump : public UCharacterBaseState
 {
 public:
 	using UCharacterBaseState::UCharacterBaseState;
@@ -16,7 +16,7 @@ public:
 
 inline void UCharacterState_Logic_Jump::EnterState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("ENTER: Jump"));
+	//UE_LOG(LogTemp, Log, TEXT("ENTER: Jump"));
 	if (!_stateMachine || !_stateMachine->GetPlayerController() || !_stateMachine->GetPlayerController()->GetPlayer())
 		return;
 	_stateMachine->SetCurrentState(State);
@@ -25,7 +25,7 @@ inline void UCharacterState_Logic_Jump::EnterState(FFightingStateMachine* _state
 
 inline void UCharacterState_Logic_Jump::ExitState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("EXIT: Jump"));
+	//UE_LOG(LogTemp, Log, TEXT("EXIT: Jump"));
 }
 
 inline void UCharacterState_Logic_Jump::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)

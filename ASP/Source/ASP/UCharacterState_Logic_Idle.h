@@ -3,12 +3,10 @@
 #include "StateMachine.h"
 #include "UCharacterBaseState.h"
 
-class UCharacterState_Logic_Idle : public UCharacterBaseState
+class ASP_API UCharacterState_Logic_Idle : public UCharacterBaseState
 {
 public:
 	using UCharacterBaseState::UCharacterBaseState;
-	
-	FString Name = "Idle";
 	virtual void EnterState(FFightingStateMachine* _stateMachine) override;
 	virtual void ExitState(FFightingStateMachine* _stateMachine) override;
 	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) override;
@@ -17,7 +15,7 @@ public:
 
 inline void UCharacterState_Logic_Idle::EnterState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("ENTER: Idle"));
+	//UE_LOG(LogTemp, Log, TEXT("ENTER: Idle"));
 
 	if (_stateMachine == nullptr) return;
 	_stateMachine->SetCurrentState(State);
@@ -42,7 +40,7 @@ inline void UCharacterState_Logic_Idle::EnterState(FFightingStateMachine* _state
 
 inline void UCharacterState_Logic_Idle::ExitState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("EXIT: Idle"));
+	//UE_LOG(LogTemp, Log, TEXT("EXIT: Idle"));
 }
 
 inline void UCharacterState_Logic_Idle::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)

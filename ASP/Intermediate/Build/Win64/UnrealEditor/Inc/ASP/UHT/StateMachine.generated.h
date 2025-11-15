@@ -26,6 +26,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	op(EStates::JUMPING) \
 	op(EStates::STARTJUMP) \
 	op(EStates::FALLING) \
+	op(EStates::LANDING) \
 	op(EStates::ATTACKING) \
 	op(EStates::CROUCHING) \
 	op(EStates::HITTED) 

@@ -45,6 +45,8 @@ struct Z_Construct_UEnum_ASP_EStates_Statics
 		{ "IDLE.Name", "EStates::IDLE" },
 		{ "JUMPING.DisplayName", "Jumping" },
 		{ "JUMPING.Name", "EStates::JUMPING" },
+		{ "LANDING.DisplayName", "Landing" },
+		{ "LANDING.Name", "EStates::LANDING" },
 		{ "ModuleRelativePath", "StateMachine.h" },
 		{ "MOVING.DisplayName", "Moving" },
 		{ "MOVING.Name", "EStates::MOVING" },
@@ -61,6 +63,7 @@ struct Z_Construct_UEnum_ASP_EStates_Statics
 		{ "EStates::JUMPING", (int64)EStates::JUMPING },
 		{ "EStates::STARTJUMP", (int64)EStates::STARTJUMP },
 		{ "EStates::FALLING", (int64)EStates::FALLING },
+		{ "EStates::LANDING", (int64)EStates::LANDING },
 		{ "EStates::ATTACKING", (int64)EStates::ATTACKING },
 		{ "EStates::CROUCHING", (int64)EStates::CROUCHING },
 		{ "EStates::HITTED", (int64)EStates::HITTED },
@@ -93,10 +96,10 @@ UEnum* Z_Construct_UEnum_ASP_EStates()
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_StateMachine_h_Statics
 {
 	static constexpr FEnumRegisterCompiledInInfo EnumInfo[] = {
-		{ EStates_StaticEnum, TEXT("EStates"), &Z_Registration_Info_UEnum_EStates, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3442967891U) },
+		{ EStates_StaticEnum, TEXT("EStates"), &Z_Registration_Info_UEnum_EStates, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 4060847622U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_StateMachine_h_1511150875(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_StateMachine_h_3102310730(TEXT("/Script/ASP"),
 	nullptr, 0,
 	nullptr, 0,
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_StateMachine_h_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_StateMachine_h_Statics::EnumInfo));

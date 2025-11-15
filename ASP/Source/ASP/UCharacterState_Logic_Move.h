@@ -3,7 +3,7 @@
 #include "FightingGame_PlayerController.h"
 #include "UCharacterBaseState.h"
 
-class UCharacterState_Logic_Move : public UCharacterBaseState
+class ASP_API UCharacterState_Logic_Move : public UCharacterBaseState
 {
 public:
 	using UCharacterBaseState::UCharacterBaseState;
@@ -15,14 +15,14 @@ public:
 
 inline void UCharacterState_Logic_Move ::EnterState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("ENTER: Move"));
+	//UE_LOG(LogTemp, Log, TEXT("ENTER: Move"));
 	if (_stateMachine == nullptr) return;
 	_stateMachine->SetCurrentState(State);
 }
 
 inline void UCharacterState_Logic_Move ::ExitState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("EXIT: Move"));
+	//UE_LOG(LogTemp, Log, TEXT("EXIT: Move"));
 }
 
 inline void UCharacterState_Logic_Move ::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)

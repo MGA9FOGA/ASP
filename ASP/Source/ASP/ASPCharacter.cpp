@@ -3,6 +3,7 @@
 #include "ASPCharacter.h"
 
 #include "AnimationStateMachine.h"
+#include "CharacterAnimInstance.h"
 #include "CustomMoveComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Components/CapsuleComponent.h"
@@ -53,11 +54,12 @@ AASPCharacter::AASPCharacter()
 		Mesh->SetCollisionProfileName(MeshCollisionProfileName);
 		Mesh->SetGenerateOverlapEvents(false);
 		Mesh->SetCanEverAffectNavigation(false);
+		Mesh->SetAnimInstanceClass(UCharacterAnimInstance::StaticClass());
 	}
 
 	//MovmentComp for the Actor
 	m_movement = CreateDefaultSubobject<UCustomMoveComponent>(TEXT("MoveComponent"));
-	m_logicStateMachine = new LogicStateMachine();
+	m_logicStateMachine = new LogicStateMachine(*this);
 	m_animationStateMachine = new AnimationStateMachine(*m_logicStateMachine, *this);
 	
 	m_moveSpeed = 10000.0f;
@@ -65,14 +67,6 @@ AASPCharacter::AASPCharacter()
 	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
-}
-
-void AASPCharacter::StartFSM()
-{
-	if (m_logicStateMachine)
-	{
-		m_logicStateMachine->GetMap()[m_logicStateMachine->GetCurrentState()].State->EnterState(m_logicStateMachine);
-	}
 }
 
 void AASPCharacter::Tick(float _deltaSeconds)
@@ -89,6 +83,10 @@ void AASPCharacter::FixedUpdate(float _deltaTime)
 	if (m_logicStateMachine != nullptr)
 	{
 		m_logicStateMachine->Update(_deltaTime);
+	}
+	if (m_animationStateMachine != nullptr)
+	{
+		m_animationStateMachine->Update(_deltaTime);
 	}
 }
 
@@ -141,10 +139,8 @@ void AASPCharacter::Jump() const
 }
 
 
-void AASPCharacter::BeginPlay()
+void AASPCharacter::Start()
 {
-	Super::BeginPlay();
-
 	if (m_movement)
 	{
 		m_movement->OnCustomHit.AddDynamic(this, &AASPCharacter::HandleCustomHit);
@@ -155,23 +151,19 @@ void AASPCharacter::BeginPlay()
 		{
 			gm->RegisterMovable(this);
 		}
-		//Register();
 	}
-	FTimerHandle timerHandle;
 
-	//GetWorld()->GetTimerManager().SetTimer(
-	//	timerHandle,
-	//	this,
-	//	&AASPCharacter::Start,
-	//	0.5f,
-	//	false
-	//);
+	m_logicStateMachine->Start();
+	m_animationStateMachine->Start();
+
+	UCharacterAnimInstance* animInstance = Cast<UCharacterAnimInstance>(Mesh->GetAnimInstance());
+	if (animInstance && m_animationStateMachine)
+	{
+		animInstance->OnLandingEndedNative.BindRaw(m_animationStateMachine, &AnimationStateMachine::OnLandingFinished);
+	}
 }
 
-void AASPCharacter::Start()
-{
-	m_logicStateMachine->GetMap()[m_logicStateMachine->GetCurrentState()].State->EnterState(m_logicStateMachine);
-}
+
 
 //void AASPCharacter::Register()
 //{

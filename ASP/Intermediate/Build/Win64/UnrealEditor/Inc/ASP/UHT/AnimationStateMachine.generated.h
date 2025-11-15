@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define ASP_AnimationStateMachine_generated_h
 
-#define FID_ASP_Source_ASP_AnimationStateMachine_h_11_GENERATED_BODY \
+#define FID_ASP_Source_ASP_AnimationStateMachine_h_13_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FAnimationMontageState_Statics; \
 	ASP_API static class UScriptStruct* StaticStruct();
 

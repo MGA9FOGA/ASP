@@ -5,14 +5,8 @@ class ASP_API LogicStateMachine : public FFightingStateMachine
 {
 public:
 	LogicStateMachine();
+	LogicStateMachine(AASPCharacter& _character);
 	virtual ~LogicStateMachine() override;
-
-private:
-	/* States */
-	FStateDefinition m_idle_State			= FStateDefinition();
-	FStateDefinition m_moving_State			= FStateDefinition();
-	FStateDefinition m_jumping_State		= FStateDefinition();
-	FStateDefinition m_attackig1_State		= FStateDefinition();
-	FStateDefinition m_attackig2_State		= FStateDefinition();
-	FStateDefinition m_crouching_State		= FStateDefinition();
+	virtual void BuildStates() override;
+	bool HasStateJustChangedTo(EStates _targetState) const;
 };

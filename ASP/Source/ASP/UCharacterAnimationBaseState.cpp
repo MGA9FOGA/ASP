@@ -1,43 +1,53 @@
-#include "D:\Github\ASP\ASP\Intermediate\Build\Win64\x64\ASPEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
 #include "UCharacterAnimationBaseState.h"
-
 #include "ASPCharacter.h"
 #include "FightingGame_PlayerController.h"
+#include "UCharacterAnimationSet.h"
 
-UCharacterAnimationBaseState::UCharacterAnimationBaseState()
+//UCharacterAnimationBaseState::UCharacterAnimationBaseState()
+//{
+//	animations.Add("Idle", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/Idle_Montage.Idle_Montage'")));
+//	animations.Add("Move", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/'")));
+//	animations.Add("JumpStart", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/'")));
+//	animations.Add("Fall", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/'")));
+//
+//}
+
+
+void UCharacterAnimationBaseState::PlayAnimationMontage(const FFightingStateMachine* _stateMachine,
+                                                        const EStates& _states)
 {
-	animations.Add("Idle", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/Idle_Montage.Idle_Montage'")));
-	animations.Add("Move", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/'")));
-	animations.Add("JumpStart", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/'")));
-	animations.Add("Fall", LoadObject<UAnimMontage>(nullptr, TEXT("AnimMontage'/Game/Animations/'")));
+	if (!_stateMachine) return;
 
-}
-
-
-void UCharacterAnimationBaseState::PlayAnimationMontage(const FFightingStateMachine* _stateMachine,const FString& _animationName)
-{
-	auto* pc = _stateMachine->GetPlayerController();
-	if (!pc) return;
-
-	AASPCharacter* character = Cast<AASPCharacter>(pc->GetPawn());
+	AASPCharacter* character = _stateMachine->GetCharacter();
 	if (!character) return;
 
-	if (UAnimInstance* anim = character->GetSkeletalMeshComponent()->GetAnimInstance())
+	UCharacterAnimationSet* set = character->GetAnimationSet();
+	if (!set)
 	{
-		if (UAnimMontage** foundMontage = animations.Find(_animationName))
-		{
-			if (UAnimMontage* montage = *foundMontage)
-			{
-				anim->Montage_Play(montage);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Animation '%s' is null in map."), *_animationName);
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Animation '%s' not found in animations map."), *_animationName);
-		}
+		UE_LOG(LogTemp, Warning, TEXT("Character has no AnimationSet."));
+		return;
+	}
+
+	TObjectPtr<UAnimMontage>* montagePtr = set->MontageMap.Find(_states);
+	if (!montagePtr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("State not found in MontageMap."));
+		return;
+	}
+
+	UAnimMontage* foundMontage = montagePtr->Get();
+	if (!foundMontage)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Montage found in MontageMap but it is NULL."));
+		return;
+	}
+
+	if (UAnimInstance* animInstance = character->GetSkeletalMeshComponent()->GetAnimInstance())
+	{
+		animInstance->Montage_Play(foundMontage, 1.0f);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AnimInstance is NULL on character mesh."));
 	}
 }

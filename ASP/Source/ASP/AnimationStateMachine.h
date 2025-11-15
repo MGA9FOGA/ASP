@@ -1,4 +1,6 @@
 #pragma once
+#include <filesystem>
+
 #include "ASPCharacter.h"
 #include "StateMachine.h"
 #include "AnimationStateMachine.generated.h"
@@ -55,8 +57,14 @@ public:
 	AnimationStateMachine();
 	AnimationStateMachine(LogicStateMachine& _stateMachine, AASPCharacter& _character);
 	virtual ~AnimationStateMachine() override;
+	virtual void BuildStates() override;
+	//Delegate Function
+	void OnLandingFinished();
 
+	FORCEINLINE bool GetIsLanded()const {return b_landingFinished;}
+	FORCEINLINE void SetBoolIsLanded(bool _b) {b_landingFinished = _b;}
 private:
 	LogicStateMachine* m_logicStateMachine;
-	AASPCharacter* m_character;
+	//Landing Trasitions Bool
+	bool b_landingFinished = false;
 };

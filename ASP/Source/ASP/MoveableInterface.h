@@ -10,12 +10,12 @@
  * 
  */
 UINTERFACE()
-class UMoveableInterface : public UInterface
+class ASP_API UMoveableInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class IMoveableInterface
+class ASP_API IMoveableInterface
 {
 	GENERATED_BODY()
 

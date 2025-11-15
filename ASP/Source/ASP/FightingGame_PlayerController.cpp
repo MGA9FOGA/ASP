@@ -151,7 +151,7 @@ void AFightingGame_PlayerController::SetCharacterRef(AASPCharacter* _character)
 	if (_character)
 	{
 		_character->SetPlayerController(this);
-		_character->GetStateMachine()->SetPlayerController(this);
+		_character->GetLogicStateMachine()->SetPlayerController(this);
 	}
 }
 

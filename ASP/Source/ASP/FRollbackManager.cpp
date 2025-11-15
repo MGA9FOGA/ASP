@@ -13,7 +13,7 @@ void FRollbackManager::SaveFrame(int32 _frame, AASPCharacter* _player, const FIn
 	FCharacterState s;
 	s.Position			= _player->GetMovementComponent()->GetLocation();
 	s.Velocity			= _player->GetMovementComponent()->GetVelocity();
-	s.LogicState		= _player->GetStateMachine()->GetCurrentState();
+	s.LogicState		= _player->GetLogicStateMachine()->GetCurrentState();
 	s.StateTimer		= 0;
 	s.Health			= 0;
 	s.Facing			= 0; //0 or 180;
@@ -40,7 +40,7 @@ void FRollbackManager::LoadFrame(int32 _frame, AASPCharacter* _player, FInputPac
 
 	_player->GetMovementComponent()->SetLocation(snapshot.State.Position);
 	_player->GetMovementComponent()->SetVelocity(snapshot.State.Velocity);
-	_player->GetStateMachine()->SetCurrentState(snapshot.State.LogicState);
+	_player->GetLogicStateMachine()->SetCurrentState(snapshot.State.LogicState);
 	//StateTimer			=	_s.StateTimer;
 	//Health				=	_s.Health;
 	//Facing				=	_s.Facing;
