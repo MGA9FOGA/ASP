@@ -27,9 +27,9 @@ void UCharacterAnimInstance::HandleMontageEnded(UAnimMontage* _montage, bool _bI
 		return;
 	}
 
-	if (TObjectPtr<UAnimMontage>* montagePtr = set->MontageMap.Find(EStates::LANDING))
+	if (TObjectPtr<UAnimMontage>* montagePtrLanding = set->MontageMap.Find(EStates::LANDING))
 	{
-		UAnimMontage* foundMontage = montagePtr->Get();
+		UAnimMontage* foundMontage = montagePtrLanding->Get();
 		if (foundMontage && _montage == foundMontage)
 		{
 			OnLandingEndedNative.ExecuteIfBound();
@@ -39,8 +39,20 @@ void UCharacterAnimInstance::HandleMontageEnded(UAnimMontage* _montage, bool _bI
 			UE_LOG(LogTemp, Warning, TEXT("Montage found in MontageMap but it is NULL."));
 		}
 	}
-	else
+	else if (TObjectPtr<UAnimMontage>* montagePtrJump = set->MontageMap.Find(EStates::STARTJUMP))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("State not found in MontageMap."));
+		UAnimMontage* foundMontage = montagePtrJump->Get();
+		if (foundMontage && _montage == foundMontage)
+		{
+			OnJumpStartEndedNative.ExecuteIfBound();
+		}
+		else if (!foundMontage)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Montage found in MontageMap but it is NULL."));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("State not found in MontageMap."));
+		}
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "DynamicMesh/MeshTransforms.h"
 #include "CustomMoveComponent.generated.h"
 
 
@@ -71,16 +72,17 @@ public:
 	void OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex);
 
 	FORCEINLINE FVector GetLocation() const {return m_newLocation;}
-	FORCEINLINE void SetLocation(FVector _location) {m_newLocation = _location;}
-	FORCEINLINE FVector GetVelocity() const {return m_velocity;}
-	FORCEINLINE void SetVelocity(FVector _velocity) {m_velocity = _velocity;}
+	FORCEINLINE void SetLocation(const FVector& _location) {m_newLocation = _location;}
+	FORCEINLINE FVector GetOwnVelocity() const {return m_velocity;}
+	FORCEINLINE void SetVelocity(const FVector& _velocity) {m_velocity = _velocity;}
+
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
 	bool b_OnGround = false;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
 	bool b_JustJumped = false;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
-	bool b_isColliderOnTheGround = false;	
+	bool b_isColliderOnTheGround = false;
 	FCollisionQueryParams m_collisionParams;
 	UWorld* m_world;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
@@ -91,7 +93,7 @@ private:
 	FHitResult m_hitResult;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
 	FVector m_newLocation;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	FVector m_velocity = FVector::ZeroVector;
 
 	void LineTraceIgnoreClass(UWorld* _world, TSubclassOf<class AASPCharacter> _ignoreClass);

@@ -100,12 +100,6 @@
     <ClCompile Include="..\..\Source\ASP\GameManager.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ASP\Idle_End_AnimNotify.cpp">
-      <Filter>Source\ASP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ASP\Idle_End_AnimNotify.h">
-      <Filter>Source\ASP</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\InputHandler.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
@@ -148,13 +142,19 @@
     <ClCompile Include="..\..\Source\ASP\UCharacterBaseState.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Falling.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Idle.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Jump.h">
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Landing.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Move.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_StartJump.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterState_Logic_Idle.h">

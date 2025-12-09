@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AnimationStateMachine.h"
+#include "LogicStateMachine.h"
 #include "InputHandler.h"
 #include "MoveableInterface.h"
 #include "GameFramework/Character.h"
@@ -10,8 +12,6 @@
 #include "ASPCharacter.generated.h"
 
 class UCharacterAnimationSet;
-class AnimationStateMachine;
-class LogicStateMachine;
 struct FCharacterState;
 class FFightingStateMachine;
 class FOnCustomOverlapBegin;
@@ -40,15 +40,16 @@ public:
 	virtual void Tick(float _deltaSeconds) override;
 	static const FName CharacterMeshName;
 	static const FName CharacterColliderName;
-
+	
 	void Start();
 	virtual void FixedUpdate(float _deltaTime) override;
-	virtual UCustomMoveComponent* GetMovementComponent() const override { return m_movement; }
+	virtual UCustomMoveComponent* GetNoChaosMovementComponent() const override { return m_movement; }
 
 	void Move(float _value) const;
 	void StopMove() const;
 	void Jump() const;
-
+	void Rotate();
+	
 	void PerformAction(EInputAction _action) const;
 	/** Register Player to GameManager **/
 	//void Register();
@@ -61,10 +62,12 @@ public:
 
 	//FORCEINLINE float GetPlayerID() const {return m_playerID;}
 	//FORCEINLINE void SetPlayerID(float _playerID) {m_playerID = _playerID;}
-	FORCEINLINE LogicStateMachine* GetLogicStateMachine() const { return m_logicStateMachine; }
-	FORCEINLINE AnimationStateMachine* GetAnimStateMachine() const { return m_animationStateMachine; }
+	FORCEINLINE LogicStateMachine* GetLogicStateMachine() const { return m_logicStateMachine.get(); }
+	FORCEINLINE AnimationStateMachine* GetAnimStateMachine() const { return m_animationStateMachine.get(); }
 	FORCEINLINE UCharacterAnimationSet* GetAnimationSet() const { return m_animationSet; }
-
+	FORCEINLINE void SetCanMoveBackwards(bool _b) { b_canMoveBackwards = _b; }
+	FORCEINLINE bool GetCanMoveBackwards() const { return b_canMoveBackwards; }
+	FORCEINLINE FVector GetMoveForwardVector() const { return m_forwardVector; }
 protected:
 	UFUNCTION()
 	void HandleCustomHit(const FHitResult& _hit);
@@ -78,14 +81,22 @@ protected:
 	class AFightingGame_PlayerController* m_playerController;
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	//int m_playerID;
-	LogicStateMachine* m_logicStateMachine;
-	AnimationStateMachine* m_animationStateMachine;
+	std::unique_ptr<LogicStateMachine> m_logicStateMachine;
+	std::unique_ptr<AnimationStateMachine> m_animationStateMachine;
 	UPROPERTY(EditAnywhere)
-	float m_jumpStrength = 10.0f;
+	float m_jumpStrength = 800.0f;
 	UPROPERTY(EditAnywhere)
-	float m_moveSpeed = 600.0f;
+	float m_moveSpeed = 300.0f;
+	UPROPERTY(EditAnywhere)
+	float m_rotationSpeed = 7.0f;
+	UPROPERTY(EditAnywhere)
+	bool b_canMoveBackwards = true;
+	UPROPERTY(EditAnywhere)
+	FRotator m_targetRotation = FRotator::ZeroRotator;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animation)
 	UCharacterAnimationSet* m_animationSet;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animation)
+	FVector m_forwardVector = FVector::ZeroVector;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -93,4 +104,7 @@ public:
 
 	UFUNCTION()
 	USkeletalMeshComponent* GetSkeletalMeshComponent() { return Mesh; }
+
+	void LookLeft();
+	void LookRight();
 };

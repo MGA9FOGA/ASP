@@ -17,6 +17,8 @@ ASP_API UClass* Z_Construct_UClass_AFightingGame_PlayerController_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UCharacterAnimationSet_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UCustomMoveComponent_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UMoveableInterface_NoRegister();
+COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FRotator();
+COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_UCapsuleComponent_NoRegister();
@@ -296,7 +298,23 @@ struct Z_Construct_UClass_AASPCharacter_Statics
 		{ "Category", "ASPCharacter" },
 		{ "ModuleRelativePath", "ASPCharacter.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_rotationSpeed_MetaData[] = {
+		{ "Category", "ASPCharacter" },
+		{ "ModuleRelativePath", "ASPCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_b_canMoveBackwards_MetaData[] = {
+		{ "Category", "ASPCharacter" },
+		{ "ModuleRelativePath", "ASPCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_targetRotation_MetaData[] = {
+		{ "Category", "ASPCharacter" },
+		{ "ModuleRelativePath", "ASPCharacter.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_animationSet_MetaData[] = {
+		{ "Category", "Animation" },
+		{ "ModuleRelativePath", "ASPCharacter.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_forwardVector_MetaData[] = {
 		{ "Category", "Animation" },
 		{ "ModuleRelativePath", "ASPCharacter.h" },
 	};
@@ -307,7 +325,12 @@ struct Z_Construct_UClass_AASPCharacter_Statics
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_playerController;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_jumpStrength;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_moveSpeed;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_rotationSpeed;
+	static void NewProp_b_canMoveBackwards_SetBit(void* Obj);
+	static const UECodeGen_Private::FBoolPropertyParams NewProp_b_canMoveBackwards;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_m_targetRotation;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_animationSet;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_m_forwardVector;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
@@ -330,7 +353,15 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_playerController = { "m_playerController", nullptr, (EPropertyFlags)0x0020080000020001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_playerController), Z_Construct_UClass_AFightingGame_PlayerController_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_playerController_MetaData), NewProp_m_playerController_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_jumpStrength = { "m_jumpStrength", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_jumpStrength), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_jumpStrength_MetaData), NewProp_m_jumpStrength_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_moveSpeed = { "m_moveSpeed", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_moveSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_moveSpeed_MetaData), NewProp_m_moveSpeed_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_rotationSpeed = { "m_rotationSpeed", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_rotationSpeed), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_rotationSpeed_MetaData), NewProp_m_rotationSpeed_MetaData) };
+void Z_Construct_UClass_AASPCharacter_Statics::NewProp_b_canMoveBackwards_SetBit(void* Obj)
+{
+	((AASPCharacter*)Obj)->b_canMoveBackwards = 1;
+}
+const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_b_canMoveBackwards = { "b_canMoveBackwards", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(AASPCharacter), &Z_Construct_UClass_AASPCharacter_Statics::NewProp_b_canMoveBackwards_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_b_canMoveBackwards_MetaData), NewProp_b_canMoveBackwards_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_targetRotation = { "m_targetRotation", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_targetRotation), Z_Construct_UScriptStruct_FRotator, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_targetRotation_MetaData), NewProp_m_targetRotation_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_animationSet = { "m_animationSet", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_animationSet), Z_Construct_UClass_UCharacterAnimationSet_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_animationSet_MetaData), NewProp_m_animationSet_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_forwardVector = { "m_forwardVector", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, m_forwardVector), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_forwardVector_MetaData), NewProp_m_forwardVector_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AASPCharacter_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_Mesh,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_Capsule,
@@ -338,7 +369,11 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AASPChara
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_playerController,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_jumpStrength,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_moveSpeed,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_rotationSpeed,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_b_canMoveBackwards,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_targetRotation,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_animationSet,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_m_forwardVector,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_AASPCharacter_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_AASPCharacter_Statics::DependentSingletons[])() = {
@@ -384,10 +419,10 @@ AASPCharacter::~AASPCharacter() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AASPCharacter, AASPCharacter::StaticClass, TEXT("AASPCharacter"), &Z_Registration_Info_UClass_AASPCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AASPCharacter), 1179115421U) },
+		{ Z_Construct_UClass_AASPCharacter, AASPCharacter::StaticClass, TEXT("AASPCharacter"), &Z_Registration_Info_UClass_AASPCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AASPCharacter), 1698715404U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_2947325198(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_1754697462(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

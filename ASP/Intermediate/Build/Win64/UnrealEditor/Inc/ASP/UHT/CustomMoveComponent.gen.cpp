@@ -789,7 +789,7 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 		{ "ModuleRelativePath", "CustomMoveComponent.h" },
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_velocity_MetaData[] = {
-		{ "AllowPrivateAccess", "TRUE" },
+		{ "AllowPrivateAccess", "true" },
 		{ "Category", "CustomMoveComponent" },
 		{ "ModuleRelativePath", "CustomMoveComponent.h" },
 	};
@@ -855,7 +855,7 @@ const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveCom
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_end = { "m_end", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_end), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_end_MetaData), NewProp_m_end_MetaData) };
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_hitResult = { "m_hitResult", nullptr, (EPropertyFlags)0x0040008000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_hitResult), Z_Construct_UScriptStruct_FHitResult, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_hitResult_MetaData), NewProp_m_hitResult_MetaData) }; // 4100991306
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_newLocation = { "m_newLocation", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_newLocation), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_newLocation_MetaData), NewProp_m_newLocation_MetaData) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_velocity = { "m_velocity", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_velocity), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_velocity_MetaData), NewProp_m_velocity_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_velocity = { "m_velocity", nullptr, (EPropertyFlags)0x0040000000020015, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_velocity), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_velocity_MetaData), NewProp_m_velocity_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UCustomMoveComponent_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Gravity,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Capsule,
@@ -912,10 +912,10 @@ UCustomMoveComponent::~UCustomMoveComponent() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 3826462822U) },
+		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 452673963U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_3339585161(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_2821098099(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

@@ -59,12 +59,12 @@ AASPCharacter::AASPCharacter()
 
 	//MovmentComp for the Actor
 	m_movement = CreateDefaultSubobject<UCustomMoveComponent>(TEXT("MoveComponent"));
-	m_logicStateMachine = new LogicStateMachine(*this);
-	m_animationStateMachine = new AnimationStateMachine(*m_logicStateMachine, *this);
-	
 	m_moveSpeed = 10000.0f;
 	m_jumpStrength = 500.0f;
-	
+
+
+	m_logicStateMachine = std::make_unique<LogicStateMachine>(*this);
+	m_animationStateMachine = std::make_unique<AnimationStateMachine>(*m_logicStateMachine, *this);
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -77,9 +77,13 @@ void AASPCharacter::Tick(float _deltaSeconds)
 void AASPCharacter::FixedUpdate(float _deltaTime)
 {
 	m_movement->SetLineTraceOnGroundStart(GetActorLocation());
-	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 100.0f));
+	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 140.0f));
 	m_movement->FixedUpdate(_deltaTime);
 	m_playerController->Update(_deltaTime);
+	
+	//UE_LOG(LogTemp, Warning, TEXT("Character : %f"), GetPlayerController()->GetPlayerID());
+
+	
 	if (m_logicStateMachine != nullptr)
 	{
 		m_logicStateMachine->Update(_deltaTime);
@@ -124,20 +128,19 @@ void AASPCharacter::PerformAction(EInputAction _action) const
 
 void AASPCharacter::Move(float _value) const
 {
-	GetMovementComponent()->Move(m_moveSpeed * _value, m_playerController->GetGameManager()->GetFixedDeltatime());
+	GetNoChaosMovementComponent()->Move(m_moveSpeed,  _value);
 }
 
 void AASPCharacter::StopMove() const
 {
 	if (!m_movement) return;
-	GetMovementComponent()->StopMove();
+	GetNoChaosMovementComponent()->StopMove();
 }
 
 void AASPCharacter::Jump() const
 {
-	GetMovementComponent()->Jump(m_jumpStrength);
+	GetNoChaosMovementComponent()->Jump(m_jumpStrength);
 }
-
 
 void AASPCharacter::Start()
 {
@@ -146,21 +149,25 @@ void AASPCharacter::Start()
 		m_movement->OnCustomHit.AddDynamic(this, &AASPCharacter::HandleCustomHit);
 		m_movement->OnCustomBeginOverlap.AddDynamic(this, &AASPCharacter::HandleCustomOverlapBegin);
 		m_movement->OnCustomEndOverlap.AddDynamic(this, &AASPCharacter::HandleCustomOverlapEnd);
-
-		if (UGameManager* gm = GetGameInstance()->GetSubsystem<UGameManager>())
-		{
-			gm->RegisterMovable(this);
-		}
 	}
 
+	if (UGameManager* gm = GetGameInstance()->GetSubsystem<UGameManager>())
+	{
+		gm->RegisterMovable(this);
+	}
+	
 	m_logicStateMachine->Start();
 	m_animationStateMachine->Start();
 
 	UCharacterAnimInstance* animInstance = Cast<UCharacterAnimInstance>(Mesh->GetAnimInstance());
 	if (animInstance && m_animationStateMachine)
 	{
-		animInstance->OnLandingEndedNative.BindRaw(m_animationStateMachine, &AnimationStateMachine::OnLandingFinished);
+		animInstance->OnLandingEndedNative.BindRaw(m_animationStateMachine.get(), &AnimationStateMachine::OnLandingFinished);
+		animInstance->OnJumpStartEndedNative.BindRaw(m_animationStateMachine.get(), &AnimationStateMachine::OnJStartJumpFinished);
 	}
+	m_forwardVector = GetActorForwardVector();
+
+	UE_LOG(LogTemp, Warning, TEXT("AASPCharacter::ForwardVector: %f,%f , %f"), m_forwardVector.X, m_forwardVector.Y, m_forwardVector.Z);
 }
 
 
@@ -216,3 +223,21 @@ void AASPCharacter::HandleCustomOverlapEnd(AActor* _otherActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Character EndOverlap with %s"), *_otherActor->GetName());
 }
+
+void AASPCharacter::LookLeft()
+{
+	m_targetRotation = FRotator (0.0f, -180.0f, 0.0f);
+}
+
+void AASPCharacter::LookRight()
+{
+	m_targetRotation = FRotator(0.0f, 0.0f, 0.0f);
+
+}
+
+void AASPCharacter::Rotate()
+{
+	SetActorRotation(m_targetRotation);
+	m_forwardVector = GetActorForwardVector();
+}
+

@@ -17,7 +17,7 @@ class UCharacterState_Anim_Landing : public UCharacterAnimationBaseState
 
 inline void UCharacterState_Anim_Landing::EnterState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("EXIT: Landing"));
+	//UE_LOG(LogTemp, Log, TEXT("EXIT: Landing"));
 	if (!_stateMachine) return;
 	AnimationStateMachine* animStateMachine = static_cast<AnimationStateMachine*>(_stateMachine);
 	animStateMachine->SetBoolIsLanded(false);
@@ -27,12 +27,12 @@ inline void UCharacterState_Anim_Landing::EnterState(FFightingStateMachine* _sta
 
 inline void UCharacterState_Anim_Landing::ExitState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("EXIT: Landing"));
+	//UE_LOG(LogTemp, Log, TEXT("EXIT: Landing"));
 }
 
 inline void UCharacterState_Anim_Landing::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Display, TEXT("Anim Landing State"));
+	//UE_LOG(LogTemp, Display, TEXT("Anim Landing State"));
 }
 
 

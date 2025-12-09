@@ -15,17 +15,17 @@ class UCharacterState_Anim_StartJump : public UCharacterAnimationBaseState
 
 inline void UCharacterState_Anim_StartJump::EnterState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("ENTER: StartJump"));
+	//UE_LOG(LogTemp, Log, TEXT("ENTER: StartJump"));
 	_stateMachine->SetCurrentState(State);
 	PlayAnimationMontage(_stateMachine, EStates::STARTJUMP);
 }
 
 inline void UCharacterState_Anim_StartJump::ExitState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("EXIT: StartJump"));
+	//UE_LOG(LogTemp, Log, TEXT("EXIT: StartJump"));
 }
 
 inline void UCharacterState_Anim_StartJump::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Display, TEXT("Anim StartJump State"));
+	//UE_LOG(LogTemp, Display, TEXT("Anim StartJump State"));
 }

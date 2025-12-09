@@ -23,6 +23,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	op(EStates::NONE) \
 	op(EStates::IDLE) \
 	op(EStates::MOVING) \
+	op(EStates::MOVINGFWD) \
+	op(EStates::MOVINGBWD) \
 	op(EStates::JUMPING) \
 	op(EStates::STARTJUMP) \
 	op(EStates::FALLING) \

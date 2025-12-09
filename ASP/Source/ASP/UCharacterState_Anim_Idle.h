@@ -16,7 +16,7 @@ class ASP_API UCharacterState_Anim_Idle : public UCharacterAnimationBaseState
 
 inline void UCharacterState_Anim_Idle::EnterState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("ENTER: Idle"));
+	//UE_LOG(LogTemp, Log, TEXT("ENTER: Idle"));
 	_stateMachine->SetCurrentState(State);
 	PlayAnimationMontage(_stateMachine, EStates::IDLE);	
 
@@ -24,11 +24,11 @@ inline void UCharacterState_Anim_Idle::EnterState(FFightingStateMachine* _stateM
 
 inline void UCharacterState_Anim_Idle::ExitState(FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Log, TEXT("EXIT: Idle"));
+	//UE_LOG(LogTemp, Log, TEXT("EXIT: Idle"));
 }
 
 inline void UCharacterState_Anim_Idle::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
 {
-	UE_LOG(LogTemp, Display, TEXT("Anim Idle State"));
+	//UE_LOG(LogTemp, Display, TEXT("Anim Idle State"));
 }
 

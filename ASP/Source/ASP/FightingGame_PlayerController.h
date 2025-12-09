@@ -11,6 +11,7 @@
  * 
  */
 
+class UInputMappingContext;
 class AASPCharacter;
 class UGameManager;
 
@@ -21,8 +22,10 @@ class ASP_API AFightingGame_PlayerController : public APlayerController
 
 public:
 	virtual void BeginPlay() override;
-	void Start();
+	void SetMappingContext(UInputMappingContext* _newMappingContext);
 	virtual void SetupInputComponent() override;
+	void UsingGamepad();
+	void UsingKeyboard();
 
 	void Update(float _deltatime);
 	void OnPressedMovement(const struct FInputActionValue& _value);
@@ -46,7 +49,10 @@ public:
 	FORCEINLINE void SetPlayerID(float _playerID) {m_playerID = _playerID;}
 	FORCEINLINE void SetGameManager(UGameManager* _gameManager) {m_gameManager = _gameManager;}
 	FORCEINLINE UGameManager* GetGameManager() const {return m_gameManager;}
+
+	void SetupMappingContext();
 private:
+	
 	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_playerCharacter;
 	UPROPERTY(EditAnywhere)
@@ -63,24 +69,22 @@ private:
 	bool b_blockPressed		= false;
 
 	//Deadzone
-	float m_deadzone =0.3f;
+	//Controller = 40
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float m_deadzone = 0.3f;
 	//ID
 	int m_playerID;
+public:
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
-
+private:
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* JumpAction;
-
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
-
-public:
-	
-	
 };
 
 

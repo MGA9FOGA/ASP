@@ -81,7 +81,7 @@ void UCustomMoveComponent::FixedUpdate(float _deltaTime)
 void UCustomMoveComponent::ApplyGravity(float _deltaTime)
 {
 	//Calculate Gravitiy Velocity
-	m_velocity.Z -= Gravity * _deltaTime;
+	m_velocity.Z -= Gravity * _deltaTime * 2;
 }
 
 void UCustomMoveComponent::Move(float _value, float _speed)
@@ -101,9 +101,15 @@ void UCustomMoveComponent::Jump(float _jumpStrength)
 {
 	if (!b_OnGround) return;
 	UE_LOG(LogTemp, Warning, TEXT("Jump"));
+	
 	m_velocity.Z = _jumpStrength;
 	b_OnGround = false;
 	b_JustJumped = true;
+
+	if (Capsule)
+	{
+		Capsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+	}
 }
 
 void UCustomMoveComponent::OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor, UPrimitiveComponent* _otherComp,
@@ -119,6 +125,11 @@ void UCustomMoveComponent::OnHit(UPrimitiveComponent* _hitComp, AActor* _otherAc
 	if (_otherActor && _otherActor->Tags.Contains(FName("Ground")) && _otherActor != GetOwner())
 	{
 		m_velocity.Z = 0.0f;
+
+		if (Capsule)
+		{
+			Capsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
+		}
 	}
 }
 

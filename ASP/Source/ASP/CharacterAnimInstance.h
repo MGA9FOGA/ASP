@@ -8,6 +8,7 @@
 
 class AASPCharacter;
 DECLARE_DELEGATE(FOnLandingEndedNative);
+DECLARE_DELEGATE(FOnJumpStartEndedNative);
 /**
  * 
  */
@@ -22,7 +23,7 @@ public:
 	void HandleMontageEnded(UAnimMontage* _montage, bool _bInterrupted);
 	
 	FOnLandingEndedNative OnLandingEndedNative;
-
+	FOnJumpStartEndedNative OnJumpStartEndedNative;
 private:
 	AASPCharacter* m_character;
 };

@@ -11,8 +11,8 @@ void FRollbackManager::SaveFrame(int32 _frame, AASPCharacter* _player, const FIn
 	int32 playerID = _player->GetPlayerController()->GetPlayerID();
 
 	FCharacterState s;
-	s.Position			= _player->GetMovementComponent()->GetLocation();
-	s.Velocity			= _player->GetMovementComponent()->GetVelocity();
+	s.Position			= _player->GetNoChaosMovementComponent()->GetLocation();
+	s.Velocity			= _player->GetNoChaosMovementComponent()->GetOwnVelocity();
 	s.LogicState		= _player->GetLogicStateMachine()->GetCurrentState();
 	s.StateTimer		= 0;
 	s.Health			= 0;
@@ -38,8 +38,8 @@ void FRollbackManager::LoadFrame(int32 _frame, AASPCharacter* _player, FInputPac
 
 	const FFrameSnapshot& snapshot = PlayerHistory[_frame];
 
-	_player->GetMovementComponent()->SetLocation(snapshot.State.Position);
-	_player->GetMovementComponent()->SetVelocity(snapshot.State.Velocity);
+	_player->GetNoChaosMovementComponent()->SetLocation(snapshot.State.Position);
+	_player->GetNoChaosMovementComponent()->SetVelocity(snapshot.State.Velocity);
 	_player->GetLogicStateMachine()->SetCurrentState(snapshot.State.LogicState);
 	//StateTimer			=	_s.StateTimer;
 	//Health				=	_s.Health;

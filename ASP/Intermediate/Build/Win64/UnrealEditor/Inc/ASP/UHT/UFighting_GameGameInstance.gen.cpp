@@ -15,6 +15,7 @@ ASP_API UClass* Z_Construct_UClass_UFighting_GameGameInstance();
 ASP_API UClass* Z_Construct_UClass_UFighting_GameGameInstance_NoRegister();
 COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 ENGINE_API UClass* Z_Construct_UClass_UGameInstance();
+ENHANCEDINPUT_API UClass* Z_Construct_UClass_UInputMappingContext_NoRegister();
 UPackage* Z_Construct_UPackage__Script_ASP();
 // End Cross Module References
 
@@ -48,11 +49,21 @@ struct Z_Construct_UClass_UFighting_GameGameInstance_Statics
 		{ "Category", "Fighting_GameGameInstance" },
 		{ "ModuleRelativePath", "UFighting_GameGameInstance.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultMappingContext_Player1_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "UFighting_GameGameInstance.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultMappingContext_Player2_MetaData[] = {
+		{ "Category", "Input" },
+		{ "ModuleRelativePath", "UFighting_GameGameInstance.h" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FClassPropertyParams NewProp_SelectedPlayer1Class;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_SelectedPlayer2Class;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_SelectablePlayers_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_SelectablePlayers;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_DefaultMappingContext_Player1;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_DefaultMappingContext_Player2;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -64,11 +75,15 @@ const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_UFighting_GameG
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_SelectedPlayer2Class = { "SelectedPlayer2Class", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UFighting_GameGameInstance, SelectedPlayer2Class), Z_Construct_UClass_UClass, Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SelectedPlayer2Class_MetaData), NewProp_SelectedPlayer2Class_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_SelectablePlayers_Inner = { "SelectablePlayers", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_SelectablePlayers = { "SelectablePlayers", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UFighting_GameGameInstance, SelectablePlayers), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SelectablePlayers_MetaData), NewProp_SelectablePlayers_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_DefaultMappingContext_Player1 = { "DefaultMappingContext_Player1", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UFighting_GameGameInstance, DefaultMappingContext_Player1), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultMappingContext_Player1_MetaData), NewProp_DefaultMappingContext_Player1_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_DefaultMappingContext_Player2 = { "DefaultMappingContext_Player2", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UFighting_GameGameInstance, DefaultMappingContext_Player2), Z_Construct_UClass_UInputMappingContext_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultMappingContext_Player2_MetaData), NewProp_DefaultMappingContext_Player2_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UFighting_GameGameInstance_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_SelectedPlayer1Class,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_SelectedPlayer2Class,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_SelectablePlayers_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_SelectablePlayers,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_DefaultMappingContext_Player1,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFighting_GameGameInstance_Statics::NewProp_DefaultMappingContext_Player2,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_UFighting_GameGameInstance_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_UFighting_GameGameInstance_Statics::DependentSingletons[])() = {
@@ -111,10 +126,10 @@ UFighting_GameGameInstance::~UFighting_GameGameInstance() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_UFighting_GameGameInstance_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UFighting_GameGameInstance, UFighting_GameGameInstance::StaticClass, TEXT("UFighting_GameGameInstance"), &Z_Registration_Info_UClass_UFighting_GameGameInstance, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UFighting_GameGameInstance), 1194550275U) },
+		{ Z_Construct_UClass_UFighting_GameGameInstance, UFighting_GameGameInstance::StaticClass, TEXT("UFighting_GameGameInstance"), &Z_Registration_Info_UClass_UFighting_GameGameInstance, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UFighting_GameGameInstance), 1990569669U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_UFighting_GameGameInstance_h_661743634(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_UFighting_GameGameInstance_h_2524888549(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_UFighting_GameGameInstance_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_UFighting_GameGameInstance_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

@@ -7,14 +7,9 @@
 #include "UCharacterState_Anim_StartJump.h"
 #include "UCharacterState_Anim_Move.h"
 
-AnimationStateMachine::AnimationStateMachine(): m_logicStateMachine(nullptr)
-{
-	AnimationStateMachine::BuildStates();
-}
-
 AnimationStateMachine::AnimationStateMachine(LogicStateMachine& _stateMachine, AASPCharacter& _character)
+    : m_logicStateMachine(_stateMachine)  
 {
-	m_logicStateMachine = &_stateMachine;
 	m_character = &_character;
 	AnimationStateMachine::BuildStates();
 }
@@ -31,8 +26,8 @@ void AnimationStateMachine::BuildStates()
 	//IDLE STATE CREATION
 	FStateDefinition Idle;
 	Idle.State = MakeShareable(new UCharacterState_Anim_Idle(EStates::IDLE));
-	Idle.Transitions.Add(FStateTransition(EStates::MOVING, [this](){ return m_logicStateMachine->HasStateJustChangedTo(EStates::MOVING); }));
-	Idle.Transitions.Add(FStateTransition(EStates::STARTJUMP, [this](){ return m_logicStateMachine->HasStateJustChangedTo(EStates::JUMPING); }));
+	Idle.Transitions.Add(FStateTransition(EStates::MOVING, [this](){ return m_logicStateMachine.HasStateJustChangedTo(EStates::MOVING); }));
+	Idle.Transitions.Add(FStateTransition(EStates::STARTJUMP, [this](){ return m_logicStateMachine.HasStateJustChangedTo(EStates::JUMPING); }));
 	m_stateMap.Add(EStates::IDLE, Idle);
 #pragma endregion
 
@@ -40,8 +35,8 @@ void AnimationStateMachine::BuildStates()
 	//MOVE STATE CREATION
 	FStateDefinition Move;
 	Move.State = MakeShareable(new UCharacterState_Anim_Move(EStates::MOVING));
-	Move.Transitions.Add(FStateTransition(EStates::STARTJUMP, [this](){ return m_logicStateMachine->HasStateJustChangedTo(EStates::JUMPING); }));
-	Move.Transitions.Add(FStateTransition(EStates::IDLE, [this](){ return m_logicStateMachine->HasStateJustChangedTo(EStates::IDLE); }));
+	Move.Transitions.Add(FStateTransition(EStates::STARTJUMP, [this](){ return m_logicStateMachine.HasStateJustChangedTo(EStates::JUMPING); }));
+	Move.Transitions.Add(FStateTransition(EStates::IDLE, [this](){ return m_logicStateMachine.HasStateJustChangedTo(EStates::IDLE); }));
 	m_stateMap.Add(EStates::MOVING, Move);
 #pragma endregion
 
@@ -57,7 +52,7 @@ void AnimationStateMachine::BuildStates()
 	//JUMP STATE CREATION
 	FStateDefinition Falling;
 	Falling.State = MakeShareable(new UCharacterState_Anim_Falling(EStates::FALLING));
-	Falling.Transitions.Add(FStateTransition(EStates::LANDING, [this](){ return m_logicStateMachine->HasStateJustChangedTo(EStates::IDLE);;}));
+	Falling.Transitions.Add(FStateTransition(EStates::IDLE,  [this](){return m_character->GetNoChaosMovementComponent()->GetBoolOnGround();}));
 	m_stateMap.Add(EStates::FALLING, Falling);
 #pragma endregion
 
@@ -65,7 +60,8 @@ void AnimationStateMachine::BuildStates()
 	//JUMP STATE CREATION
 	FStateDefinition Landed;
 	Landed.State = MakeShareable(new UCharacterState_Anim_Landing(EStates::LANDING));
-	Landed.Transitions.Add(FStateTransition(EStates::IDLE, [this](){return GetCharacter()->GetMovementComponent()->GetBoolOnGround();}));
+	Landed.Transitions.Add(FStateTransition(EStates::MOVING, [this](){return IdleToMoving(m_logicStateMachine);}));
+	Landed.Transitions.Add(FStateTransition(EStates::IDLE, [this](){return CanTransitionToIdle(*this);}));
 	m_stateMap.Add(EStates::LANDING, Landed);
 #pragma endregion	
 }
@@ -73,5 +69,10 @@ void AnimationStateMachine::BuildStates()
 void AnimationStateMachine::OnLandingFinished()
 {
 	b_landingFinished = true;
+}
+
+void AnimationStateMachine::OnJStartJumpFinished()
+{
+	b_startUpJumpingFinished = true;
 }
 

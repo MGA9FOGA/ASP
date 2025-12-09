@@ -15,5 +15,11 @@ public:
 	TSubclassOf<AASPCharacter> SelectedPlayer2Class;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<TSubclassOf<AASPCharacter>> SelectablePlayers;	
+	TArray<TSubclassOf<AASPCharacter>> SelectablePlayers;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	class UInputMappingContext* DefaultMappingContext_Player1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	class UInputMappingContext* DefaultMappingContext_Player2;
 };

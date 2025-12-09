@@ -15,11 +15,11 @@ class UAnimMontage;
 #endif
 #define ASP_CharacterAnimInstance_generated_h
 
-#define FID_ASP_Source_ASP_CharacterAnimInstance_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_CharacterAnimInstance_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execHandleMontageEnded);
 
 
-#define FID_ASP_Source_ASP_CharacterAnimInstance_h_17_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_CharacterAnimInstance_h_18_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUCharacterAnimInstance(); \
 	friend struct Z_Construct_UClass_UCharacterAnimInstance_Statics; \
@@ -28,7 +28,7 @@ public: \
 	DECLARE_SERIALIZER(UCharacterAnimInstance)
 
 
-#define FID_ASP_Source_ASP_CharacterAnimInstance_h_17_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_CharacterAnimInstance_h_18_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UCharacterAnimInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 private: \
@@ -42,13 +42,13 @@ public: \
 	NO_API virtual ~UCharacterAnimInstance();
 
 
-#define FID_ASP_Source_ASP_CharacterAnimInstance_h_14_PROLOG
-#define FID_ASP_Source_ASP_CharacterAnimInstance_h_17_GENERATED_BODY \
+#define FID_ASP_Source_ASP_CharacterAnimInstance_h_15_PROLOG
+#define FID_ASP_Source_ASP_CharacterAnimInstance_h_18_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_CharacterAnimInstance_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_CharacterAnimInstance_h_17_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_CharacterAnimInstance_h_17_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_CharacterAnimInstance_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_CharacterAnimInstance_h_18_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_CharacterAnimInstance_h_18_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

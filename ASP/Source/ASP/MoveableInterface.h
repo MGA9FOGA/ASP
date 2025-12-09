@@ -21,5 +21,5 @@ class ASP_API IMoveableInterface
 
 public:
 	virtual void FixedUpdate(float _deltaTime) = 0;
-	virtual class UCustomMoveComponent* GetMovementComponent() const = 0;
+	virtual class UCustomMoveComponent* GetNoChaosMovementComponent() const = 0;
 };

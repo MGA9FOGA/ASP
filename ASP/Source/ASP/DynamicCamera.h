@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "DynamicCamera.generated.h"
 
+class UGameManager;
+
 UCLASS()
 class ASP_API ADynamicCamera : public AActor
 {
@@ -23,6 +25,20 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	bool characterMaxDistanceAlloToMove();
+private:
+	UPROPERTY()
+	UGameManager* m_gameManager;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	float m_minDistance = 400.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	float m_maxDistance = 600.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	float m_height = 130.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	float m_cameraSmooth = 5.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	float m_maxPlayerPositionDifference = 1080.0f;
 	UPROPERTY(Category=Camera, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<class UCameraComponent> Camera;
+	TObjectPtr<class UCameraComponent> m_camera;
 };

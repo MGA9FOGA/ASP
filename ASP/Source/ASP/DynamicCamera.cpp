@@ -2,6 +2,8 @@
 
 
 #include "DynamicCamera.h"
+
+#include "GameManager.h"
 #include "Camera/CameraComponent.h"
 
 
@@ -14,19 +16,53 @@ ADynamicCamera::ADynamicCamera()
 	USceneComponent* sceneComp = CreateDefaultSubobject<USceneComponent>(FName("Root"));
 	RootComponent = sceneComp;
 	
-	Camera = CreateDefaultSubobject<UCameraComponent>(CameraName);
-	Camera->SetupAttachment(RootComponent);
+	m_camera = CreateDefaultSubobject<UCameraComponent>(CameraName);
+	m_camera->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void ADynamicCamera::BeginPlay()
 {
 	Super::BeginPlay();
+	m_gameManager = GetGameInstance()->GetSubsystem<UGameManager>();
 }
 
 // Called every frame
 void ADynamicCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!m_gameManager->GetPlayer1() || !m_gameManager->GetPlayer2()) return;
+
+	FVector p1Pos = m_gameManager->GetPlayer1()->GetActorLocation();
+	FVector p2Pos = m_gameManager->GetPlayer2()->GetActorLocation();
+
+	FVector center = (p1Pos + p2Pos) * 0.5f;
+
+	float distance = FVector::Dist(p1Pos, p2Pos);
+	float targetDistance = FMath::Clamp(distance, m_minDistance, m_maxDistance);
+
+	FVector targetLocation;
+	targetLocation.X = center.X - targetDistance;
+	targetLocation.Y = center.Y;
+	targetLocation.Z = m_height;
+
+	FVector newLocation = FMath::VInterpTo(GetActorLocation(), targetLocation, DeltaTime,m_cameraSmooth);
+
+	SetActorLocation(newLocation);
+}
+
+bool ADynamicCamera::characterMaxDistanceAlloToMove()
+{
+	AASPCharacter* P1 = m_gameManager->GetPlayer1();
+	AASPCharacter* P2 = m_gameManager->GetPlayer2();
+
+	if (!P1 || !P2) return false;
+
+	float Distance = FMath::Abs(P1->GetActorLocation().Y - P2->GetActorLocation().Y);
+
+	UE_LOG(LogTemp, Display, TEXT("Distance: %f"), Distance);
+	
+	return Distance < m_maxPlayerPositionDifference;
 }
 

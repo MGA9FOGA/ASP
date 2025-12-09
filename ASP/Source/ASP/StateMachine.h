@@ -1,22 +1,24 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "ASPCharacter.h"
+
 
 
 UENUM(BlueprintType)
 enum class EStates : uint8
 {
-	NONE        UMETA(DisplayName="None"),
-	IDLE        UMETA(DisplayName="Idle"),
-	MOVING      UMETA(DisplayName="Moving"),
-	JUMPING     UMETA(DisplayName="Jumping"),
-	STARTJUMP   UMETA(DisplayName="StartJump"),
-	FALLING     UMETA(DisplayName="Falling"),
-	LANDING     UMETA(DisplayName="Landing"),
-	ATTACKING   UMETA(DisplayName="Attacking"),
-	CROUCHING   UMETA(DisplayName="Crouching"),
-	HITTED      UMETA(DisplayName="Hitted")
+	NONE       		UMETA(DisplayName="None"),
+	IDLE       		UMETA(DisplayName="Idle"),
+	MOVING       	UMETA(DisplayName="Moving"),
+	MOVINGFWD   	UMETA(DisplayName="MovingForward"),
+	MOVINGBWD      	UMETA(DisplayName="MovingBackward"),
+	JUMPING     	UMETA(DisplayName="Jumping"),
+	STARTJUMP   	UMETA(DisplayName="StartJump"),
+	FALLING     	UMETA(DisplayName="Falling"),
+	LANDING     	UMETA(DisplayName="Landing"),
+	ATTACKING   	UMETA(DisplayName="Attacking"),
+	CROUCHING   	UMETA(DisplayName="Crouching"),
+	HITTED      	UMETA(DisplayName="Hitted")
 };
 
 #include "CoreMinimal.h"
@@ -59,7 +61,7 @@ public:
 	virtual void Start();
 	//Getter
 	FORCEINLINE EInputAction GetAction() const {return m_ECurrentInputAction;}
-	FORCEINLINE AASPCharacter* GetCharacter() const {return m_character;}
+	FORCEINLINE class AASPCharacter* GetCharacter() const {return m_character;}
 	FORCEINLINE EStates GetPreviousState() const { return m_EPreviousState;}
 	FORCEINLINE EStates GetCurrentState() const {return m_ECurrentState;}
 	FORCEINLINE AFightingGame_PlayerController* GetPlayerController() const {return m_playerController;}

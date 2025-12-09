@@ -11,8 +11,10 @@
 inline bool IdleToMoving(FFightingStateMachine& _statemachine)
 {
 	EInputAction action = _statemachine.GetAction();
-	return (action == EInputAction::MoveRight || action == EInputAction::MoveLeft);
+
+	return action == EInputAction::MoveRight || action == EInputAction::MoveLeft;
 }
+
 
 inline bool IdleOrWalkToJump(FFightingStateMachine& _statemachine)
 {
@@ -29,7 +31,7 @@ inline bool WalkingToIdle(FFightingStateMachine& _statemachine)
 
 inline bool JumpToIdle(const FFightingStateMachine& _statemachine)
 {
-	if (_statemachine.GetPlayerController()->GetPlayer()->GetMovementComponent()->GetBoolOnGround()) return true;
+	if (_statemachine.GetPlayerController()->GetPlayer()->GetNoChaosMovementComponent()->GetBoolOnGround()) return true;
 	return false;
 }
 
@@ -46,5 +48,9 @@ inline bool CanTransitionToIdle(FFightingStateMachine& _statemachine)
 
 inline bool CanTransitionToFalling(FFightingStateMachine& _statemachine)
 {
-	return _statemachine.GetCharacter()->GetMovementComponent()->GetVelocity().Z < 0.0f;
+	AnimationStateMachine* animFSM = static_cast<AnimationStateMachine*>(&_statemachine);
+	if (!animFSM)
+		return false;
+	
+	return _statemachine.GetCharacter()->GetNoChaosMovementComponent()->GetOwnVelocity().Z < 0.0f || animFSM->GetStartUpJumpedFinished();
 }

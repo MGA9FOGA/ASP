@@ -1,7 +1,6 @@
 #pragma once
 #include <filesystem>
 
-#include "ASPCharacter.h"
 #include "StateMachine.h"
 #include "AnimationStateMachine.generated.h"
 class LogicStateMachine;
@@ -54,17 +53,20 @@ struct FAnimationMontageState
 class ASP_API AnimationStateMachine : public FFightingStateMachine
 {
 public:
-	AnimationStateMachine();
 	AnimationStateMachine(LogicStateMachine& _stateMachine, AASPCharacter& _character);
 	virtual ~AnimationStateMachine() override;
 	virtual void BuildStates() override;
 	//Delegate Function
 	void OnLandingFinished();
+	void OnJStartJumpFinished();
 
 	FORCEINLINE bool GetIsLanded()const {return b_landingFinished;}
 	FORCEINLINE void SetBoolIsLanded(bool _b) {b_landingFinished = _b;}
+	FORCEINLINE void SetIsStartUpJumpFinished(bool _b) {b_startUpJumpingFinished = _b;}
+	FORCEINLINE bool GetStartUpJumpedFinished()const {return b_startUpJumpingFinished;}
 private:
-	LogicStateMachine* m_logicStateMachine;
+	LogicStateMachine& m_logicStateMachine;
 	//Landing Trasitions Bool
 	bool b_landingFinished = false;
+	bool b_startUpJumpingFinished = false;
 };
