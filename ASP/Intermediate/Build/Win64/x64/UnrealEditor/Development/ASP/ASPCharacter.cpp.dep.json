@@ -104,7 +104,11 @@
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\fightinggame_playercontroller.generated.h",
             "d:\\github\\asp\\asp\\source\\asp\\frollbackmanager.h",
             "d:\\github\\asp\\asp\\source\\asp\\gamemanager.h",
-            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\gamemanager.generated.h"
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\gamemanager.generated.h",
+            "d:\\github\\asp\\asp\\source\\asp\\upushboxcomponent.h",
+            "e:\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\components\\boxcomponent.h",
+            "e:\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\boxcomponent.generated.h",
+            "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\upushboxcomponent.generated.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

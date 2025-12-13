@@ -8,6 +8,7 @@
 #include "CustomMoveComponent.generated.h"
 
 
+class ADynamicCamera;
 class UCapsuleComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomHit, const FHitResult&, HitResult);
@@ -27,6 +28,8 @@ public:
 	void Move(float _value, float _speed);
 	void StopMove();
 	void Jump(float _jumpStrength);
+	void ClampToStage(AActor* _actor);
+	void ResolvePushBoxes();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Gravity = 980.f;
@@ -71,12 +74,23 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex);
 
+	UPROPERTY(EditAnywhere, Category="Movement|Bounds")
+	float MinY = 0.0f;
+	UPROPERTY(EditAnywhere, Category="Movement|Bounds")
+	float MaxY = 3400.0f;
+	UPROPERTY(EditAnywhere, Category="Movement|Bounds")
+	float HalfArenaWidth = 1700.0f;
+	UPROPERTY(EditAnywhere, Category="Movement|Bounds")
+	float CameraCenterY;
+	
 	FORCEINLINE FVector GetLocation() const {return m_newLocation;}
 	FORCEINLINE void SetLocation(const FVector& _location) {m_newLocation = _location;}
 	FORCEINLINE FVector GetOwnVelocity() const {return m_velocity;}
 	FORCEINLINE void SetVelocity(const FVector& _velocity) {m_velocity = _velocity;}
 
 private:
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
+	ADynamicCamera* m_camera;	
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))
 	bool b_OnGround = false;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess=true))

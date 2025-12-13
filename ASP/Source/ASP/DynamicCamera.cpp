@@ -28,9 +28,8 @@ void ADynamicCamera::BeginPlay()
 }
 
 // Called every frame
-void ADynamicCamera::Tick(float DeltaTime)
+void ADynamicCamera::Update(float _deltaTime)
 {
-	Super::Tick(DeltaTime);
 
 	if (!m_gameManager->GetPlayer1() || !m_gameManager->GetPlayer2()) return;
 
@@ -47,7 +46,7 @@ void ADynamicCamera::Tick(float DeltaTime)
 	targetLocation.Y = center.Y;
 	targetLocation.Z = m_height;
 
-	FVector newLocation = FMath::VInterpTo(GetActorLocation(), targetLocation, DeltaTime,m_cameraSmooth);
+	FVector newLocation = FMath::VInterpTo(GetActorLocation(), targetLocation, _deltaTime,m_cameraSmooth);
 
 	SetActorLocation(newLocation);
 }

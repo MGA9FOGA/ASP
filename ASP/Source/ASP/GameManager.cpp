@@ -319,7 +319,11 @@ void UGameManager::FixedGameUpdate60Hz(float _fixedDeltatime)
 		RotateCharacters(m_player1, m_player2);
 		RotateCharacters(m_player2, m_player1);
 	}
-
+	if (m_camera)
+	{
+		m_camera->Update(_fixedDeltatime);
+	}
+	
 	//GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Yellow,
 	//  FString::Printf(TEXT("Frame: %d | Player1: %s | Player2: %s"),
 	//  FrameNumber,

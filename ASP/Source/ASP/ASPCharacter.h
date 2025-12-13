@@ -11,6 +11,7 @@
 #include "Logging/LogMacros.h"
 #include "ASPCharacter.generated.h"
 
+class UPushBoxComponent;
 class UCharacterAnimationSet;
 struct FCharacterState;
 class FFightingStateMachine;
@@ -34,6 +35,8 @@ class ASP_API AASPCharacter : public AActor, public IMoveableInterface
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCapsuleComponent> Capsule;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPushBoxComponent> PushBox;
 public:
 	AASPCharacter();
 	
@@ -68,6 +71,7 @@ public:
 	FORCEINLINE void SetCanMoveBackwards(bool _b) { b_canMoveBackwards = _b; }
 	FORCEINLINE bool GetCanMoveBackwards() const { return b_canMoveBackwards; }
 	FORCEINLINE FVector GetMoveForwardVector() const { return m_forwardVector; }
+	FORCEINLINE UPushBoxComponent* GetPushBox() const { return PushBox; }
 protected:
 	UFUNCTION()
 	void HandleCustomHit(const FHitResult& _hit);

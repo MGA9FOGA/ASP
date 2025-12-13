@@ -49,9 +49,9 @@ private:
 	TSubclassOf<class AASPCharacter> m_characterClass2;
 	
 	//Spawnpoints
-	FVector m_player1Position = FVector(730.0f,1230.0f,1800.0f);
+	FVector m_player1Position = FVector(730.0f,1230.0f,400.0f);
 	FRotator m_player1Rotation = FRotator(0.0f,0.0f,0.0f);
-	FVector m_player2Position = FVector(730.0f,2030.0f,1800.0f);
+	FVector m_player2Position = FVector(730.0f,2030.0f,400.0f);
 	FRotator m_player2Rotation = FRotator(0.0f,180.0f,0.0f);
 
 	UPROPERTY(EditAnywhere)

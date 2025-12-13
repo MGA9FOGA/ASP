@@ -5,16 +5,21 @@
 
 #include "ASPCharacter.h"
 #include "CollisionDebugDrawingPublic.h"
+#include "DynamicCamera.h"
 #include "EngineUtils.h"
+#include "UPushBoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+constexpr float PushboxHeightTolerance = 40.0f;
+constexpr float diff = 194.5f ;
 
 UCustomMoveComponent::UCustomMoveComponent()
 {
-
 }
 
 void UCustomMoveComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+                                         FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
@@ -47,7 +52,7 @@ void UCustomMoveComponent::BeginPlay()
 	{
 		UE_LOG(LogTemp, Log, TEXT("[%s] Using capsule: %s"), *GetOwner()->GetName(), *Capsule->GetName());
 
-		Capsule->OnComponentHit.AddDynamic(this, &UCustomMoveComponent::OnHit);
+		//Capsule->OnComponentHit.AddDynamic(this, &UCustomMoveComponent::OnHit);
 		Capsule->OnComponentBeginOverlap.AddDynamic(this, &UCustomMoveComponent::OnOverlapBegin);
 		Capsule->OnComponentEndOverlap.AddDynamic(this, &UCustomMoveComponent::OnOverlapEnd);
 	}
@@ -55,26 +60,45 @@ void UCustomMoveComponent::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[%s] No capsule found!"), *GetOwner()->GetName());
 	}
+
+	m_camera = Cast<ADynamicCamera>(UGameplayStatics::GetActorOfClass(m_world, ADynamicCamera::StaticClass()));
 }
 
 void UCustomMoveComponent::FixedUpdate(float _deltaTime)
 {
-	//Apply the calculated Velocity
+	AActor* owner = GetOwner();
+	if (!owner) return;
+	// 1. Ground check
+	b_OnGround = CheckIfOnGround(
+		m_world, m_hitResult, m_start, m_end, m_collisionParams
+	);
+
+	//// 2. Gravity
 	if (!b_OnGround || b_JustJumped)
 	{
 		ApplyGravity(_deltaTime);
 	}
 
-	if (AActor* owner = GetOwner())
+	// 4. Ground-Snap
+	if (b_OnGround && m_velocity.Z <= 0)
 	{
-		FColor LineColor = b_OnGround ? FColor::Red : FColor::Green;
-		DrawDebugLine(GetWorld(), m_start, m_end, LineColor, false, 1.0f, 0, 2.0f);
-		m_newLocation = GetOwner()->GetActorLocation() + m_velocity * _deltaTime;
-		owner->SetActorLocation(m_newLocation, true);
-		//UE_LOG(LogTemp, Warning, TEXT("Update"));
+		m_newLocation.Z = m_hitResult.ImpactPoint.Z + Capsule->GetScaledCapsuleHalfHeight();
+		m_velocity.Z = 0;
+		b_OnGround = true;
 	}
+	else
+	{
+		b_OnGround = false;
+	}
+
+	m_newLocation = owner->GetActorLocation();
+	m_newLocation += m_velocity * _deltaTime;
+	owner->SetActorLocation(m_newLocation, false);
+
+	if (b_OnGround || b_JustJumped)
+		ResolvePushBoxes();
+	ClampToStage(owner);
 	b_JustJumped = false;
-	b_OnGround = CheckIfOnGround(m_world, m_hitResult, m_start, m_end, m_collisionParams);
 }
 
 
@@ -101,35 +125,70 @@ void UCustomMoveComponent::Jump(float _jumpStrength)
 {
 	if (!b_OnGround) return;
 	UE_LOG(LogTemp, Warning, TEXT("Jump"));
-	
+
 	m_velocity.Z = _jumpStrength;
 	b_OnGround = false;
 	b_JustJumped = true;
+}
 
-	if (Capsule)
+void UCustomMoveComponent::ClampToStage(AActor* _actor)
+{
+	FVector location = _actor->GetActorLocation();
+	location.Y = FMath::Clamp(location.Y, MinY, MaxY);
+	_actor->SetActorLocation(location, false);
+}
+
+void UCustomMoveComponent::ResolvePushBoxes()
+{
+	AActor* Owner = GetOwner();
+	if (!Owner) return;
+
+	AASPCharacter* selfChar = Cast<AASPCharacter>(Owner);
+	
+	if (!selfChar || !selfChar->GetPushBox()) return;
+
+	for (TActorIterator<AASPCharacter> It(GetWorld()); It; ++It)
 	{
-		Capsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Ignore);
+		AASPCharacter* Other = *It;
+		if (Other == selfChar || !Other->GetPushBox()) continue;
+		if (!GetBoolOnGround() || !Other->GetNoChaosMovementComponent()->GetBoolOnGround())
+			continue; 
+
+		const float selfY = selfChar->GetActorLocation().Y;
+		const float otherY = Other->GetActorLocation().Y;
+
+		const float minDist =
+			selfChar->GetPushBox()->GetHalfWidth() +
+			Other->GetPushBox()->GetHalfWidth();
+
+		const float Delta = selfY - otherY;
+		const float Dist = FMath::Abs(Delta);
+
+		if (Dist < minDist)
+		{
+			const float Push = (minDist - Dist);
+			const float Dir = FMath::Sign(Delta);
+
+			FVector L1 = selfChar->GetActorLocation();
+
+			L1.Y += Push * Dir;
+
+			selfChar->SetActorLocation(L1, false);;
+		}
 	}
 }
 
-void UCustomMoveComponent::OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor, UPrimitiveComponent* _otherComp,
+void UCustomMoveComponent::OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor,
+                                 UPrimitiveComponent* _otherComp,
                                  FVector _ormalImpulse, const FHitResult& _hit)
 {
-	if (_otherActor && _otherActor != GetOwner())
+	if (_otherActor && _otherActor
+		!=
+		GetOwner()
+	)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CustomMoveComponent Hit with %s"), *_otherActor->GetName());
 		OnCustomHit.Broadcast(_hit);
-		
-	}
-
-	if (_otherActor && _otherActor->Tags.Contains(FName("Ground")) && _otherActor != GetOwner())
-	{
-		m_velocity.Z = 0.0f;
-
-		if (Capsule)
-		{
-			Capsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
-		}
 	}
 }
 
@@ -137,7 +196,10 @@ void UCustomMoveComponent::OnOverlapBegin(UPrimitiveComponent* _overlappedComp, 
                                           UPrimitiveComponent* _otherComp, int32 _otherBodyIndex, bool _bFromSweep,
                                           const FHitResult& _sweepResult)
 {
-	if (_otherActor && _otherActor != GetOwner())
+	if (_otherActor && _otherActor
+		!=
+		GetOwner()
+	)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[%s] Overlap Begin: %s"), *GetOwner()->GetName(), *_otherActor->GetName());
 		OnCustomBeginOverlap.Broadcast(_otherActor);
@@ -147,7 +209,10 @@ void UCustomMoveComponent::OnOverlapBegin(UPrimitiveComponent* _overlappedComp, 
 void UCustomMoveComponent::OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,
                                         UPrimitiveComponent* _otherComp, int32 _otherBodyIndex)
 {
-	if (_otherActor && _otherActor != GetOwner())
+	if (_otherActor && _otherActor
+		!=
+		GetOwner()
+	)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[%s] Overlap End: %s"), *GetOwner()->GetName(), *_otherActor->GetName());
 		OnCustomEndOverlap.Broadcast(_otherActor);
@@ -161,6 +226,16 @@ void UCustomMoveComponent::LineTraceIgnoreClass(UWorld* _world, TSubclassOf<AASP
 		m_collisionParams.AddIgnoredActor(*it);
 	}
 	m_collisionParams.AddIgnoredActor(GetOwner());
+	TArray<AActor*> ActorsToIgnore;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("IgnoreCollision"), ActorsToIgnore);
+
+	for (AActor* Actor : ActorsToIgnore)
+	{
+		if (Actor)
+		{
+			m_collisionParams.AddIgnoredActor(Actor);
+		}
+	}
 }
 
 bool UCustomMoveComponent::CheckIfOnGround(UWorld* _world, FHitResult& _outHit, FVector _start, FVector _end,

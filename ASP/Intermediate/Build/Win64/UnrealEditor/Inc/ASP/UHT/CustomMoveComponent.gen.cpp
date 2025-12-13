@@ -11,6 +11,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeCustomMoveComponent() {}
 
 // Begin Cross Module References
+ASP_API UClass* Z_Construct_UClass_ADynamicCamera_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UCustomMoveComponent();
 ASP_API UClass* Z_Construct_UClass_UCustomMoveComponent_NoRegister();
 ASP_API UFunction* Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature();
@@ -753,6 +754,27 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 		{ "ToolTip", "Overlap End" },
 #endif
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MinY_MetaData[] = {
+		{ "Category", "Movement|Bounds" },
+		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MaxY_MetaData[] = {
+		{ "Category", "Movement|Bounds" },
+		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_HalfArenaWidth_MetaData[] = {
+		{ "Category", "Movement|Bounds" },
+		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_CameraCenterY_MetaData[] = {
+		{ "Category", "Movement|Bounds" },
+		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_camera_MetaData[] = {
+		{ "AllowPrivateAccess", "TRUE" },
+		{ "Category", "CustomMoveComponent" },
+		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_b_OnGround_MetaData[] = {
 		{ "AllowPrivateAccess", "TRUE" },
 		{ "Category", "CustomMoveComponent" },
@@ -799,6 +821,11 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomHit;
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomBeginOverlap;
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomEndOverlap;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_MinY;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_MaxY;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_HalfArenaWidth;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_CameraCenterY;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_camera;
 	static void NewProp_b_OnGround_SetBit(void* Obj);
 	static const UECodeGen_Private::FBoolPropertyParams NewProp_b_OnGround;
 	static void NewProp_b_JustJumped_SetBit(void* Obj);
@@ -836,6 +863,11 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UCustomMoveCom
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomHit = { "OnCustomHit", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomHit), Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomHit_MetaData), NewProp_OnCustomHit_MetaData) }; // 854795097
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomBeginOverlap = { "OnCustomBeginOverlap", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomBeginOverlap), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomBeginOverlap_MetaData), NewProp_OnCustomBeginOverlap_MetaData) }; // 878664543
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomEndOverlap = { "OnCustomEndOverlap", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomEndOverlap), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomEndOverlap_MetaData), NewProp_OnCustomEndOverlap_MetaData) }; // 878664543
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MinY = { "MinY", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, MinY), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MinY_MetaData), NewProp_MinY_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MaxY = { "MaxY", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, MaxY), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MaxY_MetaData), NewProp_MaxY_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_HalfArenaWidth = { "HalfArenaWidth", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, HalfArenaWidth), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HalfArenaWidth_MetaData), NewProp_HalfArenaWidth_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_CameraCenterY = { "CameraCenterY", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, CameraCenterY), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CameraCenterY_MetaData), NewProp_CameraCenterY_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_camera = { "m_camera", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, m_camera), Z_Construct_UClass_ADynamicCamera_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_camera_MetaData), NewProp_m_camera_MetaData) };
 void Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_b_OnGround_SetBit(void* Obj)
 {
 	((UCustomMoveComponent*)Obj)->b_OnGround = 1;
@@ -862,6 +894,11 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UCustomMo
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomHit,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomBeginOverlap,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomEndOverlap,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MinY,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MaxY,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_HalfArenaWidth,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_CameraCenterY,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_m_camera,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_b_OnGround,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_b_JustJumped,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_b_isColliderOnTheGround,
@@ -912,10 +949,10 @@ UCustomMoveComponent::~UCustomMoveComponent() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 452673963U) },
+		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 4217050744U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_2821098099(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_1596487435(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

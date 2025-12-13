@@ -18,7 +18,7 @@ struct FHitResult;
 #endif
 #define ASP_ASPCharacter_generated_h
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_29_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_ASPCharacter_h_30_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execGetSkeletalMeshComponent); \
 	DECLARE_FUNCTION(execGetCapsuleComponent); \
 	DECLARE_FUNCTION(execHandleCustomOverlapEnd); \
@@ -26,7 +26,7 @@ struct FHitResult;
 	DECLARE_FUNCTION(execHandleCustomHit);
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_29_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_ASPCharacter_h_30_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAASPCharacter(); \
 	friend struct Z_Construct_UClass_AASPCharacter_Statics; \
@@ -38,7 +38,7 @@ public: \
 	virtual UObject* _getUObject() const override { return const_cast<AASPCharacter*>(this); }
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_29_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_ASPCharacter_h_30_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	AASPCharacter(AASPCharacter&&); \
@@ -50,13 +50,13 @@ public: \
 	NO_API virtual ~AASPCharacter();
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_26_PROLOG
-#define FID_ASP_Source_ASP_ASPCharacter_h_29_GENERATED_BODY \
+#define FID_ASP_Source_ASP_ASPCharacter_h_27_PROLOG
+#define FID_ASP_Source_ASP_ASPCharacter_h_30_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_ASPCharacter_h_29_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_ASPCharacter_h_29_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_ASPCharacter_h_29_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_ASPCharacter_h_30_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_ASPCharacter_h_30_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_ASPCharacter_h_30_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

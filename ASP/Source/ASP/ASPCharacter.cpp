@@ -14,6 +14,7 @@
 #include "StateMachine.h"
 #include "FRollbackManager.h"
 #include "LogicStateMachine.h"
+#include "UPushBoxComponent.h"
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -25,7 +26,6 @@ const FName AASPCharacter::CharacterColliderName(TEXT("Collider"));
 AASPCharacter::AASPCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
 	Capsule = CreateDefaultSubobject<UCapsuleComponent>(CharacterColliderName);
 	RootComponent = Capsule;
 	Capsule->InitCapsuleSize(42.f, 96.0f);
@@ -39,6 +39,11 @@ AASPCharacter::AASPCharacter()
 	Capsule->SetShouldUpdatePhysicsVolume(true);
 	Capsule->SetCanEverAffectNavigation(false);
 	Capsule->bDynamicObstacle = true;
+
+	PushBox = CreateDefaultSubobject<UPushBoxComponent>(TEXT("PushBox"));
+	PushBox->SetupAttachment(RootComponent);
+	PushBox->SetBoxExtent(FVector(10.f, 40.f, 80.f));
+	
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(CharacterMeshName);
 	if (Mesh)
 	{
@@ -77,7 +82,7 @@ void AASPCharacter::Tick(float _deltaSeconds)
 void AASPCharacter::FixedUpdate(float _deltaTime)
 {
 	m_movement->SetLineTraceOnGroundStart(GetActorLocation());
-	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 140.0f));
+	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 100.0f));
 	m_movement->FixedUpdate(_deltaTime);
 	m_playerController->Update(_deltaTime);
 	

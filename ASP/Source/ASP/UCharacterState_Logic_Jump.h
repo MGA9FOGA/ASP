@@ -2,6 +2,7 @@
 #include "ASPCharacter.h"
 #include "FightingGame_PlayerController.h"
 #include "UCharacterBaseState.h"
+#include "AI/NavigationSystemBase.h"
 
 class ASP_API UCharacterState_Logic_Jump : public UCharacterBaseState
 {
@@ -34,6 +35,7 @@ inline void UCharacterState_Logic_Jump::ExitState(FFightingStateMachine* _stateM
 {
 	//UE_LOG(LogTemp, Log, TEXT("EXIT: Jump"));
 	m_EJumpDirectionState = EInputAction::None;
+	_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
 }
 
 inline void UCharacterState_Logic_Jump::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)

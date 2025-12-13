@@ -23,13 +23,13 @@ inline void UCharacterState_Logic_Move::EnterState(FFightingStateMachine* _state
 inline void UCharacterState_Logic_Move::ExitState(FFightingStateMachine* _stateMachine)
 {
 	//UE_LOG(LogTemp, Log, TEXT("EXIT: Move"));
-	//_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
+	_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
 }
 
 inline void UCharacterState_Logic_Move::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
 {
 	if (!_stateMachine || !_stateMachine->GetPlayerController() || !_stateMachine->GetPlayerController()->GetPlayer()
-		|| !_stateMachine->GetCharacter()->GetNoChaosMovementComponent()->GetBoolOnGround())
+	|| !_stateMachine->GetCharacter()->GetNoChaosMovementComponent()->GetBoolOnGround())
 	{
 		return;
 	}
