@@ -52,7 +52,9 @@ public:
 	
 	//Fixed Update
 	UFUNCTION()
-	void FixedGameUpdate60Hz(float _fixedDeltatime);
+	void FixedGameUpdate60Hz(double _fixedDeltatime);
+	UFUNCTION()
+	void RenderUpdate(double _alpha);
 	//Register Player
 	UFUNCTION()
 	void RegisterMovable(TScriptInterface<IMoveableInterface> _movable);
@@ -69,14 +71,17 @@ private:
 	void SaveCurrentFrame(AASPCharacter* _player);
 	void RotateCharacters(AASPCharacter* _playToRotate, AASPCharacter* _enemy);
 public:
-	const float FIXED_UPDATE_RATE = 1.0f / 60.0f;
-	int32 FrameNumber = 0;
+	const double FIXED_UPDATE_RATE = 1.0f / 60.0f;
+	int64 FrameNumber = 0;
 
 
 private:
 	TArray<TScriptInterface<IMoveableInterface>> m_movables;
 	TWeakObjectPtr<UWorld> m_cachedWorld;
-	float m_accumulatedTime = 0.0f;
+	double m_accumulatedTime = 0.0f;
+	int64 m_simulationSteps = 0;
+	int64 m_lastConsumedFrame = -1;
+	
 	UPROPERTY(EditAnywhere)
 	ADynamicCamera* m_camera;
 	
@@ -105,3 +110,4 @@ private:
 	//FRotator m_player2Rotation = FRotator(0.0f,180.0f,0.0f);
 	
 };
+

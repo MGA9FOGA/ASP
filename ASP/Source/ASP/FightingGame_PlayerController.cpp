@@ -91,7 +91,7 @@ void AFightingGame_PlayerController::Update(float _deltatime)
 
 	uint8 encoded = InputHandler::EncodeInput(raw);
 
-	FInputPacket packet(m_gameManager->FrameNumber, encoded, 0, 0);
+	FInputPacket packet(m_gameManager->FrameNumber + 1, encoded, 0, 0);
 
 	if (m_gameManager)
 	{

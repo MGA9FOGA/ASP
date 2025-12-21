@@ -79,7 +79,7 @@ void AASPCharacter::Tick(float _deltaSeconds)
 	Super::Tick(_deltaSeconds);
 }
 
-void AASPCharacter::FixedUpdate(float _deltaTime)
+void AASPCharacter::FixedUpdate(double _deltaTime)
 {
 	m_movement->SetLineTraceOnGroundStart(GetActorLocation());
 	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 100.0f));
@@ -87,17 +87,22 @@ void AASPCharacter::FixedUpdate(float _deltaTime)
 	m_playerController->Update(_deltaTime);
 	
 	//UE_LOG(LogTemp, Warning, TEXT("Character : %f"), GetPlayerController()->GetPlayerID());
-
 	
 	if (m_logicStateMachine != nullptr)
 	{
 		m_logicStateMachine->Update(_deltaTime);
 	}
+}
+
+void AASPCharacter::RenderUpdate(double _deltaTime)
+{
 	if (m_animationStateMachine != nullptr)
 	{
 		m_animationStateMachine->Update(_deltaTime);
 	}
 }
+
+
 
 void AASPCharacter::PerformAction(EInputAction _action) const
 {
@@ -172,7 +177,7 @@ void AASPCharacter::Start()
 	}
 	m_forwardVector = GetActorForwardVector();
 
-	UE_LOG(LogTemp, Warning, TEXT("AASPCharacter::ForwardVector: %f,%f , %f"), m_forwardVector.X, m_forwardVector.Y, m_forwardVector.Z);
+	//UE_LOG(LogTemp, Warning, TEXT("AASPCharacter::ForwardVector: %f,%f , %f"), m_forwardVector.X, m_forwardVector.Y, m_forwardVector.Z);
 }
 
 

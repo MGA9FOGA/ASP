@@ -44,36 +44,25 @@ void UGameManager::Deinitialize()
 
 void UGameManager::Tick(float _deltaTime)
 {
+	if (!GetWorld() || !GetWorld()->IsGameWorld())
+		return;
 	m_accumulatedTime += _deltaTime;
+	m_accumulatedTime = FMath::Min(m_accumulatedTime, 0.04f);
+
 	while (m_accumulatedTime >= FIXED_UPDATE_RATE)
 	{
+		++FrameNumber;
 		FixedGameUpdate60Hz(FIXED_UPDATE_RATE);
 		m_accumulatedTime -= FIXED_UPDATE_RATE;
+		UE_LOG(LogTemp, Warning, TEXT("Frame %lld"), FrameNumber);
 	}
+	const double alpha = m_accumulatedTime / FIXED_UPDATE_RATE;
+	RenderUpdate(alpha);
 }
 
 void UGameManager::BeginPlaySetup()
 {
-	//
-	//if (!m_cachedWorld.IsValid())
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("GameManager: World noch nicht verfügbar."));
-	//	return;
-	//}
-	//
-	//m_playerController1 = Cast<AFightingGame_PlayerController>(
-	//UGameplayStatics::GetPlayerController(m_cachedWorld.Get(), 0));
-	//if (m_playerController1)
-	//{
-	//	m_playerController1->SetMappingContext(GI->DefaultMappingContext_Player1);
-	//}
-	//
-	//if (!m_playerController2)
-	//	m_playerController2 = Cast<AFightingGame_PlayerController>(UGameplayStatics::CreatePlayer(m_cachedWorld.Get(),1, true));
-	//if (m_playerController2)
-	//{
-	//	m_playerController2->SetMappingContext(GI->DefaultMappingContext_Player2);
-	//}
+	FrameNumber = 0;
 	m_playerController1 = Cast<AFightingGame_PlayerController>(
 	UGameplayStatics::GetPlayerController(m_cachedWorld.Get(), 0));
 	m_playerController2 = Cast<AFightingGame_PlayerController>(
@@ -93,25 +82,6 @@ void UGameManager::BeginPlaySetup()
 	
 	m_player1 = m_playerController1->GetPlayer();
 	m_player2 = m_playerController2->GetPlayer();
-
-	//else
-	//{
-	//	m_playerController2->GetLocalPlayer()->ViewportClient->SetForceDisableSplitscreen(true);
-	//}
-	//m_playerController1->SetPlayerID(0);
-	//m_playerController2->SetPlayerID(1);
-	//
-	//// Spawn Characters
-	//SpawnCharacterForController(m_playerController1, m_player1, m_player1Position, m_player1Rotation);
-	//SpawnCharacterForController(m_playerController2, m_player2, m_player2Position, m_player2Rotation);
-	//
-	//InitializeFighters(m_player1, m_playerController1);
-	//InitializeFighters(m_player2, m_playerController2);
-	//
-	//m_player1->Start();
-	//m_player2->Start();
-	//UE_LOG(LogTemp, Warning, TEXT("GetPlayer1(): m_player1 ist %s"), *m_playerController1->GetPlayer()->GetName());
-	//UE_LOG(LogTemp, Log, TEXT("GameManager: Beide Spieler initialisiert"));
 }
 
 void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet)
@@ -119,7 +89,7 @@ void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _playerContro
 	TMap<int32, FInputPacket>& playerMap = m_playerInputQueues.FindOrAdd(_playerController);
 	playerMap.Add(_packet.FrameNumber, _packet);
 	
-	const int32 MaxHistory = 240; // 4 Sekunden bei 60fps
+	const int32 MaxHistory = 240; // 4 Sekunden bei 60fps // 6-8 bei richtigem Rollback
 	if (playerMap.Num() > MaxHistory)
 	{
 		int32 OldestFrame = playerMap.begin()->Key;
@@ -143,40 +113,17 @@ void UGameManager::ProcessInputs()
 	for (auto& pair : m_playerInputQueues)
 	{
 		AFightingGame_PlayerController* player = pair.Key;
-//
 		const FInputPacket* packet = GetInputQueueAtFrame(player, FrameNumber);
 		if (!packet)
 			continue;
-//
 		EInputAction action = CheckForCombo(player, FrameNumber);
 		if (action == EInputAction::None)
 			continue;
-		
 		if (player->GetPlayer())
 			player->GetPlayer()->GetLogicStateMachine()->SetAction(action);
-//
 		if (player->GetPlayer() == m_player2)
-			UE_LOG(LogTemp, Warning, TEXT("player %s, Action %d"), *m_player2->GetName(), action);
+			player->GetPlayer()->GetLogicStateMachine()->SetAction(action);
 	}
-
-//const FInputPacket* packet = GetInputQueueAtFrame(m_playerController1, FrameNumber);
-//if (!packet)
-//	return;
-//EInputAction action = CheckForCombo(m_playerController1, FrameNumber);
-//if (action == EInputAction::None)
-//	return;
-//if (m_playerController1->GetPlayer())
-//	m_playerController1->GetPlayer()->GetLogicStateMachine()->SetAction(action);
-
-
-//const FInputPacket* packet1 = GetInputQueueAtFrame(m_playerController2, FrameNumber);
-//if (!packet1)
-//	return;
-//EInputAction action1 = CheckForCombo(m_playerController2, FrameNumber);
-//if (action1 == EInputAction::None)
-//	return;
-//if (m_playerController2->GetPlayer())
-//	m_playerController2->GetPlayer()->GetLogicStateMachine()->SetAction(action1);
 }
 
 EInputAction UGameManager::CheckForCombo(AFightingGame_PlayerController* _pc, int32 _currentFrame)
@@ -201,30 +148,26 @@ EInputAction UGameManager::CheckForCombo(AFightingGame_PlayerController* _pc, in
 		if (action != EInputAction::Idle)
 			recentActions.Add(action);
 	}
-
 	if (recentActions.Num() == 0)
 		return EInputAction::Idle;
-
 	// ---------- COMBO CHECK ----------
 	if (recentActions.Contains(EInputAction::Up))
 	{
 		if (recentActions.Contains(EInputAction::Attack1)) return EInputAction::UpAttack1;
 		if (recentActions.Contains(EInputAction::Attack2)) return EInputAction::UpAttack2;
 	}
-
+	
 	if (recentActions.Contains(EInputAction::Jump))
 	{
 		if (recentActions.Contains(EInputAction::Attack1)) return EInputAction::JumpAttack1;
 		if (recentActions.Contains(EInputAction::Attack2)) return EInputAction::JumpAttack2;
 	}
-
+	
 	if (recentActions.Contains(EInputAction::Crouch))
 	{
 		if (recentActions.Contains(EInputAction::Attack1)) return EInputAction::LowAttack1;
 		if (recentActions.Contains(EInputAction::Attack2)) return EInputAction::LowAttack2;
 	}
-
-	// sonst: letzter Action
 	return recentActions.Last();
 }
 
@@ -296,9 +239,9 @@ void UGameManager::RotateCharacters(AASPCharacter* _playToRotate, AASPCharacter*
 {
 	if (!_playToRotate || !_enemy || !_playToRotate->GetNoChaosMovementComponent()) return;
 	if (!_playToRotate->GetNoChaosMovementComponent()->GetBoolOnGround() && !_enemy->GetNoChaosMovementComponent()->GetBoolOnGround()) return;
-	float diff = _playToRotate->GetActorLocation().Y - _enemy->GetActorLocation().Y;
+	float rotDiff = _playToRotate->GetActorLocation().Y - _enemy->GetActorLocation().Y;
 
-	if (diff < 0)
+	if (rotDiff < 0)
 		_playToRotate->LookRight();
 	else
 		_playToRotate->LookLeft();
@@ -307,29 +250,49 @@ void UGameManager::RotateCharacters(AASPCharacter* _playToRotate, AASPCharacter*
 }
 
 
-void UGameManager::FixedGameUpdate60Hz(float _fixedDeltatime)
+void UGameManager::FixedGameUpdate60Hz(double _fixedDeltatime)
 {
-	if (FrameNumber > 60)
-	{
-		FrameNumber = 0;
-		return;
-	}
+	ProcessInputs();
 	if (m_player1 && m_player2)
 	{
 		RotateCharacters(m_player1, m_player2);
 		RotateCharacters(m_player2, m_player1);
 	}
-	if (m_camera)
-	{
-		m_camera->Update(_fixedDeltatime);
-	}
-	
 	//GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Yellow,
 	//  FString::Printf(TEXT("Frame: %d | Player1: %s | Player2: %s"),
 	//  FrameNumber,
 	//  *GetNameSafe(Player1),
 	//  *GetNameSafe(Player2)));
+	for (auto& movable : m_movables)
+	{
+		if (movable)
+		{
+			movable->FixedUpdate(_fixedDeltatime);
+		}
+	}
+	if (m_simulationSteps != m_lastConsumedFrame)
+	{
+		m_lastConsumedFrame = m_simulationSteps;
+	}
 	
+	//if (m_player1)
+	//	SaveCurrentFrame(m_player1);
+	//Rollbackcheck
+}
+
+void UGameManager::RenderUpdate(double _fixedDeltatime)
+{
+	for (auto& movable : m_movables)
+	{
+		if (movable)
+		{
+			movable->RenderUpdate(_fixedDeltatime);
+		}
+	}
+	if (m_camera)
+	{
+		m_camera->Update(_fixedDeltatime);
+	}
 	if (m_camera)
 	{
 		if (m_player1)
@@ -341,17 +304,6 @@ void UGameManager::FixedGameUpdate60Hz(float _fixedDeltatime)
 			m_player2->SetCanMoveBackwards(m_camera->characterMaxDistanceAlloToMove());
 		}
 	}
-	for (auto& movable : m_movables)
-	{
-		if (movable)
-		{
-			movable->FixedUpdate(_fixedDeltatime);
-		}
-	}
-	ProcessInputs();
-	//if (m_player1)
-	//	SaveCurrentFrame(m_player1);
-	FrameNumber++;
 }
 
 void UGameManager::RegisterMovable(TScriptInterface<IMoveableInterface> _movable)

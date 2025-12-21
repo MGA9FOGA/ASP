@@ -2,6 +2,7 @@
 
 #include "ASPGameMode.h"
 #include "ASPCharacter.h"
+#include "CustomMoveComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameManager.h"
 #include "FightingGame_PlayerController.h"

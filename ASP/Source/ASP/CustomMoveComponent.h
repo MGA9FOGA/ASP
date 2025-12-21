@@ -30,7 +30,7 @@ public:
 	void Jump(float _jumpStrength);
 	void ClampToStage(AActor* _actor);
 	void ResolvePushBoxes();
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Gravity = 980.f;
 

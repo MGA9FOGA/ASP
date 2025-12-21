@@ -20,6 +20,7 @@ class ASP_API IMoveableInterface
 	GENERATED_BODY()
 
 public:
-	virtual void FixedUpdate(float _deltaTime) = 0;
+	virtual void FixedUpdate(double _deltaTime) = 0;
+	virtual void RenderUpdate(double _deltaTime) = 0;
 	virtual class UCustomMoveComponent* GetNoChaosMovementComponent() const = 0;
 };

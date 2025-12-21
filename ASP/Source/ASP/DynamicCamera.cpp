@@ -60,7 +60,7 @@ bool ADynamicCamera::characterMaxDistanceAlloToMove()
 
 	float Distance = FMath::Abs(P1->GetActorLocation().Y - P2->GetActorLocation().Y);
 
-	UE_LOG(LogTemp, Display, TEXT("Distance: %f"), Distance);
+	//UE_LOG(LogTemp, Display, TEXT("Distance: %f"), Distance);
 	
 	return Distance < m_maxPlayerPositionDifference;
 }

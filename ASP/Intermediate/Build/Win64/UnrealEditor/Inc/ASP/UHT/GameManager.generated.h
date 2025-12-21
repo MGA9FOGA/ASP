@@ -17,6 +17,7 @@ class IMoveableInterface;
 
 #define FID_ASP_Source_ASP_GameManager_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execRegisterMovable); \
+	DECLARE_FUNCTION(execRenderUpdate); \
 	DECLARE_FUNCTION(execFixedGameUpdate60Hz);
 
 

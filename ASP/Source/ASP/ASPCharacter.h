@@ -45,7 +45,9 @@ public:
 	static const FName CharacterColliderName;
 	
 	void Start();
-	virtual void FixedUpdate(float _deltaTime) override;
+	virtual void FixedUpdate(double _deltaTime) override;
+	virtual void RenderUpdate(double _deltaTime) override;
+
 	virtual UCustomMoveComponent* GetNoChaosMovementComponent() const override { return m_movement; }
 
 	void Move(float _value) const;
