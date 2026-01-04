@@ -8,49 +8,45 @@
 #include "StateMachine.h"
 
 //Logic
-inline bool IdleToMoving(FFightingStateMachine& _statemachine)
+inline bool IdleToMoving(const FCharacterState _state, const FFrameInput& _input)
 {
-	EInputAction action = _statemachine.GetAction();
+	EInputAction action = _input.Action;
 
 	return action == EInputAction::MoveRight || action == EInputAction::MoveLeft;
 }
 
 
-inline bool IdleOrWalkToJump(FFightingStateMachine& _statemachine)
+inline bool IdleOrWalkToJump(const FCharacterState _state, const FFrameInput& _input)
 {
-	if (_statemachine.GetAction() == EInputAction::JumpLeft || _statemachine.GetAction() == EInputAction::JumpRight ||
-		_statemachine.GetAction() == Jump) return true;
+	if (!_state.bGrounded)
+		return false;
+	
+	return _input.Action == EInputAction::Jump
+		|| _input.Action == EInputAction::JumpLeft
+		|| _input.Action == EInputAction::JumpRight;
+}
+
+inline bool WalkingToIdle(const FCharacterState _state, const FFrameInput& _input)
+{
+	if (_input.Action == EInputAction::Idle || _input.Action == EInputAction::None ) return true;
 	return false;
 }
 
-inline bool WalkingToIdle(FFightingStateMachine& _statemachine)
+inline bool JumpToIdle(const FCharacterState _state, const FFrameInput& _input)
 {
-	if (_statemachine.GetAction() == EInputAction::Idle || _statemachine.GetAction() == EInputAction::None ) return true;
-	return false;
-}
-
-inline bool JumpToIdle(const FFightingStateMachine& _statemachine)
-{
-	if (_statemachine.GetPlayerController()->GetPlayer()->GetNoChaosMovementComponent()->GetBoolOnGround()) return true;
-	return false;
+	return _state.bGrounded && !_state.bJumpRequested && _state.bHasLeftGround;
 }
 
 
 //Animation
-inline bool CanTransitionToIdle(FFightingStateMachine& _statemachine)
+inline bool CanTransitionToIdle(const FCharacterState _state, const FFrameInput& _input)
 {
-	AnimationStateMachine* animFSM = static_cast<AnimationStateMachine*>(&_statemachine);
-	if (!animFSM)
-		return false;
-
-	return animFSM->GetIsLanded();
+	return _state.bAnimLanded;
 }
 
-inline bool CanTransitionToFalling(FFightingStateMachine& _statemachine)
+inline bool CanTransitionToFalling(const FCharacterState _state, const FFrameInput& _input)
 {
-	AnimationStateMachine* animFSM = static_cast<AnimationStateMachine*>(&_statemachine);
-	if (!animFSM)
-		return false;
-	
-	return _statemachine.GetCharacter()->GetNoChaosMovementComponent()->GetOwnVelocity().Z < 0.0f || animFSM->GetStartUpJumpedFinished();
+	return _state.Velocity.Z < 0.f || _state.bAnimJumpStartupFinished;
 }
+
+/*_statemachine.GetCharacter()->GetNoChaosMovementComponent()->GetOwnVelocity().Z < 0.0f || animFSM->GetStartUpJumpedFinished()*/

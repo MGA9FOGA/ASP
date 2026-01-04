@@ -14,8 +14,6 @@ void EmptyLinkFunctionForGeneratedCodeCustomMoveComponent() {}
 ASP_API UClass* Z_Construct_UClass_ADynamicCamera_NoRegister();
 ASP_API UClass* Z_Construct_UClass_UCustomMoveComponent();
 ASP_API UClass* Z_Construct_UClass_UCustomMoveComponent_NoRegister();
-ASP_API UFunction* Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature();
-ASP_API UFunction* Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature();
 COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_UActorComponent();
@@ -24,97 +22,6 @@ ENGINE_API UClass* Z_Construct_UClass_UPrimitiveComponent_NoRegister();
 ENGINE_API UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
 UPackage* Z_Construct_UPackage__Script_ASP();
 // End Cross Module References
-
-// Begin Delegate FOnCustomHit
-struct Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics
-{
-	struct _Script_ASP_eventOnCustomHit_Parms
-	{
-		FHitResult HitResult;
-	};
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_HitResult_MetaData[] = {
-		{ "NativeConst", "" },
-	};
-#endif // WITH_METADATA
-	static const UECodeGen_Private::FStructPropertyParams NewProp_HitResult;
-	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-	static const UECodeGen_Private::FFunctionParams FuncParams;
-};
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::NewProp_HitResult = { "HitResult", nullptr, (EPropertyFlags)0x0010008008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(_Script_ASP_eventOnCustomHit_Parms, HitResult), Z_Construct_UScriptStruct_FHitResult, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HitResult_MetaData), NewProp_HitResult_MetaData) }; // 4100991306
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::NewProp_HitResult,
-};
-static_assert(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::PropPointers) < 2048);
-const UECodeGen_Private::FFunctionParams Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::FuncParams = { (UObject*(*)())Z_Construct_UPackage__Script_ASP, nullptr, "OnCustomHit__DelegateSignature", nullptr, nullptr, Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::PropPointers), sizeof(Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::_Script_ASP_eventOnCustomHit_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::Function_MetaDataParams) };
-static_assert(sizeof(Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::_Script_ASP_eventOnCustomHit_Parms) < MAX_uint16);
-UFunction* Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature()
-{
-	static UFunction* ReturnFunction = nullptr;
-	if (!ReturnFunction)
-	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature_Statics::FuncParams);
-	}
-	return ReturnFunction;
-}
-void FOnCustomHit_DelegateWrapper(const FMulticastScriptDelegate& OnCustomHit, FHitResult const& HitResult)
-{
-	struct _Script_ASP_eventOnCustomHit_Parms
-	{
-		FHitResult HitResult;
-	};
-	_Script_ASP_eventOnCustomHit_Parms Parms;
-	Parms.HitResult=HitResult;
-	OnCustomHit.ProcessMulticastDelegate<UObject>(&Parms);
-}
-// End Delegate FOnCustomHit
-
-// Begin Delegate FOnCustomOverlap
-struct Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics
-{
-	struct _Script_ASP_eventOnCustomOverlap_Parms
-	{
-		AActor* OtherActor;
-	};
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-	};
-#endif // WITH_METADATA
-	static const UECodeGen_Private::FObjectPropertyParams NewProp_OtherActor;
-	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-	static const UECodeGen_Private::FFunctionParams FuncParams;
-};
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::NewProp_OtherActor = { "OtherActor", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(_Script_ASP_eventOnCustomOverlap_Parms, OtherActor), Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::NewProp_OtherActor,
-};
-static_assert(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::PropPointers) < 2048);
-const UECodeGen_Private::FFunctionParams Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::FuncParams = { (UObject*(*)())Z_Construct_UPackage__Script_ASP, nullptr, "OnCustomOverlap__DelegateSignature", nullptr, nullptr, Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::PropPointers), sizeof(Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::_Script_ASP_eventOnCustomOverlap_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::Function_MetaDataParams), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::Function_MetaDataParams) };
-static_assert(sizeof(Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::_Script_ASP_eventOnCustomOverlap_Parms) < MAX_uint16);
-UFunction* Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature()
-{
-	static UFunction* ReturnFunction = nullptr;
-	if (!ReturnFunction)
-	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature_Statics::FuncParams);
-	}
-	return ReturnFunction;
-}
-void FOnCustomOverlap_DelegateWrapper(const FMulticastScriptDelegate& OnCustomOverlap, AActor* OtherActor)
-{
-	struct _Script_ASP_eventOnCustomOverlap_Parms
-	{
-		AActor* OtherActor;
-	};
-	_Script_ASP_eventOnCustomOverlap_Parms Parms;
-	Parms.OtherActor=OtherActor;
-	OnCustomOverlap.ProcessMulticastDelegate<UObject>(&Parms);
-}
-// End Delegate FOnCustomOverlap
 
 // Begin Class UCustomMoveComponent Function AddLinetraceIgnore
 struct Z_Construct_UFunction_UCustomMoveComponent_AddLinetraceIgnore_Statics
@@ -333,158 +240,6 @@ DEFINE_FUNCTION(UCustomMoveComponent::execGetLineTraceOnGroundStart)
 }
 // End Class UCustomMoveComponent Function GetLineTraceOnGroundStart
 
-// Begin Class UCustomMoveComponent Function OnHit
-struct Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics
-{
-	struct CustomMoveComponent_eventOnHit_Parms
-	{
-		UPrimitiveComponent* _hitComp;
-		AActor* _otherActor;
-		UPrimitiveComponent* _otherComp;
-		FVector _ormalImpulse;
-		FHitResult _hit;
-	};
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp__hitComp_MetaData[] = {
-		{ "EditInline", "true" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp__otherComp_MetaData[] = {
-		{ "EditInline", "true" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp__hit_MetaData[] = {
-		{ "NativeConst", "" },
-	};
-#endif // WITH_METADATA
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__hitComp;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__otherActor;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__otherComp;
-	static const UECodeGen_Private::FStructPropertyParams NewProp__ormalImpulse;
-	static const UECodeGen_Private::FStructPropertyParams NewProp__hit;
-	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-	static const UECodeGen_Private::FFunctionParams FuncParams;
-};
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__hitComp = { "_hitComp", nullptr, (EPropertyFlags)0x0010000000080080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnHit_Parms, _hitComp), Z_Construct_UClass_UPrimitiveComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp__hitComp_MetaData), NewProp__hitComp_MetaData) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__otherActor = { "_otherActor", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnHit_Parms, _otherActor), Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__otherComp = { "_otherComp", nullptr, (EPropertyFlags)0x0010000000080080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnHit_Parms, _otherComp), Z_Construct_UClass_UPrimitiveComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp__otherComp_MetaData), NewProp__otherComp_MetaData) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__ormalImpulse = { "_ormalImpulse", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnHit_Parms, _ormalImpulse), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__hit = { "_hit", nullptr, (EPropertyFlags)0x0010008008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnHit_Parms, _hit), Z_Construct_UScriptStruct_FHitResult, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp__hit_MetaData), NewProp__hit_MetaData) }; // 4100991306
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__hitComp,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__otherActor,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__otherComp,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__ormalImpulse,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::NewProp__hit,
-};
-static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::PropPointers) < 2048);
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UCustomMoveComponent, nullptr, "OnHit", nullptr, nullptr, Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::PropPointers), sizeof(Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::CustomMoveComponent_eventOnHit_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00C20401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::Function_MetaDataParams), Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::Function_MetaDataParams) };
-static_assert(sizeof(Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::CustomMoveComponent_eventOnHit_Parms) < MAX_uint16);
-UFunction* Z_Construct_UFunction_UCustomMoveComponent_OnHit()
-{
-	static UFunction* ReturnFunction = nullptr;
-	if (!ReturnFunction)
-	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UCustomMoveComponent_OnHit_Statics::FuncParams);
-	}
-	return ReturnFunction;
-}
-DEFINE_FUNCTION(UCustomMoveComponent::execOnHit)
-{
-	P_GET_OBJECT(UPrimitiveComponent,Z_Param__hitComp);
-	P_GET_OBJECT(AActor,Z_Param__otherActor);
-	P_GET_OBJECT(UPrimitiveComponent,Z_Param__otherComp);
-	P_GET_STRUCT(FVector,Z_Param__ormalImpulse);
-	P_GET_STRUCT_REF(FHitResult,Z_Param_Out__hit);
-	P_FINISH;
-	P_NATIVE_BEGIN;
-	P_THIS->OnHit(Z_Param__hitComp,Z_Param__otherActor,Z_Param__otherComp,Z_Param__ormalImpulse,Z_Param_Out__hit);
-	P_NATIVE_END;
-}
-// End Class UCustomMoveComponent Function OnHit
-
-// Begin Class UCustomMoveComponent Function OnOverlapBegin
-struct Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics
-{
-	struct CustomMoveComponent_eventOnOverlapBegin_Parms
-	{
-		UPrimitiveComponent* _overlappedComp;
-		AActor* _otherActor;
-		UPrimitiveComponent* _otherComp;
-		int32 _otherBodyIndex;
-		bool _bFromSweep;
-		FHitResult _sweepResult;
-	};
-#if WITH_METADATA
-	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp__overlappedComp_MetaData[] = {
-		{ "EditInline", "true" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp__otherComp_MetaData[] = {
-		{ "EditInline", "true" },
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp__sweepResult_MetaData[] = {
-		{ "NativeConst", "" },
-	};
-#endif // WITH_METADATA
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__overlappedComp;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__otherActor;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp__otherComp;
-	static const UECodeGen_Private::FIntPropertyParams NewProp__otherBodyIndex;
-	static void NewProp__bFromSweep_SetBit(void* Obj);
-	static const UECodeGen_Private::FBoolPropertyParams NewProp__bFromSweep;
-	static const UECodeGen_Private::FStructPropertyParams NewProp__sweepResult;
-	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
-	static const UECodeGen_Private::FFunctionParams FuncParams;
-};
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__overlappedComp = { "_overlappedComp", nullptr, (EPropertyFlags)0x0010000000080080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnOverlapBegin_Parms, _overlappedComp), Z_Construct_UClass_UPrimitiveComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp__overlappedComp_MetaData), NewProp__overlappedComp_MetaData) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__otherActor = { "_otherActor", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnOverlapBegin_Parms, _otherActor), Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__otherComp = { "_otherComp", nullptr, (EPropertyFlags)0x0010000000080080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnOverlapBegin_Parms, _otherComp), Z_Construct_UClass_UPrimitiveComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp__otherComp_MetaData), NewProp__otherComp_MetaData) };
-const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__otherBodyIndex = { "_otherBodyIndex", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnOverlapBegin_Parms, _otherBodyIndex), METADATA_PARAMS(0, nullptr) };
-void Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__bFromSweep_SetBit(void* Obj)
-{
-	((CustomMoveComponent_eventOnOverlapBegin_Parms*)Obj)->_bFromSweep = 1;
-}
-const UECodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__bFromSweep = { "_bFromSweep", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(CustomMoveComponent_eventOnOverlapBegin_Parms), &Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__bFromSweep_SetBit, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__sweepResult = { "_sweepResult", nullptr, (EPropertyFlags)0x0010008008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CustomMoveComponent_eventOnOverlapBegin_Parms, _sweepResult), Z_Construct_UScriptStruct_FHitResult, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp__sweepResult_MetaData), NewProp__sweepResult_MetaData) }; // 4100991306
-const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::PropPointers[] = {
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__overlappedComp,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__otherActor,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__otherComp,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__otherBodyIndex,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__bFromSweep,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::NewProp__sweepResult,
-};
-static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::PropPointers) < 2048);
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UCustomMoveComponent, nullptr, "OnOverlapBegin", nullptr, nullptr, Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::PropPointers), sizeof(Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::CustomMoveComponent_eventOnOverlapBegin_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00420401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::Function_MetaDataParams), Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::Function_MetaDataParams) };
-static_assert(sizeof(Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::CustomMoveComponent_eventOnOverlapBegin_Parms) < MAX_uint16);
-UFunction* Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin()
-{
-	static UFunction* ReturnFunction = nullptr;
-	if (!ReturnFunction)
-	{
-		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin_Statics::FuncParams);
-	}
-	return ReturnFunction;
-}
-DEFINE_FUNCTION(UCustomMoveComponent::execOnOverlapBegin)
-{
-	P_GET_OBJECT(UPrimitiveComponent,Z_Param__overlappedComp);
-	P_GET_OBJECT(AActor,Z_Param__otherActor);
-	P_GET_OBJECT(UPrimitiveComponent,Z_Param__otherComp);
-	P_GET_PROPERTY(FIntProperty,Z_Param__otherBodyIndex);
-	P_GET_UBOOL(Z_Param__bFromSweep);
-	P_GET_STRUCT_REF(FHitResult,Z_Param_Out__sweepResult);
-	P_FINISH;
-	P_NATIVE_BEGIN;
-	P_THIS->OnOverlapBegin(Z_Param__overlappedComp,Z_Param__otherActor,Z_Param__otherComp,Z_Param__otherBodyIndex,Z_Param__bFromSweep,Z_Param_Out__sweepResult);
-	P_NATIVE_END;
-}
-// End Class UCustomMoveComponent Function OnOverlapBegin
-
 // Begin Class UCustomMoveComponent Function OnOverlapEnd
 struct Z_Construct_UFunction_UCustomMoveComponent_OnOverlapEnd_Statics
 {
@@ -497,7 +252,13 @@ struct Z_Construct_UFunction_UCustomMoveComponent_OnOverlapEnd_Statics
 	};
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "//Collider Hit\n//UPROPERTY(BlueprintAssignable, Category=\"CustomMove|Events\")\n//FOnCustomHit OnCustomHit;\n//UFUNCTION()\n//void OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, FVector _ormalImpulse, const FHitResult& _hit);\n//\n////Overlap Begin\n//UPROPERTY(BlueprintAssignable)\n//FOnCustomOverlap OnCustomBeginOverlap;\n//UFUNCTION()\n//void OnOverlapBegin(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex, bool _bFromSweep, const FHitResult& _sweepResult);\n//\n////Overlap End\n//UPROPERTY(BlueprintAssignable)\n//FOnCustomOverlap OnCustomEndOverlap;\n" },
+#endif
 		{ "ModuleRelativePath", "CustomMoveComponent.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Collider Hit\nUPROPERTY(BlueprintAssignable, Category=\"CustomMove|Events\")\nFOnCustomHit OnCustomHit;\nUFUNCTION()\nvoid OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, FVector _ormalImpulse, const FHitResult& _hit);\n\n/Overlap Begin\nUPROPERTY(BlueprintAssignable)\nFOnCustomOverlap OnCustomBeginOverlap;\nUFUNCTION()\nvoid OnOverlapBegin(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex, bool _bFromSweep, const FHitResult& _sweepResult);\n\n/Overlap End\nUPROPERTY(BlueprintAssignable)\nFOnCustomOverlap OnCustomEndOverlap;" },
+#endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp__overlappedComp_MetaData[] = {
 		{ "EditInline", "true" },
@@ -689,8 +450,6 @@ void UCustomMoveComponent::StaticRegisterNativesUCustomMoveComponent()
 		{ "GetHitResultOnGround", &UCustomMoveComponent::execGetHitResultOnGround },
 		{ "GetLineTraceOnGroundEnd", &UCustomMoveComponent::execGetLineTraceOnGroundEnd },
 		{ "GetLineTraceOnGroundStart", &UCustomMoveComponent::execGetLineTraceOnGroundStart },
-		{ "OnHit", &UCustomMoveComponent::execOnHit },
-		{ "OnOverlapBegin", &UCustomMoveComponent::execOnOverlapBegin },
 		{ "OnOverlapEnd", &UCustomMoveComponent::execOnOverlapEnd },
 		{ "SetBoolOnGround", &UCustomMoveComponent::execSetBoolOnGround },
 		{ "SetLineTraceOnGroundEnd", &UCustomMoveComponent::execSetLineTraceOnGroundEnd },
@@ -724,34 +483,6 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 		{ "ModuleRelativePath", "CustomMoveComponent.h" },
 #if !UE_BUILD_SHIPPING
 		{ "ToolTip", "Ref on Character Capsule" },
-#endif
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_OnCustomHit_MetaData[] = {
-		{ "Category", "CustomMove|Events" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//Collider Hit\n" },
-#endif
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Collider Hit" },
-#endif
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_OnCustomBeginOverlap_MetaData[] = {
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//Overlap Begin\n" },
-#endif
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Overlap Begin" },
-#endif
-	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_OnCustomEndOverlap_MetaData[] = {
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "//Overlap End\n" },
-#endif
-		{ "ModuleRelativePath", "CustomMoveComponent.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Overlap End" },
 #endif
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MinY_MetaData[] = {
@@ -818,9 +549,6 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_Gravity;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Capsule;
-	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomHit;
-	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomBeginOverlap;
-	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCustomEndOverlap;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_MinY;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_MaxY;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_HalfArenaWidth;
@@ -845,9 +573,7 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 		{ &Z_Construct_UFunction_UCustomMoveComponent_GetHitResultOnGround, "GetHitResultOnGround" }, // 3178150606
 		{ &Z_Construct_UFunction_UCustomMoveComponent_GetLineTraceOnGroundEnd, "GetLineTraceOnGroundEnd" }, // 2717208480
 		{ &Z_Construct_UFunction_UCustomMoveComponent_GetLineTraceOnGroundStart, "GetLineTraceOnGroundStart" }, // 519892869
-		{ &Z_Construct_UFunction_UCustomMoveComponent_OnHit, "OnHit" }, // 1138691424
-		{ &Z_Construct_UFunction_UCustomMoveComponent_OnOverlapBegin, "OnOverlapBegin" }, // 3905557757
-		{ &Z_Construct_UFunction_UCustomMoveComponent_OnOverlapEnd, "OnOverlapEnd" }, // 3338901057
+		{ &Z_Construct_UFunction_UCustomMoveComponent_OnOverlapEnd, "OnOverlapEnd" }, // 3161140949
 		{ &Z_Construct_UFunction_UCustomMoveComponent_SetBoolOnGround, "SetBoolOnGround" }, // 2765703706
 		{ &Z_Construct_UFunction_UCustomMoveComponent_SetLineTraceOnGroundEnd, "SetLineTraceOnGroundEnd" }, // 3542780166
 		{ &Z_Construct_UFunction_UCustomMoveComponent_SetLineTraceOnGroundStart, "SetLineTraceOnGroundStart" }, // 3601493992
@@ -860,9 +586,6 @@ struct Z_Construct_UClass_UCustomMoveComponent_Statics
 };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Gravity = { "Gravity", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, Gravity), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Gravity_MetaData), NewProp_Gravity_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Capsule = { "Capsule", nullptr, (EPropertyFlags)0x0010000000080008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, Capsule), Z_Construct_UClass_UCapsuleComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Capsule_MetaData), NewProp_Capsule_MetaData) };
-const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomHit = { "OnCustomHit", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomHit), Z_Construct_UDelegateFunction_ASP_OnCustomHit__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomHit_MetaData), NewProp_OnCustomHit_MetaData) }; // 854795097
-const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomBeginOverlap = { "OnCustomBeginOverlap", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomBeginOverlap), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomBeginOverlap_MetaData), NewProp_OnCustomBeginOverlap_MetaData) }; // 878664543
-const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomEndOverlap = { "OnCustomEndOverlap", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, OnCustomEndOverlap), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomEndOverlap_MetaData), NewProp_OnCustomEndOverlap_MetaData) }; // 878664543
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MinY = { "MinY", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, MinY), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MinY_MetaData), NewProp_MinY_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MaxY = { "MaxY", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, MaxY), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MaxY_MetaData), NewProp_MaxY_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_HalfArenaWidth = { "HalfArenaWidth", nullptr, (EPropertyFlags)0x0010000000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UCustomMoveComponent, HalfArenaWidth), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_HalfArenaWidth_MetaData), NewProp_HalfArenaWidth_MetaData) };
@@ -891,9 +614,6 @@ const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UCustomMoveCom
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UCustomMoveComponent_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Gravity,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_Capsule,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomHit,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomBeginOverlap,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_OnCustomEndOverlap,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MinY,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_MaxY,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UCustomMoveComponent_Statics::NewProp_HalfArenaWidth,
@@ -949,10 +669,10 @@ UCustomMoveComponent::~UCustomMoveComponent() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 4217050744U) },
+		{ Z_Construct_UClass_UCustomMoveComponent, UCustomMoveComponent::StaticClass, TEXT("UCustomMoveComponent"), &Z_Registration_Info_UClass_UCustomMoveComponent, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UCustomMoveComponent), 753899121U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_1596487435(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_307219344(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_CustomMoveComponent_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

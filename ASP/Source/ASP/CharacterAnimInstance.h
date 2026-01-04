@@ -24,6 +24,4 @@ public:
 	
 	FOnLandingEndedNative OnLandingEndedNative;
 	FOnJumpStartEndedNative OnJumpStartEndedNative;
-private:
-	AASPCharacter* m_character;
 };

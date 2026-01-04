@@ -43,7 +43,7 @@ AASPCharacter::AASPCharacter()
 	PushBox = CreateDefaultSubobject<UPushBoxComponent>(TEXT("PushBox"));
 	PushBox->SetupAttachment(RootComponent);
 	PushBox->SetBoxExtent(FVector(10.f, 40.f, 80.f));
-	
+
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(CharacterMeshName);
 	if (Mesh)
 	{
@@ -62,14 +62,10 @@ AASPCharacter::AASPCharacter()
 		Mesh->SetAnimInstanceClass(UCharacterAnimInstance::StaticClass());
 	}
 
-	//MovmentComp for the Actor
-	m_movement = CreateDefaultSubobject<UCustomMoveComponent>(TEXT("MoveComponent"));
-	m_moveSpeed = 10000.0f;
-	m_jumpStrength = 500.0f;
+	//OnCustomHit.AddDynamic(this, &AASPCharacter::HandleCustomHit);
+	//OnCustomBeginOverlap.AddDynamic(this, &AASPCharacter::HandleCustomOverlapBegin);
+	//OnCustomEndOverlap.AddDynamic(this, &AASPCharacter::HandleCustomOverlapEnd);
 
-
-	m_logicStateMachine = std::make_unique<LogicStateMachine>(*this);
-	m_animationStateMachine = std::make_unique<AnimationStateMachine>(*m_logicStateMachine, *this);
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -79,144 +75,82 @@ void AASPCharacter::Tick(float _deltaSeconds)
 	Super::Tick(_deltaSeconds);
 }
 
-void AASPCharacter::FixedUpdate(double _deltaTime)
+void AASPCharacter::OnOverlapBegin(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,
+                                   UPrimitiveComponent* _otherComp, int32 _otherBodyIndex, bool _bFromSweep,
+                                   const FHitResult& _sweepResult)
 {
-	m_movement->SetLineTraceOnGroundStart(GetActorLocation());
-	m_movement->SetLineTraceOnGroundEnd(m_movement->GetLineTraceOnGroundStart() - FVector(0, 0, 100.0f));
-	m_movement->FixedUpdate(_deltaTime);
-	m_playerController->Update(_deltaTime);
-	
-	//UE_LOG(LogTemp, Warning, TEXT("Character : %f"), GetPlayerController()->GetPlayerID());
-	
-	if (m_logicStateMachine != nullptr)
+	if (_otherActor && _otherActor
+		!=
+		GetOwner()
+	)
 	{
-		m_logicStateMachine->Update(_deltaTime);
+		OnCustomBeginOverlap.Broadcast(_otherActor);
 	}
 }
 
-void AASPCharacter::RenderUpdate(double _deltaTime)
+void AASPCharacter::OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor,
+                          UPrimitiveComponent* _otherComp,
+                          FVector _ormalImpulse, const FHitResult& _hit)
 {
-	if (m_animationStateMachine != nullptr)
+	if (_otherActor && _otherActor
+		!=
+		GetOwner()
+	)
 	{
-		m_animationStateMachine->Update(_deltaTime);
+		OnCustomHit.Broadcast(_hit);
 	}
 }
 
-
-
-void AASPCharacter::PerformAction(EInputAction _action) const
+void AASPCharacter::OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,
+                                 UPrimitiveComponent* _otherComp, int32 _otherBodyIndex)
 {
-	//if (!m_playerController) return;
-	//switch (_action)
-	//{
-	//case EAction::MoveRight:
-	//	m_playerController->Move(1.0f);
-	//	break;
-	//case EAction::MoveLeft:
-	//	m_playerController->Move(-1.0f);
-	//	break;
-	//case EAction::UpMoveRight:
-	//	m_playerController->Move(1.0f);
-	//	break;
-	//case EAction::UpMoveLeft:
-	//	m_playerController->Move(-1.0f);
-	//	break;
-	//case EAction::CrouchMoveRight:
-	//	m_playerController->Move(1.0f);
-	//	break;
-	//case EAction::CrouchMoveLeft:
-	//	m_playerController->Move(-1.0f);
-	//	break;
-	//case EAction::Jump:
-	//	m_playerController->Jump(500.0f);
-	//	break;
-	//default:
-	//	m_playerController->StopMove();
-	//	break;
-	//}
+	if (_otherActor && _otherActor
+		!=
+		GetOwner()
+	)
+	{
+		OnCustomEndOverlap.Broadcast(_otherActor);
+	}
 }
 
-void AASPCharacter::Move(float _value) const
+void AASPCharacter::NotifyAnimLandingFinished()
 {
-	GetNoChaosMovementComponent()->Move(m_moveSpeed,  _value);
+	PendingAnimEvents.bLandingFinished = true;
 }
 
-void AASPCharacter::StopMove() const
+void AASPCharacter::NotifyAnimJumpStartupFinished()
 {
-	if (!m_movement) return;
-	GetNoChaosMovementComponent()->StopMove();
+	PendingAnimEvents.bJumpStartupFinished = true;
 }
 
-void AASPCharacter::Jump() const
+void AASPCharacter::ApplyState(const FCharacterRollbackState& _state)
 {
-	GetNoChaosMovementComponent()->Jump(m_jumpStrength);
+	SetActorLocation(_state.Position);
 }
+
 
 void AASPCharacter::Start()
 {
-	if (m_movement)
+	if (Capsule)
 	{
-		m_movement->OnCustomHit.AddDynamic(this, &AASPCharacter::HandleCustomHit);
-		m_movement->OnCustomBeginOverlap.AddDynamic(this, &AASPCharacter::HandleCustomOverlapBegin);
-		m_movement->OnCustomEndOverlap.AddDynamic(this, &AASPCharacter::HandleCustomOverlapEnd);
-	}
+		UE_LOG(LogTemp, Log, TEXT("[%s] Using capsule: %s"), *GetName(), *Capsule->GetName());
 
-	if (UGameManager* gm = GetGameInstance()->GetSubsystem<UGameManager>())
-	{
-		gm->RegisterMovable(this);
+		Capsule->OnComponentHit.AddDynamic(this, &AASPCharacter::OnHit);
+		Capsule->OnComponentBeginOverlap.AddDynamic(this, &AASPCharacter::OnOverlapBegin);
+		Capsule->OnComponentEndOverlap.AddDynamic(this, &AASPCharacter::OnOverlapEnd);
 	}
-	
-	m_logicStateMachine->Start();
-	m_animationStateMachine->Start();
-
-	UCharacterAnimInstance* animInstance = Cast<UCharacterAnimInstance>(Mesh->GetAnimInstance());
-	if (animInstance && m_animationStateMachine)
+	else
 	{
-		animInstance->OnLandingEndedNative.BindRaw(m_animationStateMachine.get(), &AnimationStateMachine::OnLandingFinished);
-		animInstance->OnJumpStartEndedNative.BindRaw(m_animationStateMachine.get(), &AnimationStateMachine::OnJStartJumpFinished);
+		UE_LOG(LogTemp, Warning, TEXT("[%s] No capsule found!"), *GetOwner()->GetName());
+	}
+	if (UCharacterAnimInstance* anim = Cast<UCharacterAnimInstance>(
+		GetSkeletalMeshComponent()->GetAnimInstance()))
+	{
+		anim->OnLandingEndedNative.BindUObject(this, &AASPCharacter::NotifyAnimLandingFinished);
+		anim->OnJumpStartEndedNative.BindUObject(this, &AASPCharacter::NotifyAnimJumpStartupFinished);
 	}
 	m_forwardVector = GetActorForwardVector();
-
-	//UE_LOG(LogTemp, Warning, TEXT("AASPCharacter::ForwardVector: %f,%f , %f"), m_forwardVector.X, m_forwardVector.Y, m_forwardVector.Z);
 }
-
-
-
-//void AASPCharacter::Register()
-//{
-//	if (UGameManager* gm = GetGameInstance()->GetSubsystem<UGameManager>())
-//	{Unreal Engine reflection macro
-     //UPROPERTY
-     //
-     //
-     //Properties are declared using standard C++ variable syntax, preceded by the UPROPERTY macro which defines property metadata and variable specifiers.
-     //
-     //Remarks:
-     //
-     //The UPROPERTY macro enables a member variable of a UCLASS or a USTRUCT to be used as a UPROPERTY.
-     //A UPROPERTY has many uses. It can allow the variable to be replicated, serialized, and accessed from Blueprints. They are also used by the garbage collector to keep track of how many references there are to a UObject.
-     //Learn more: Properties, Property Specifiers.
-     //
-     //Example:
-     //
-     //
-     //
-     //UPROPERTY([specifier, specifier, ...], [meta(key=value, key=value, ...)])
-     //Type VariableName;
-     //
-     // Src.Caches.UE53_generated_header.h
-//		if (!gm->GetPlayer1())
-//		{
-//			gm->RegisterPlayer1(this, 0);
-//			UE_LOG(LogTemp, Warning, TEXT("GetPlayer1(): m_player1 ist %s"), *gm->GetPlayer1()->GetName());
-//		}
-//		else if (!gm->GetPlayer2())
-//		{
-//			gm->RegisterPlayer2(this, 1);
-//			UE_LOG(LogTemp, Warning, TEXT("GetPlayer2(): m_player1 ist %s"), *gm->GetPlayer2()->GetName());
-//		}
-//	}
-//}
 
 void AASPCharacter::HandleCustomHit(const FHitResult& _hit)
 {
@@ -236,13 +170,12 @@ void AASPCharacter::HandleCustomOverlapEnd(AActor* _otherActor)
 
 void AASPCharacter::LookLeft()
 {
-	m_targetRotation = FRotator (0.0f, -180.0f, 0.0f);
+	m_targetRotation = FRotator(0.0f, -180.0f, 0.0f);
 }
 
 void AASPCharacter::LookRight()
 {
 	m_targetRotation = FRotator(0.0f, 0.0f, 0.0f);
-
 }
 
 void AASPCharacter::Rotate()
@@ -250,4 +183,3 @@ void AASPCharacter::Rotate()
 	SetActorRotation(m_targetRotation);
 	m_forwardVector = GetActorForwardVector();
 }
-

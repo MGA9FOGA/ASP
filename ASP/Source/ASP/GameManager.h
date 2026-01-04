@@ -3,111 +3,192 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ASPCharacter.h"
+#include "Subsystems/GameInstanceSubsystem.h"
+#include "Tickable.h"
+
+#include "FMovementSimulator.h"
 #include "FRollbackManager.h"
 #include "InputHandler.h"
-#include "Subsystems/GameInstanceSubsystem.h"
+
+
 #include "GameManager.generated.h"
 
-class UFighting_GameGameInstance;
+class AASPCharacter;
 class AFightingGame_PlayerController;
-class IMoveableInterface;
+class ADynamicCamera;
 
-/**
- * 
- */
+/* =============================
+ * === INPUT PER FRAME ===
+ * ============================= */
+struct FFrameInput
+{
+	uint8 Buttons;
+	EInputAction Action;
+};
+
+
+/* =============================
+ * === GAME STATE ===
+ * ============================= */
+struct FGameState
+{
+	int64 FrameNumber = 0;
+
+	FCharacterState P1;
+	FCharacterState P2;
+
+	FFrameInput P1Input;
+	FFrameInput P2Input;
+};
+
+/* =============================
+ * === GAME MANAGER ===
+ * ============================= */
 UCLASS(Blueprintable)
 class ASP_API UGameManager : public UGameInstanceSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 
 	UGameManager();
+
 public:
+	/* =============================
+	 * === SUBSYSTEM ===
+	 * ============================= */
 	virtual void Initialize(FSubsystemCollectionBase& _collection) override;
 	virtual void Deinitialize() override;
-	
-	//*FTickableGameObject Functions*//
+
+	/* =============================
+	 * === TICK ===
+	 * ============================= */
 	virtual void Tick(float _deltaTime) override;
-	virtual TStatId GetStatId() const override
-	{
-		RETURN_QUICK_DECLARE_CYCLE_STAT(UGameManager, STATGROUP_Tickables);
-	}
+	virtual TStatId GetStatId() const override { RETURN_QUICK_DECLARE_CYCLE_STAT(UGameManager, STATGROUP_Tickables); }
+
 	virtual bool IsTickable() const override { return true; }
 	virtual bool IsTickableWhenPaused() const override { return false; }
 	virtual bool IsTickableInEditor() const override { return false; }
 
-	void BeginPlaySetup();
-	
-	//For Player Input Handling
-	void AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet);
-	const FInputPacket* GetInputQueueAtFrame(AFightingGame_PlayerController* _pc, int _frameNumber) const;
-	void ProcessInputs(); 
-	EInputAction CheckForCombo(AFightingGame_PlayerController* _pc, int32 _currentFrame);
-	
-	FRollbackManager RollbackManager = FRollbackManager();
-	
-	// Rollback-Resimulation
-	void PerformRollback(int32 _targetFrame);
+	// =============================
+	// Registration
+	// =============================
+	void RegisterPlayer(
+		int32 _playerIndex,
+		AASPCharacter* _character,
+		AFightingGame_PlayerController* _controller, FVector _location, float _yaw
+	);
 
-	
-	//Fixed Update
-	UFUNCTION()
-	void FixedGameUpdate60Hz(double _fixedDeltatime);
-	UFUNCTION()
-	void RenderUpdate(double _alpha);
-	//Register Player
-	UFUNCTION()
-	void RegisterMovable(TScriptInterface<IMoveableInterface> _movable);
-	//Getter & Setter
+	/* =============================
+	 * === ROLLBACK ===
+	 * ============================= */
+	void AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet);
+
+	// =============================
+	// === Rollback ===
+	// =============================
+	void RollbackToFrame(int64 _frame);
+
+	/* =============================
+	 * === GETTER ===
+	 * ============================= */
 	FORCEINLINE class AASPCharacter* GetPlayer1() const { return m_player1; }
 	FORCEINLINE class AASPCharacter* GetPlayer2() const { return m_player2; }
-	FORCEINLINE class ADynamicCamera* GetCamera() const {return m_camera;}
-	FORCEINLINE float GetFixedDeltatime() const {return FIXED_UPDATE_RATE;}
+	FORCEINLINE class ADynamicCamera* GetCamera() const { return m_camera; }
+	FORCEINLINE double static GetFixedDeltatime() { return FIXED_UPDATE_RATE; }
+	FORCEINLINE int64 GetFrameNumber() const { return FrameNumber; }
+
 private:
+	/* =============================
+	 * === FIXED UPDATE ===
+	 * ============================= */
+	void FixedGameUpdate60Hz(double _fixedDeltatime);
+	void RenderUpdate(double _alpha);
+
+	/* =============================
+	 * === SETUP ===
+	 * ============================= */
+	void BeginPlaySetup();
 	void OnWorldInitialization(UWorld* _world, const UWorld::InitializationValues _ivs);
-	//void SpawnCharacterForController(AFightingGame_PlayerController* _pc, AASPCharacter*& _outCharacter,
-	//                                 const FVector& _spawnPos, const FRotator& _spawnRot);
-	//void InitializeFighters(AASPCharacter* _character, AFightingGame_PlayerController* _pc);
-	void SaveCurrentFrame(AASPCharacter* _player);
-	void RotateCharacters(AASPCharacter* _playToRotate, AASPCharacter* _enemy);
-public:
-	const double FIXED_UPDATE_RATE = 1.0f / 60.0f;
-	int64 FrameNumber = 0;
 
+	/* =============================
+	 * === INPUT BUILDING ===
+	 * ============================= */
+	void BuildFrameInput(int64 _frame, FGameState& _outState);
+	FFrameInput BuildPlayerInput(AFightingGame_PlayerController* _pc, int64 _frame);
+
+	/* =============================
+	* === STATE APPLY ===
+	* ============================= */
+	void ApplyGameStateToActors(const FGameState& _state);
+
+	/* =============================
+	 * === Camera ===
+	 * ============================= */
+	void CheckBackMovement(FCharacterState& _state) const;
+	
+	/* =============================
+	 * === LEGACY INPUT SUPPORT ===
+	 * ============================= */
+	const FInputPacket* GetInputQueueAtFrame(AFightingGame_PlayerController* _pc, int32 _frameNumber) const;
+	EInputAction CheckForCombo(AFightingGame_PlayerController* _pc, int32 _currentFrame);
 
 private:
-	TArray<TScriptInterface<IMoveableInterface>> m_movables;
+
+	/* =============================
+	 * Core State
+	 * ============================= */
+	FGameState m_currentGameState;
+
+	/* =============================
+	 * Simulation
+	 * ============================= */
+	FMovementSimulator m_movementSimP1;
+	FMovementSimulator m_movementSimP2;
+
+	/* =============================
+	 * Visuals
+	 * ============================= */
+	TUniquePtr<FCharacterVisual> m_visualP1;
+	TUniquePtr<FCharacterVisual> m_visualP2;
+
+	/* =============================
+	 * Rollback
+	 * ============================= */
+	FRollbackManager m_rollbackManager;
+
+	/* =============================
+	 * === WORLD ===
+	 * ============================= */
 	TWeakObjectPtr<UWorld> m_cachedWorld;
-	double m_accumulatedTime = 0.0f;
-	int64 m_simulationSteps = 0;
-	int64 m_lastConsumedFrame = -1;
 	
+	// =============================
+	// Players
+	// =============================
 	UPROPERTY(EditAnywhere)
-	ADynamicCamera* m_camera;
-	
-	//Input Queue
-	TMap<AFightingGame_PlayerController*, TMap<int32, FInputPacket>> m_playerInputQueues; 
-	UPROPERTY()
-	TArray<AFightingGame_PlayerController*> m_playerControllers;
-	//Player1
+	AFightingGame_PlayerController* m_playerController1 = nullptr;
+	UPROPERTY(EditAnywhere)
+	AFightingGame_PlayerController* m_playerController2 = nullptr;
+
 	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_player1 = nullptr;
 	UPROPERTY(EditAnywhere)
-	AFightingGame_PlayerController* m_playerController1 = nullptr;
-	//UPROPERTY(EditAnywhere)
-	//TSubclassOf<AASPCharacter> m_characterClass1;
-	//Player2
-	UPROPERTY(EditAnywhere)
 	class AASPCharacter* m_player2 = nullptr;
+
+	/* =============================
+	 * === Camera ===
+	 * ============================= */
 	UPROPERTY(EditAnywhere)
-	AFightingGame_PlayerController* m_playerController2 = nullptr;
-	//UPROPERTY(EditAnywhere)
-	//TSubclassOf<AASPCharacter> m_characterClass2;
-	//Spawnpoints
-	//FVector m_player1Position = FVector(730.0f,1230.0f,1800.0f);
-	//FRotator m_player1Rotation = FRotator(0.0f,0.0f,0.0f);
-	//FVector m_player2Position = FVector(730.0f,1430.0f,1800.0f);
-	//FRotator m_player2Rotation = FRotator(0.0f,180.0f,0.0f);
+	ADynamicCamera* m_camera;
+
+	/* =============================
+	 * === INPUT STORAGE ===
+	 * ============================= */
+	TMap<AFightingGame_PlayerController*, TMap<int32, FInputPacket>> m_playerInputQueues;
 	
+	/* =============================
+	 * === TIMING ===
+	 * ============================= */
+	double m_accumulatedTime = 0.0f;
+	static constexpr double FIXED_UPDATE_RATE = 1.0f / 60.0f;
+	int64 FrameNumber = 0;
 };
 

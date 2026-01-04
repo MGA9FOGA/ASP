@@ -8,27 +8,34 @@ class AnimationStateMachine;
 
 class ASP_API UCharacterState_Anim_Idle : public UCharacterAnimationBaseState
 {
-	using UCharacterAnimationBaseState::UCharacterAnimationBaseState;
-	virtual void EnterState(FFightingStateMachine* _stateMachine) override;
-	virtual void ExitState(FFightingStateMachine* _stateMachine) override;
-	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) override;
+public:
+	UCharacterState_Anim_Idle(): UCharacterAnimationBaseState(EStates::IDLE)
+	{
+	}
+
+	virtual void EnterState(FCharacterState& _state, const FFrameInput& _input) override;
+	virtual void UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime) override;
+	virtual void ExitState(FCharacterState& _state) override;
 };
 
-inline void UCharacterState_Anim_Idle::EnterState(FFightingStateMachine* _stateMachine)
-{
-	//UE_LOG(LogTemp, Log, TEXT("ENTER: Idle"));
-	_stateMachine->SetCurrentState(State);
-	PlayAnimationMontage(_stateMachine, EStates::IDLE);	
 
+inline void UCharacterState_Anim_Idle::EnterState(FCharacterState& _state, const FFrameInput& _input)
+{
+	UCharacterAnimationBaseState::EnterState(_state, _input);
+
+	if (_state.bAnimLanded)
+	{
+		_state.bAnimLanded = false;
+	}
+	RequestMontage(_state, EStates::IDLE);
 }
 
-inline void UCharacterState_Anim_Idle::ExitState(FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Anim_Idle::UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
 {
-	//UE_LOG(LogTemp, Log, TEXT("EXIT: Idle"));
+	
 }
 
-inline void UCharacterState_Anim_Idle::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Anim_Idle::ExitState(FCharacterState& _state)
 {
-	//UE_LOG(LogTemp, Display, TEXT("Anim Idle State"));
+	
 }
-

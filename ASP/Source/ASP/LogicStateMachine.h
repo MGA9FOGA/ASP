@@ -5,8 +5,8 @@ class ASP_API LogicStateMachine : public FFightingStateMachine
 {
 public:
 	LogicStateMachine();
-	LogicStateMachine(AASPCharacter& _character);
 	virtual ~LogicStateMachine() override;
-	virtual void BuildStates() override;
-	bool HasStateJustChangedTo(EStates _targetState) const;
+	virtual void BuildStates();
+	virtual void Update(FCharacterState& _state, const FFrameInput& _input, float _deltaTime) override;
+	bool HasStateJustChangedTo(const FCharacterState& _state, EStates _targetState) const;
 };

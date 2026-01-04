@@ -7,25 +7,32 @@ class AnimationStateMachine;
 
 class UCharacterState_Anim_StartJump : public UCharacterAnimationBaseState
 {
-	using UCharacterAnimationBaseState::UCharacterAnimationBaseState;
-	virtual void EnterState(FFightingStateMachine* _stateMachine) override;
-	virtual void ExitState(FFightingStateMachine* _stateMachine) override;
-	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) override;
+public:
+	UCharacterState_Anim_StartJump()
+		: UCharacterAnimationBaseState(EStates::STARTJUMP)
+	{}
+
+	virtual void EnterState(FCharacterState& _state, const FFrameInput& _input) override;
+	virtual void ExitState(FCharacterState& _state) override;
+	virtual void UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime) override;
 };
 
-inline void UCharacterState_Anim_StartJump::EnterState(FFightingStateMachine* _stateMachine)
+
+inline void UCharacterState_Anim_StartJump::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
-	//UE_LOG(LogTemp, Log, TEXT("ENTER: StartJump"));
-	_stateMachine->SetCurrentState(State);
-	PlayAnimationMontage(_stateMachine, EStates::STARTJUMP);
+	UCharacterAnimationBaseState::EnterState(_state, _input);
+	_state.bAnimJumpStartupFinished = true;
+	RequestMontage(_state, EStates::STARTJUMP);
+	_state.StateTimer = 0.f;
 }
 
-inline void UCharacterState_Anim_StartJump::ExitState(FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Anim_StartJump::ExitState(FCharacterState& _state)
 {
-	//UE_LOG(LogTemp, Log, TEXT("EXIT: StartJump"));
+	UCharacterAnimationBaseState::ExitState(_state);
 }
 
-inline void UCharacterState_Anim_StartJump::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Anim_StartJump::UpdateState(FCharacterState& _state, const FFrameInput& _input,
+	float _deltaTime)
 {
-	//UE_LOG(LogTemp, Display, TEXT("Anim StartJump State"));
+	UCharacterAnimationBaseState::UpdateState(_state, _input, _deltaTime);
 }

@@ -8,20 +8,19 @@
 
 class FFightingStateMachine;
 struct FAnimationMontageState;
-struct FCharacterState;
+struct FCharacterRollbackState;
 /**
  * 
  */
 class ASP_API UCharacterBaseState
 {
 public:
-	UCharacterBaseState();
-	UCharacterBaseState(EStates _state);
-	virtual ~UCharacterBaseState();
-	FString Name;
-	EStates State = EStates::NONE;
-	virtual void EnterState(FFightingStateMachine* _stateMachine) ;
-	virtual void ExitState(FFightingStateMachine* _stateMachine) ;
-	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) ;
-protected:
+	explicit UCharacterBaseState(EStates _inStates);
+	virtual ~UCharacterBaseState() = default;
+
+	EStates State;
+	
+	virtual void EnterState(FCharacterState& _state,const FFrameInput& _input);
+	virtual void ExitState(FCharacterState& _state);
+	virtual void UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime);
 };

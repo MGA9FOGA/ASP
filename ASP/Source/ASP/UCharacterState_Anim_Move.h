@@ -8,69 +8,53 @@ class AnimationStateMachine;
 
 class UCharacterState_Anim_Move : public UCharacterAnimationBaseState
 {
-	using UCharacterAnimationBaseState::UCharacterAnimationBaseState;
-	virtual void EnterState(FFightingStateMachine* _stateMachine) override;
-	virtual void ExitState(FFightingStateMachine* _stateMachine) override;
-	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) override;
-
-private:
-	bool b_hasPlayedMontage = false;
-	int32 m_previousMoveDir = 0;
-};
-
-inline void UCharacterState_Anim_Move::EnterState(FFightingStateMachine* _stateMachine)
-{
-	UE_LOG(LogTemp, Log, TEXT("ENTER Anim: Move"));
-	_stateMachine->SetCurrentState(State);
-	b_hasPlayedMontage = false;
-	//else if (_stateMachine->GetCharacter()->GetActorForwardVector().X < -0.5f && _stateMachine->GetCharacter()->GetNoChaosMovementComponent()->GetVelocity().Y <= -0.5f)
-	//{
-	//	PlayAnimationMontage(_stateMachine, EStates::MOVINGBWD);
-	//}
-	//else if (_stateMachine->GetCharacter()->GetActorForwardVector().X > 0.5f && _stateMachine->GetCharacter()->GetNoChaosMovementComponent()->GetVelocity().Y <= -0.5f)
-	//{
-	//	PlayAnimationMontage(_stateMachine, EStates::MOVINGBWD);
-	//}
-	//else if (_stateMachine->GetCharacter()->GetActorForwardVector().X < -0.5f && _stateMachine->GetCharacter()->GetNoChaosMovementComponent()->GetVelocity().Y >= 0.5f)
-	//{
-	//	PlayAnimationMontage(_stateMachine, EStates::MOVINGFWD);
-	//}
-}
-
-inline void UCharacterState_Anim_Move::ExitState(FFightingStateMachine* _stateMachine)
-{
-	//	UE_LOG(LogTemp, Log, TEXT("EXIT: Move"));
-}
-
-inline void UCharacterState_Anim_Move::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
-{
-	if (!_stateMachine || !_stateMachine->GetCharacter()) return;
-
-	auto* character = _stateMachine->GetCharacter();
-	auto velocityY = character->GetNoChaosMovementComponent()->GetOwnVelocity().Y;
-	auto forwardX  = character->GetActorForwardVector().X;
-
-	// Bestimme Bewegungsrichtung: +1 = vorwärts, -1 = rückwärts, 0 = stillstand
-	int32 currentMoveDir = 0;
-	if (forwardX > 0.5f && velocityY > 0.1f) currentMoveDir = 1;        // vorwärts
-	else if (forwardX < -0.5f && velocityY < -0.1f) currentMoveDir = 1; // vorwärts rückwärts gespiegelt
-	else if (forwardX > 0.5f && velocityY < -0.1f) currentMoveDir = -1; // rückwärts
-	else if (forwardX < -0.5f && velocityY > 0.1f) currentMoveDir = -1; // rückwärts rückwärts gespiegelt
-	
-	// Wenn die Richtung sich geändert hat, reset b_hasPlayedMontage
-	if (currentMoveDir != m_previousMoveDir)
+public:
+	UCharacterState_Anim_Move(): UCharacterAnimationBaseState(EStates::MOVING)
 	{
-		b_hasPlayedMontage = false;
-		m_previousMoveDir = currentMoveDir;
 	}
 
-	if (currentMoveDir == 0 ) return;
+	virtual void EnterState(FCharacterState& _state, const FFrameInput& _input) override;
+	virtual void ExitState(FCharacterState& _state) override;
+	virtual void UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime) override;
+private:
+	int8 m_previousMoveDir = 0;
+};
 
-	// Abspielen der passenden Animation
-	if (!b_hasPlayedMontage)
+
+inline void UCharacterState_Anim_Move::EnterState(FCharacterState& _state, const FFrameInput& _input)
+{
+	UCharacterAnimationBaseState::EnterState(_state, _input);
+	m_previousMoveDir = 0;
+}
+
+inline void UCharacterState_Anim_Move::ExitState(FCharacterState& _state)
+{
+}
+
+inline void UCharacterState_Anim_Move::UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
+{
+	int8 currentMoveDir = 0;
+
+	if (FMath::Abs(_state.Velocity.Y) > 1.f)
 	{
-		EStates targetState = (currentMoveDir > 0) ? EStates::MOVINGFWD : EStates::MOVINGBWD;
-		PlayAnimationMontage(_stateMachine, targetState);
-		b_hasPlayedMontage = true;
+		// Vorwärts / Rückwärts relativ Facing
+		currentMoveDir = (_state.Velocity.Y * _state.Facing > 0.f) ? 1 : -1;
+	}
+
+	// standing Still
+	if (currentMoveDir == 0)
+	{
+		m_previousMoveDir = 0;
+		return;
+	}
+
+	// change of direction?
+	if (currentMoveDir != m_previousMoveDir)
+	{
+		EStates TargetAnim =
+			(currentMoveDir > 0) ? EStates::MOVINGFWD : EStates::MOVINGBWD;
+
+		RequestMontage(_state, TargetAnim);
+		m_previousMoveDir = currentMoveDir;
 	}
 }

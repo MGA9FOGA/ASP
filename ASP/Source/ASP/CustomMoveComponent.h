@@ -11,9 +11,6 @@
 class ADynamicCamera;
 class UCapsuleComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomHit, const FHitResult&, HitResult);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomOverlap, AActor*, OtherActor);
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ASP_API UCustomMoveComponent : public UActorComponent
 {
@@ -57,20 +54,20 @@ public:
 	UCapsuleComponent* Capsule = nullptr;
 
 	//Collider Hit
-	UPROPERTY(BlueprintAssignable, Category="CustomMove|Events")
-	FOnCustomHit OnCustomHit;
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, FVector _ormalImpulse, const FHitResult& _hit);
-
-	//Overlap Begin
-	UPROPERTY(BlueprintAssignable)
-	FOnCustomOverlap OnCustomBeginOverlap;
-	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex, bool _bFromSweep, const FHitResult& _sweepResult);
-
-	//Overlap End
-	UPROPERTY(BlueprintAssignable)
-	FOnCustomOverlap OnCustomEndOverlap;
+	//UPROPERTY(BlueprintAssignable, Category="CustomMove|Events")
+	//FOnCustomHit OnCustomHit;
+	//UFUNCTION()
+	//void OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, FVector _ormalImpulse, const FHitResult& _hit);
+//
+	////Overlap Begin
+	//UPROPERTY(BlueprintAssignable)
+	//FOnCustomOverlap OnCustomBeginOverlap;
+	//UFUNCTION()
+	//void OnOverlapBegin(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex, bool _bFromSweep, const FHitResult& _sweepResult);
+//
+	////Overlap End
+	//UPROPERTY(BlueprintAssignable)
+	//FOnCustomOverlap OnCustomEndOverlap;
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex);
 

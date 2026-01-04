@@ -17,18 +17,8 @@ struct FHitResult;
 #endif
 #define ASP_CustomMoveComponent_generated_h
 
-#define FID_ASP_Source_ASP_CustomMoveComponent_h_14_DELEGATE \
-ASP_API void FOnCustomHit_DelegateWrapper(const FMulticastScriptDelegate& OnCustomHit, FHitResult const& HitResult);
-
-
-#define FID_ASP_Source_ASP_CustomMoveComponent_h_15_DELEGATE \
-ASP_API void FOnCustomOverlap_DelegateWrapper(const FMulticastScriptDelegate& OnCustomOverlap, AActor* OtherActor);
-
-
-#define FID_ASP_Source_ASP_CustomMoveComponent_h_20_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_CustomMoveComponent_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execOnOverlapEnd); \
-	DECLARE_FUNCTION(execOnOverlapBegin); \
-	DECLARE_FUNCTION(execOnHit); \
 	DECLARE_FUNCTION(execAddLinetraceIgnore); \
 	DECLARE_FUNCTION(execGetHitResultOnGround); \
 	DECLARE_FUNCTION(execSetLineTraceOnGroundEnd); \
@@ -39,7 +29,7 @@ ASP_API void FOnCustomOverlap_DelegateWrapper(const FMulticastScriptDelegate& On
 	DECLARE_FUNCTION(execGetBoolOnGround);
 
 
-#define FID_ASP_Source_ASP_CustomMoveComponent_h_20_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_CustomMoveComponent_h_17_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUCustomMoveComponent(); \
 	friend struct Z_Construct_UClass_UCustomMoveComponent_Statics; \
@@ -48,7 +38,7 @@ public: \
 	DECLARE_SERIALIZER(UCustomMoveComponent)
 
 
-#define FID_ASP_Source_ASP_CustomMoveComponent_h_20_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_CustomMoveComponent_h_17_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	UCustomMoveComponent(UCustomMoveComponent&&); \
@@ -60,13 +50,13 @@ public: \
 	NO_API virtual ~UCustomMoveComponent();
 
 
-#define FID_ASP_Source_ASP_CustomMoveComponent_h_17_PROLOG
-#define FID_ASP_Source_ASP_CustomMoveComponent_h_20_GENERATED_BODY \
+#define FID_ASP_Source_ASP_CustomMoveComponent_h_14_PROLOG
+#define FID_ASP_Source_ASP_CustomMoveComponent_h_17_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_CustomMoveComponent_h_20_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_CustomMoveComponent_h_20_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_CustomMoveComponent_h_20_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_CustomMoveComponent_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_CustomMoveComponent_h_17_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_CustomMoveComponent_h_17_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

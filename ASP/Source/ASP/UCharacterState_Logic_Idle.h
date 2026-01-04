@@ -6,63 +6,83 @@
 class ASP_API UCharacterState_Logic_Idle : public UCharacterBaseState
 {
 public:
-	using UCharacterBaseState::UCharacterBaseState;
-	virtual void EnterState(FFightingStateMachine* _stateMachine) override;
-	virtual void ExitState(FFightingStateMachine* _stateMachine) override;
-	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) override;
+	UCharacterState_Logic_Idle()
+		: UCharacterBaseState(EStates::IDLE) {}
+	
+	virtual void EnterState(FCharacterState& _state,const FFrameInput& _input) override;
+	virtual void ExitState(FCharacterState& _state) override;
+	virtual void UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime) override;
 };
 
 
-inline void UCharacterState_Logic_Idle::EnterState(FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Logic_Idle::EnterState(FCharacterState& _state,const FFrameInput& _input)
 {
-	if (!_stateMachine) return;
+	UE_LOG(LogTemp, Warning, TEXT("Enter idle after "));
+	_state.MoveAxis = 0.f;
+}
 
-	AASPCharacter* character = _stateMachine->GetCharacter();
-	if (!character)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Idle EnterState: Character ist NULL"));
+inline void UCharacterState_Logic_Idle::ExitState(FCharacterState& _state)
+{
+}
+
+inline void UCharacterState_Logic_Idle::UpdateState(FCharacterState& _state, const FFrameInput& _input,
+                                                    float _deltaTime)
+{
+	
+	if (!_state.bGrounded)
 		return;
-	}
 
-	_stateMachine->SetCurrentState(State);
-}
-
-inline void UCharacterState_Logic_Idle::ExitState(FFightingStateMachine* _stateMachine)
-{
-	//UE_LOG(LogTemp, Log, TEXT("EXIT: Idle"));
-}
-
-inline void UCharacterState_Logic_Idle::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
-{
-	if (!_stateMachine || !_stateMachine->GetPlayerController() || !_stateMachine->GetPlayerController()->GetPlayer() ||
-		!_stateMachine->GetCharacter()->GetNoChaosMovementComponent()->GetBoolOnGround()) { return; }
-	switch (_stateMachine->GetAction())
+	switch (_input.Action)
 	{
-	case EInputAction::MoveRight: if (_stateMachine->GetCharacter()->GetActorForwardVector().X > 0.5f)
+	// =============================
+	// === Facing = 1 -> looking to the right ===
+	// =============================
+	case EInputAction::MoveRight:
 		{
-			_stateMachine->GetPlayerController()->GetPlayer()->Move(1.0f);
-		}
-		else if (_stateMachine->GetCharacter()->GetActorForwardVector().X < -0.5f && _stateMachine->GetCharacter()->
-			GetCanMoveBackwards()) { _stateMachine->GetPlayerController()->GetPlayer()->Move(1.0f); }
-		else if (!_stateMachine->GetCharacter()->GetCanMoveBackwards())
-		{
-			_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
-		}
-		break;
-	case EInputAction::MoveLeft:
-		{
-			if (_stateMachine->GetCharacter()->GetActorForwardVector().X < -0.5f)
+			if (_state.Facing == 1)
 			{
-				_stateMachine->GetPlayerController()->GetPlayer()->Move(-1.0f);
+				_state.MoveAxis = 1.f;
 			}
-			else if (_stateMachine->GetCharacter()->GetActorForwardVector().X > 0.5f && _stateMachine->GetCharacter()->
-				GetCanMoveBackwards()) { _stateMachine->GetPlayerController()->GetPlayer()->Move(-1.0f); }
-			else if (!_stateMachine->GetCharacter()->GetCanMoveBackwards())
+			// =============================
+			// === Facing = -1 -> backwards ===
+			// =============================
+			else if (_state.Facing == -1 && _state.bCanMoveBackwards)
 			{
-				_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
+				_state.MoveAxis = 1.f;
+			}
+			else
+			{
+				_state.MoveAxis = 0.f;
 			}
 			break;
 		}
-	default: break;
+
+	// =============================
+	// === Facing = -1 -> looking to the left ===
+	// =============================
+	case EInputAction::MoveLeft:
+		{
+			if (_state.Facing == -1)
+			{
+				_state.MoveAxis = -1.f;
+			}
+			// =============================
+			// === Facing = 1 -> backwards ===
+			// =============================
+			else if (_state.Facing == 1 && _state.bCanMoveBackwards)
+			{
+				_state.MoveAxis = -1.f;
+			}
+			else
+			{
+				_state.MoveAxis = 0.f;
+			}
+			break;
+		}
+	default:
+		{
+			_state.MoveAxis = 0.f;
+			break;
+		}
 	}
 }

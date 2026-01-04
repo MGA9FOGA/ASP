@@ -2,87 +2,79 @@
 
 
 #include "StateMachine.h"
-#include "Conditions.h"
 #include "GameManager.h"
 #include "UCharacterBaseState.h"
-#include "UCharacterState_Logic_Idle.h"
-#include "UCharacterState_Logic_Jump.h"
-#include "UCharacterState_Logic_Move.h"
+
 
 
 FFightingStateMachine::FFightingStateMachine()
 {
 }
 
-
-
-void FFightingStateMachine::Update(float _deltaTime)
+void FFightingStateMachine::Update(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
 {
-	if (m_stateMap.Contains(m_ECurrentState))
+	if (!m_stateMap.Contains(_state.LogicState)) return;
+	auto& def = m_stateMap[_state.LogicState];
+
+	// State-Update ausführen
+	if (def.State.IsValid())
 	{
-		TSharedPtr<UCharacterBaseState> stateObj = m_stateMap[m_ECurrentState].State;
-		if (stateObj.IsValid())
+		_state.StateTimer += _deltaTime;
+		def.State->UpdateState(_state, _input, _deltaTime);
+	}
+
+	for (const FStateTransition& transition : def.Transitions)
+	{
+		if (transition.Condition(_state, _input))
 		{
-			stateObj->UpdateState(_deltaTime, this);
-		}
-	}
-	TryTransitions();
-}
-
-
-void FFightingStateMachine::ChangeState(EStates _newState)
-{
-	if (m_ECurrentState == _newState) return;
-	
-	m_EPreviousState = m_EPreviousState;
-	
-	// Exit des alten States
-	if (m_stateMap.Contains(m_ECurrentState) && m_stateMap[m_ECurrentState].State.IsValid())
-	{
-		m_stateMap[m_ECurrentState].State->ExitState(this);
-	}
-	else
-	{
-		return;
-	}
-
-	// Enter des neuen States
-	if (m_stateMap.Contains(_newState) && m_stateMap[_newState].State.IsValid())
-	{
-		m_stateMap[_newState].State->EnterState(this);
-	}
-}
-
-void FFightingStateMachine::TryTransitions()
-{
-	if (!m_stateMap.Contains(m_ECurrentState)) return;
-    
-	auto& Def = m_stateMap[m_ECurrentState];
-	for (const auto& Transition : Def.Transitions)
-	{
-		// Condition() kann jetzt direkt Input benutzen!
-		if (Transition.Condition && Transition.Condition())
-		{
-			//UE_LOG(LogTemp, Warning, TEXT("Transition TRUE -> Changing to %d"), (int)Transition.TargetStateAction);
-			ChangeState(Transition.TargetStateAction);
+			ChangeState(_state, transition.Target, _input);
 			break;
 		}
 	}
 }
 
-void FFightingStateMachine::BuildStates()
+void FFightingStateMachine::ChangeState(FCharacterState& _state, EStates _newState, const FFrameInput& _input)
 {
-}
+	if (_newState == m_currentState)
+		return;
 
-void FFightingStateMachine::Start()
-{
-	m_ECurrentState = EStates::IDLE;
-	if (auto* StatePair = m_stateMap.Find(EStates::IDLE))
+	// =============================
+	// === Exit old state ===
+	// =============================
+	if (m_stateMap.Contains(m_currentState))
 	{
-		if (StatePair->State.IsValid())
-			m_currentState = StatePair->State.Get();
+		auto& oldDef = m_stateMap[m_currentState];
+		if (oldDef.State.IsValid())
+		{
+			oldDef.State->ExitState(_state);
+		}
 	}
-	m_currentState->EnterState(this);
+
+	// =============================
+	// === Switch state ===
+	// =============================
+	_state.PreviousLogicState = m_currentState;
+	m_currentState = _newState;
+	_state.LogicState = _newState;
+	_state.StateTimer = 0.f;
+
+	// =============================
+	// === Enter new state ===
+	// =============================
+	if (m_stateMap.Contains(_newState))
+	{
+		auto& newDef = m_stateMap[_newState];
+		if (newDef.State.IsValid())
+		{
+			newDef.State->EnterState(_state, _input);
+		}
+	}
 }
 
 
+void FFightingStateMachine::Start(FCharacterState& _state)
+{
+	m_currentState = EStates::IDLE;
+	_state.LogicState = m_currentState;
+	_state.StateTimer = 0.f;
+}

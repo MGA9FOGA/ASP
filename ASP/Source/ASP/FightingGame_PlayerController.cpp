@@ -13,68 +13,40 @@
 void AFightingGame_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	m_gameManager = GetGameInstance()->GetSubsystem<UGameManager>();
 }
 
-
-void AFightingGame_PlayerController::SetMappingContext(UInputMappingContext* _newMappingContext)
+void AFightingGame_PlayerController::SetCharacterRef(AASPCharacter* _character)
 {
-	if (!_newMappingContext) return;
-
-	DefaultMappingContext = _newMappingContext;
-
-	UE_LOG(LogTemp, Error, TEXT("PlayerController gesetzt."));
-
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
-		GetLocalPlayer()))
+	m_playerCharacter = _character;
+	if (_character)
 	{
-		Subsystem->ClearAllMappings();
-		Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		_character->SetPlayerController(this);
 	}
 }
-
 
 void AFightingGame_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-
-	if (!MoveAction)
-		UE_LOG(LogTemp, Error, TEXT("MoveAction is NULL on controller %d"), GetLocalPlayer()->GetControllerId());
-	if (MoveAction)
-		UE_LOG(LogTemp, Error, TEXT("MoveAction is  %d"), GetLocalPlayer()->GetControllerId());
-
-	if (!JumpAction)
-		UE_LOG(LogTemp, Error, TEXT("JumpAction is NULL on controller %d"), GetLocalPlayer()->GetControllerId());
-	if (JumpAction)
-		UE_LOG(LogTemp, Error, TEXT("JumpAction is  %d"), GetLocalPlayer()->GetControllerId());
-
 	if (UEnhancedInputComponent* enhancedInput = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		// Jumping
 		enhancedInput->BindAction(JumpAction, ETriggerEvent::Started, this,
-		                          &AFightingGame_PlayerController::OnPressedJump);
+								  &AFightingGame_PlayerController::OnPressedJump);
 		enhancedInput->BindAction(JumpAction, ETriggerEvent::Completed, this,
-		                          &AFightingGame_PlayerController::OnJumpReleased);
+								  &AFightingGame_PlayerController::OnJumpReleased);
 		enhancedInput->BindAction(JumpAction, ETriggerEvent::Canceled, this,
-		                          &AFightingGame_PlayerController::OnJumpReleased);
+								  &AFightingGame_PlayerController::OnJumpReleased);
 		// Moving
 		enhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this,
-		                          &AFightingGame_PlayerController::OnPressedMovement);
+								  &AFightingGame_PlayerController::OnPressedMovement);
 		enhancedInput->BindAction(MoveAction, ETriggerEvent::Completed, this,
-		                          &AFightingGame_PlayerController::OnMoveReleased);
+								  &AFightingGame_PlayerController::OnMoveReleased);
 		enhancedInput->BindAction(MoveAction, ETriggerEvent::Canceled, this,
-		                          &AFightingGame_PlayerController::OnMoveReleased);
+								  &AFightingGame_PlayerController::OnMoveReleased);
 	}
-}
-
-void AFightingGame_PlayerController::UsingGamepad()
-{
-	m_deadzone = 40.0f;
-}
-
-void AFightingGame_PlayerController::UsingKeyboard()
-{
-	m_deadzone = 0.3f;
 }
 
 void AFightingGame_PlayerController::Update(float _deltatime)
@@ -90,101 +62,14 @@ void AFightingGame_PlayerController::Update(float _deltatime)
 	raw.Block = b_blockPressed;
 
 	uint8 encoded = InputHandler::EncodeInput(raw);
-
-	FInputPacket packet(m_gameManager->FrameNumber + 1, encoded, 0, 0);
+	
 
 	if (m_gameManager)
 	{
+		const int32 CurrentFrame = m_gameManager->GetFrameNumber();
+
+		FInputPacket packet(CurrentFrame, encoded, 0, 0);
 		m_gameManager->AddInputToQueue(this, packet);
-	}
-}
-
-void AFightingGame_PlayerController::OnPressedMovement(const FInputActionValue& _value)
-{
-	const FVector2d movementVector = _value.Get<FVector2d>();
-
-	if (GetPlayerID() == 1)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("character 2 = MovementVector X: %f | Y: %f"),
-		       movementVector.X, movementVector.Y);
-	}
-	else if (GetPlayerID() == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("character 1 = MovementVector X: %f | Y: %f"),
-		       movementVector.X, movementVector.Y);
-	}
-
-	b_upPressed = movementVector.Y > m_deadzone;
-	b_downPressed = movementVector.Y < -m_deadzone;
-	b_rightPressed = movementVector.X > m_deadzone;
-	b_leftPressed = movementVector.X < -m_deadzone;
-}
-
-void AFightingGame_PlayerController::OnMoveReleased()
-{
-	b_downPressed = false;
-	b_leftPressed = false;
-	b_rightPressed = false;
-	b_upPressed = false;
-}
-
-void AFightingGame_PlayerController::OnPressedJump()
-{
-	b_jumpPressed = true;
-}
-
-void AFightingGame_PlayerController::OnJumpReleased()
-{
-	b_jumpPressed = false;
-}
-
-void AFightingGame_PlayerController::OnPressedCrouch()
-{
-	b_downPressed = true;
-}
-
-void AFightingGame_PlayerController::OnCrouchReleased()
-{
-	b_downPressed = false;
-}
-
-void AFightingGame_PlayerController::OnPressedAttack1()
-{
-	b_Attack1Pressed = true;
-}
-
-void AFightingGame_PlayerController::OnAttack1Released()
-{
-	b_Attack1Pressed = false;
-}
-
-void AFightingGame_PlayerController::OnPressedAttack2()
-{
-	b_Attack2Pressed = true;
-}
-
-void AFightingGame_PlayerController::OnAttack1Released2()
-{
-	b_Attack2Pressed = false;
-}
-
-void AFightingGame_PlayerController::OnPressedBlock()
-{
-	b_blockPressed = true;
-}
-
-void AFightingGame_PlayerController::OnBlockReleased()
-{
-	b_blockPressed = false;
-}
-
-void AFightingGame_PlayerController::SetCharacterRef(AASPCharacter* _character)
-{
-	m_playerCharacter = _character;
-	if (_character)
-	{
-		_character->SetPlayerController(this);
-		_character->GetLogicStateMachine()->SetPlayerController(this);
 	}
 }
 
@@ -195,34 +80,64 @@ void AFightingGame_PlayerController::ResetInputBuffer()
 	Input = FRawInput();
 }
 
+void AFightingGame_PlayerController::OnPressedMovement(const FInputActionValue& _value)
+{
+	const FVector2d movementVector = _value.Get<FVector2d>();
+
+	//UE_LOG(LogTemp, Log, TEXT("OnPressedMovement: X=%.2f, Y=%.2f"), movementVector.X, movementVector.Y);
+	
+	b_upPressed = movementVector.Y > m_deadzone;
+	//b_downPressed = movementVector.Y < -m_deadzone;
+	b_rightPressed = movementVector.X > m_deadzone;
+	b_leftPressed = movementVector.X < -m_deadzone;
+}
+
+void AFightingGame_PlayerController::OnMoveReleased()
+{
+	b_downPressed	= false;
+	b_leftPressed	= false;
+	b_rightPressed	= false;
+	b_upPressed		= false;
+}
+
+void AFightingGame_PlayerController::OnPressedJump() { b_jumpPressed = true; }
+void AFightingGame_PlayerController::OnJumpReleased() { b_jumpPressed = false; }
+void AFightingGame_PlayerController::OnPressedCrouch() { b_downPressed = true; }
+void AFightingGame_PlayerController::OnCrouchReleased() { b_downPressed = false; }
+void AFightingGame_PlayerController::OnPressedAttack1() { b_Attack1Pressed = true; }
+void AFightingGame_PlayerController::OnAttack1Released() { b_Attack1Pressed = false; }
+void AFightingGame_PlayerController::OnPressedAttack2() { b_Attack2Pressed = true; }
+void AFightingGame_PlayerController::OnAttack2Released() { b_Attack2Pressed = false; }
+void AFightingGame_PlayerController::OnPressedBlock() { b_blockPressed = true; }
+void AFightingGame_PlayerController::OnBlockReleased() { b_blockPressed = false; }
+
+void AFightingGame_PlayerController::UsingGamepad() { m_deadzone = 40.f; }
+void AFightingGame_PlayerController::UsingKeyboard() { m_deadzone = 0.3f; }
+
+void AFightingGame_PlayerController::SetMappingContext(UInputMappingContext* _newMappingContext)
+{
+	if (!_newMappingContext) return;
+	DefaultMappingContext = _newMappingContext;
+
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->ClearAllMappings();
+		Subsystem->AddMappingContext(DefaultMappingContext, 0);
+	}
+}
+
 void AFightingGame_PlayerController::SetupMappingContext()
 {
 	if (!DefaultMappingContext || !GetLocalPlayer())
 	{
-		// Retry until mapping exists
 		FTimerHandle Handle;
-		GetWorld()->GetTimerManager().SetTimer(Handle, [this]()
-		{
-			SetupMappingContext();
-		}, 0.01f, false);
-
+		GetWorld()->GetTimerManager().SetTimer(Handle, [this]() { SetupMappingContext(); }, 0.01f, false);
 		return;
 	}
 
-	auto* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	if (!Subsystem)
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
-		FTimerHandle Handle;
-		GetWorld()->GetTimerManager().SetTimer(Handle, [this]()
-		{
-			SetupMappingContext();
-		}, 0.01f, false);
-
-		return;
+		Subsystem->ClearAllMappings();
+		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
-
-	Subsystem->ClearAllMappings();
-	Subsystem->AddMappingContext(DefaultMappingContext, 0);
-
-	UE_LOG(LogTemp, Warning, TEXT("MappingContext ADDED for Controller %d"), GetLocalPlayer()->GetControllerId());
 }

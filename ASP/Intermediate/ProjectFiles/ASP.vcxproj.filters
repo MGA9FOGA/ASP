@@ -88,6 +88,9 @@
     <ClCompile Include="..\..\Source\ASP\FightingGame_PlayerController.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\FMovementSimulator.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\FRollbackManager.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
@@ -170,6 +173,12 @@
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UFighting_GameGameInstance.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UPushBoxComponent.cpp">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UPushBoxComponent.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 
 #include "DynamicCamera.h"
 
+#include "ASPCharacter.h"
 #include "GameManager.h"
 #include "Camera/CameraComponent.h"
 

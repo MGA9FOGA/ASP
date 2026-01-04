@@ -2,7 +2,6 @@
 
 
 #include "CharacterAnimInstance.h"
-
 #include "ASPCharacter.h"
 #include "UCharacterAnimationSet.h"
 
@@ -10,49 +9,38 @@ void UCharacterAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 	OnMontageEnded.AddDynamic(this, &UCharacterAnimInstance::HandleMontageEnded);
-
-	AActor* owner = GetOwningActor();
-	m_character = Cast<AASPCharacter>(owner);
 }
 
 void UCharacterAnimInstance::HandleMontageEnded(UAnimMontage* _montage, bool _bInterrupted)
 {
-	if (!m_character || !m_character->GetAnimationSet())
-		return;
-
-	UCharacterAnimationSet* set = m_character->GetAnimationSet();
-	if (!set)
+	if (_bInterrupted || !_montage)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Character has no AnimationSet."));
 		return;
 	}
 
-	if (TObjectPtr<UAnimMontage>* montagePtrLanding = set->MontageMap.Find(EStates::LANDING))
+	AASPCharacter* character = Cast<AASPCharacter>(GetOwningActor());
+	if (!character) return;
+	
+	UCharacterAnimationSet* animSet = character->GetAnimationSet();
+	if (!animSet) return;
+	
+	// === Landing ===
+	if (UAnimMontage* Landing = animSet->MontageMap.FindRef(EStates::LANDING))
 	{
-		UAnimMontage* foundMontage = montagePtrLanding->Get();
-		if (foundMontage && _montage == foundMontage)
+		if (_montage == Landing)
 		{
 			OnLandingEndedNative.ExecuteIfBound();
-		}
-		else if (!foundMontage)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Montage found in MontageMap but it is NULL."));
+			return;
 		}
 	}
-	else if (TObjectPtr<UAnimMontage>* montagePtrJump = set->MontageMap.Find(EStates::STARTJUMP))
+
+	// === Jump Startup ===
+	if (UAnimMontage* JumpStart = animSet->MontageMap.FindRef(EStates::STARTJUMP))
 	{
-		UAnimMontage* foundMontage = montagePtrJump->Get();
-		if (foundMontage && _montage == foundMontage)
+		if (_montage == JumpStart)
 		{
 			OnJumpStartEndedNative.ExecuteIfBound();
-		}
-		else if (!foundMontage)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Montage found in MontageMap but it is NULL."));
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("State not found in MontageMap."));
+			return;
 		}
 	}
 }

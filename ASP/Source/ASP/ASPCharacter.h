@@ -1,19 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
-
 #include "CoreMinimal.h"
-#include "AnimationStateMachine.h"
-#include "LogicStateMachine.h"
-#include "InputHandler.h"
-#include "MoveableInterface.h"
-#include "GameFramework/Character.h"
-#include "Logging/LogMacros.h"
 #include "ASPCharacter.generated.h"
 
+class UCapsuleComponent;
+class AFightingGame_PlayerController;
 class UPushBoxComponent;
 class UCharacterAnimationSet;
-struct FCharacterState;
+struct FCharacterRollbackState;
 class FFightingStateMachine;
 class FOnCustomOverlapBegin;
 class USpringArmComponent;
@@ -23,12 +17,57 @@ class UInputAction;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomHit, const FHitResult&, HitResult);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomOverlap, AActor*, OtherActor);
 
+struct FPendingAnimEvents
+{
+	bool bLandingFinished = false;
+	bool bJumpStartupFinished = false;
+};
 UCLASS(config=Game)
-class ASP_API AASPCharacter : public AActor, public IMoveableInterface
+class ASP_API AASPCharacter : public AActor
 {
 	GENERATED_BODY()
 
+public:
+	AASPCharacter();
+	// =============================
+	// === Start ===
+	// =============================
+	void Start();
+
+	// =============================
+	// === Tick ===
+	// =============================
+	virtual void Tick(float _deltaSeconds) override;
+
+	// ===================================
+	// === Apply State from Simulaiont ===
+	// ===================================
+	void ApplyState(const FCharacterRollbackState& _state);
+
+	// =============================
+	// === Facing/Rotation ===
+	// =============================
+	void Rotate();
+	void LookLeft();
+	void LookRight();
+
+	// =============================
+	// === Accessors ===
+	// =============================
+	FORCEINLINE UPushBoxComponent* GetPushBox() const { return PushBox; }
+	FORCEINLINE FVector GetMoveForwardVector() const { return m_forwardVector; }
+	FORCEINLINE void SetPlayerController(AFightingGame_PlayerController* PC) { m_playerController = PC; }
+	FORCEINLINE AFightingGame_PlayerController* GetPlayerController() const { return m_playerController; }
+	FORCEINLINE UCharacterAnimationSet* GetAnimationSet() const { return m_animationSet; }
+	FORCEINLINE USkeletalMeshComponent* GetSkeletalMeshComponent() { return Mesh; }
+
+protected:
+	// =============================
+	// === Components ===
+	// =============================
 	UPROPERTY(Category=Character, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<USkeletalMeshComponent> Mesh;
 
@@ -37,80 +76,110 @@ class ASP_API AASPCharacter : public AActor, public IMoveableInterface
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPushBoxComponent> PushBox;
-public:
-	AASPCharacter();
+
+	// =============================
+	// === Animation ===
+	// =============================
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animation)
+	UCharacterAnimationSet* m_animationSet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animation)
+	FVector m_forwardVector = FVector::ZeroVector;
+
+	// ==================================
+	// === Playercontroller/GameManager ===
+	// ==================================
+	UPROPERTY(VisibleAnywhere)
+	class AFightingGame_PlayerController* m_playerController;
+
+	UPROPERTY(VisibleAnywhere)
+	class UGameManager* m_gameManager;
+
+	// =============================
+	// === Rotation ===
+	// =============================
+	UPROPERTY(EditAnywhere)
+	FRotator m_targetRotation = FRotator::ZeroRotator;
+
+	// =========================================
+	// === Events for cosmetic Overlaps/Hit  ===
+	// =========================================
+
+	UPROPERTY(BlueprintAssignable, Category="CustomMove|Events")
+	FOnCustomHit OnCustomHit;
 	
-	virtual void Tick(float _deltaSeconds) override;
-	static const FName CharacterMeshName;
-	static const FName CharacterColliderName;
+	UPROPERTY(BlueprintAssignable)
+	FOnCustomOverlap OnCustomBeginOverlap;
 	
-	void Start();
-	virtual void FixedUpdate(double _deltaTime) override;
-	virtual void RenderUpdate(double _deltaTime) override;
-
-	virtual UCustomMoveComponent* GetNoChaosMovementComponent() const override { return m_movement; }
-
-	void Move(float _value) const;
-	void StopMove() const;
-	void Jump() const;
-	void Rotate();
+	UPROPERTY(BlueprintAssignable)
+	FOnCustomOverlap OnCustomEndOverlap;
 	
-	void PerformAction(EInputAction _action) const;
-	/** Register Player to GameManager **/
-	//void Register();
-
-	FORCEINLINE class AFightingGame_PlayerController* GetPlayerController() const { return m_playerController; }
-	FORCEINLINE void SetPlayerController(AFightingGame_PlayerController* _playerController)
-	{
-		m_playerController = _playerController;
-	}
-
-	//FORCEINLINE float GetPlayerID() const {return m_playerID;}
-	//FORCEINLINE void SetPlayerID(float _playerID) {m_playerID = _playerID;}
-	FORCEINLINE LogicStateMachine* GetLogicStateMachine() const { return m_logicStateMachine.get(); }
-	FORCEINLINE AnimationStateMachine* GetAnimStateMachine() const { return m_animationStateMachine.get(); }
-	FORCEINLINE UCharacterAnimationSet* GetAnimationSet() const { return m_animationSet; }
-	FORCEINLINE void SetCanMoveBackwards(bool _b) { b_canMoveBackwards = _b; }
-	FORCEINLINE bool GetCanMoveBackwards() const { return b_canMoveBackwards; }
-	FORCEINLINE FVector GetMoveForwardVector() const { return m_forwardVector; }
-	FORCEINLINE UPushBoxComponent* GetPushBox() const { return PushBox; }
-protected:
 	UFUNCTION()
 	void HandleCustomHit(const FHitResult& _hit);
 	UFUNCTION()
 	void HandleCustomOverlapBegin(AActor* _otherActor);
 	UFUNCTION()
 	void HandleCustomOverlapEnd(AActor* _otherActor);
-	UPROPERTY(VisibleAnywhere)
-	class UCustomMoveComponent* m_movement;
-	UPROPERTY(VisibleAnywhere)
-	class AFightingGame_PlayerController* m_playerController;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	//int m_playerID;
-	std::unique_ptr<LogicStateMachine> m_logicStateMachine;
-	std::unique_ptr<AnimationStateMachine> m_animationStateMachine;
-	UPROPERTY(EditAnywhere)
-	float m_jumpStrength = 800.0f;
-	UPROPERTY(EditAnywhere)
-	float m_moveSpeed = 300.0f;
-	UPROPERTY(EditAnywhere)
-	float m_rotationSpeed = 7.0f;
-	UPROPERTY(EditAnywhere)
-	bool b_canMoveBackwards = true;
-	UPROPERTY(EditAnywhere)
-	FRotator m_targetRotation = FRotator::ZeroRotator;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animation)
-	UCharacterAnimationSet* m_animationSet;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animation)
-	FVector m_forwardVector = FVector::ZeroVector;
 
-public:
-	UFUNCTION(BlueprintCallable)
-	UCapsuleComponent* GetCapsuleComponent() { return Capsule; }
+	// =============================
+	// === Collider Events (cosmetic) ===
+	// =============================
 
 	UFUNCTION()
-	USkeletalMeshComponent* GetSkeletalMeshComponent() { return Mesh; }
+	void OnOverlapBegin(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex, bool _bFromSweep, const FHitResult& _sweepResult);
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* _hitComp, AActor* _otherActor, UPrimitiveComponent* _otherComp,
+			   FVector _ormalImpulse,
+			   const FHitResult& _hit);
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex);
 
-	void LookLeft();
-	void LookRight();
+	void NotifyAnimLandingFinished();
+	void NotifyAnimJumpStartupFinished();
+public:
+	static const FName CharacterMeshName;
+	static const FName CharacterColliderName;
+
+	FPendingAnimEvents PendingAnimEvents;
 };
+
+//old stuff
+
+//	void Start();
+//	virtual void FixedUpdate(double _deltaTime) override;
+//
+//
+//	virtual UCustomMoveComponent* GetNoChaosMovementComponent() const override { return m_movement; }
+//
+//	void Move(float _value) const;
+//	void StopMove() const;
+//	void Jump() const;
+//	
+//
+//
+//	FORCEINLINE LogicStateMachine* GetLogicStateMachine() const { return m_logicStateMachine.get(); }
+//	FORCEINLINE AnimationStateMachine* GetAnimStateMachine() const { return m_animationStateMachine.get(); }
+//	
+//	
+//
+//
+//	
+//
+//	UPROPERTY(VisibleAnywhere)
+//	class UCustomMoveComponent* m_movement;
+//	std::unique_ptr<LogicStateMachine> m_logicStateMachine;
+//	std::unique_ptr<AnimationStateMachine> m_animationStateMachine;
+//	UPROPERTY(EditAnywhere)
+//	float m_jumpStrength = 800.0f;
+//	UPROPERTY(EditAnywhere)
+//	float m_moveSpeed = 300.0f;
+//	UPROPERTY(EditAnywhere)
+//	float m_rotationSpeed = 7.0f;
+//
+//public:
+//	UFUNCTION(BlueprintCallable)
+//	UCapsuleComponent* GetCapsuleComponent() { return Capsule; }
+//
+//	
+//
+

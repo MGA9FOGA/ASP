@@ -9,19 +9,12 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
-class IMoveableInterface;
 #ifdef ASP_GameManager_generated_h
 #error "GameManager.generated.h already included, missing '#pragma once' in GameManager.h"
 #endif
 #define ASP_GameManager_generated_h
 
-#define FID_ASP_Source_ASP_GameManager_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
-	DECLARE_FUNCTION(execRegisterMovable); \
-	DECLARE_FUNCTION(execRenderUpdate); \
-	DECLARE_FUNCTION(execFixedGameUpdate60Hz);
-
-
-#define FID_ASP_Source_ASP_GameManager_h_22_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_GameManager_h_50_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUGameManager(); \
 	friend struct Z_Construct_UClass_UGameManager_Statics; \
@@ -30,7 +23,7 @@ public: \
 	DECLARE_SERIALIZER(UGameManager)
 
 
-#define FID_ASP_Source_ASP_GameManager_h_22_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_GameManager_h_50_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	UGameManager(UGameManager&&); \
@@ -42,13 +35,12 @@ public: \
 	NO_API virtual ~UGameManager();
 
 
-#define FID_ASP_Source_ASP_GameManager_h_19_PROLOG
-#define FID_ASP_Source_ASP_GameManager_h_22_GENERATED_BODY \
+#define FID_ASP_Source_ASP_GameManager_h_47_PROLOG
+#define FID_ASP_Source_ASP_GameManager_h_50_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_GameManager_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_GameManager_h_22_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_GameManager_h_22_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_GameManager_h_50_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_GameManager_h_50_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

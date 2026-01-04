@@ -8,27 +8,33 @@ class AnimationStateMachine;
 
 class UCharacterState_Anim_Falling : public UCharacterAnimationBaseState
 {
-	using UCharacterAnimationBaseState::UCharacterAnimationBaseState;
-	virtual void EnterState(FFightingStateMachine* _stateMachine) override;
-	virtual void ExitState(FFightingStateMachine* _stateMachine) override;
-	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) override;
+public:
+	UCharacterState_Anim_Falling(): UCharacterAnimationBaseState(EStates::FALLING)
+	{
+	}
+
+	virtual void EnterState(FCharacterState& _state, const FFrameInput& _input) override;
+	virtual void ExitState(FCharacterState& _state) override;
+	virtual void UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime) override;
 };
 
-inline void UCharacterState_Anim_Falling::EnterState(FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Anim_Falling::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
-	//UE_LOG(LogTemp, Log, TEXT("ENTER: Falling"));
-	_stateMachine->SetCurrentState(State);
-	AnimationStateMachine* animStateMachine = static_cast<AnimationStateMachine*>(_stateMachine);
-	animStateMachine->SetIsStartUpJumpFinished(false);
-	PlayAnimationMontage(_stateMachine, EStates::FALLING);
+	UCharacterAnimationBaseState::EnterState(_state, _input);
+	if (_state.bAnimJumpStartupFinished)
+	{
+		_state.bAnimJumpStartupFinished = false;
+		RequestMontage(_state, EStates::FALLING);
+	}
 }
 
-inline void UCharacterState_Anim_Falling::ExitState(FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Anim_Falling::ExitState(FCharacterState& _state)
 {
-	//UE_LOG(LogTemp, Log, TEXT("EXIT: Falling"));
+	UCharacterAnimationBaseState::ExitState(_state);
 }
 
-inline void UCharacterState_Anim_Falling::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Anim_Falling::UpdateState(FCharacterState& _state, const FFrameInput& _input,
+                                                      float _deltaTime)
 {
-	//UE_LOG(LogTemp, Display, TEXT("Anim Falling State"));
+	UCharacterAnimationBaseState::UpdateState(_state, _input, _deltaTime);
 }

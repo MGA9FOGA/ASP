@@ -1,100 +1,71 @@
 #pragma once
-#include "ASPCharacter.h"
 #include "FightingGame_PlayerController.h"
 #include "UCharacterBaseState.h"
-#include "AI/NavigationSystemBase.h"
+
 
 class ASP_API UCharacterState_Logic_Jump : public UCharacterBaseState
 {
 public:
-	using UCharacterBaseState::UCharacterBaseState;
+	UCharacterState_Logic_Jump()
+		: UCharacterBaseState(EStates::JUMPING)
+	{
+	}
 
-	virtual void EnterState(FFightingStateMachine* _stateMachine) override;
-	virtual void ExitState(FFightingStateMachine* _stateMachine) override;
-	virtual void UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine) override;
-
+	virtual void EnterState(FCharacterState& _state, const FFrameInput& _input) override;
+	virtual void ExitState(FCharacterState& _state) override;
+	virtual void UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime) override;
 	void MoveDirection(FFightingStateMachine* _stateMachine);
-
-	private:
-	EInputAction m_EJumpDirectionState;
 };
 
-
-inline void UCharacterState_Logic_Jump::EnterState(FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Logic_Jump::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
-	//UE_LOG(LogTemp, Log, TEXT("ENTER: Jump"));
-	if (!_stateMachine || !_stateMachine->GetPlayerController() || !_stateMachine->GetPlayerController()->GetPlayer())
-		return;
-	_stateMachine->SetCurrentState(State);
-	_stateMachine->GetPlayerController()->GetPlayer()->Jump();
+	UE_LOG(LogTemp, Warning, TEXT("Enter Jump after "));
+	// =============================
+	// === setting Flags ===
+	// =============================
+	_state.bJumpRequested = true;
+	_state.bHasLeftGround = false;
 	
-	MoveDirection(_stateMachine);
-}
+	// =============================
+	// === Locking Jump Direction ===
+	// =============================
+	_state.JumpAxis = 0.f;
 
-inline void UCharacterState_Logic_Jump::ExitState(FFightingStateMachine* _stateMachine)
-{
-	//UE_LOG(LogTemp, Log, TEXT("EXIT: Jump"));
-	m_EJumpDirectionState = EInputAction::None;
-	_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
-}
-
-inline void UCharacterState_Logic_Jump::UpdateState(float _deltaTime, FFightingStateMachine* _stateMachine)
-{
-	if (!_stateMachine || !_stateMachine->GetPlayerController()->GetPlayer()) return;
-
-	switch (m_EJumpDirectionState)
+	// =============================
+	// === Locking Jump Direction ===
+	// =============================
+	switch (_input.Action)
 	{
 	case EInputAction::JumpRight:
-		_stateMachine->GetPlayerController()->GetPlayer()->Move(1.0f);
-		break;
+		{
+			if (_state.Facing == 1 || _state.bCanMoveBackwards)
+			{
+				_state.JumpAxis = 1.f;
+			}
+			break;
+		}
+
 	case EInputAction::JumpLeft:
-		_stateMachine->GetPlayerController()->GetPlayer()->Move(-1.0f);
-		break;
+		{
+			if (_state.Facing == -1 || _state.bCanMoveBackwards)
+			{
+				_state.JumpAxis = -1.f;
+			}
+			break;
+		}
 	default:
-		break;;
+		_state.JumpAxis = 0.f;
+		break;
 	}
-	
 }
 
-inline void UCharacterState_Logic_Jump::MoveDirection(FFightingStateMachine* _stateMachine)
+inline void UCharacterState_Logic_Jump::ExitState(FCharacterState& _state)
 {
-	switch (_stateMachine->GetAction())
-	{
-	case EInputAction::JumpRight:
-		if (_stateMachine->GetCharacter()->GetActorForwardVector().X > 0.5f)
-		{
-			m_EJumpDirectionState = EInputAction::JumpRight;
-		}
-		else if (_stateMachine->GetCharacter()->GetActorForwardVector().X < -0.5f && _stateMachine->GetCharacter()->GetCanMoveBackwards())
-		{
-			m_EJumpDirectionState = EInputAction::JumpRight;
-		}
-		else if (!_stateMachine->GetCharacter()->GetCanMoveBackwards())
-		{
-			_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
-		}
-		break;
-	case EInputAction::JumpLeft:
-		if (_stateMachine->GetCharacter()->GetActorForwardVector().X < -0.5f)
-		{
-			m_EJumpDirectionState = EInputAction::JumpLeft;
-		}
-		else if (_stateMachine->GetCharacter()->GetActorForwardVector().X > 0.5f  && _stateMachine->GetCharacter()->GetCanMoveBackwards())
-		{
-			m_EJumpDirectionState = EInputAction::JumpLeft;
-		}
-		else if (!_stateMachine->GetCharacter()->GetCanMoveBackwards())
-		{
-			_stateMachine->GetPlayerController()->GetPlayer()->StopMove();
-		}
-		break;
-	case EInputAction::MoveRight:
-		m_EJumpDirectionState = EInputAction::MoveRight;
-		break;
-	case EInputAction::MoveLeft:
-		m_EJumpDirectionState = EInputAction::MoveLeft;
-		break;
-	default:
-		break;;
-	}
+	_state.bHasLeftGround = false;
+}
+
+inline void UCharacterState_Logic_Jump::UpdateState(FCharacterState& _state, const FFrameInput& _input,
+                                                    float _deltaTime)
+{
+	UCharacterBaseState::UpdateState(_state, _input, _deltaTime);
 }
