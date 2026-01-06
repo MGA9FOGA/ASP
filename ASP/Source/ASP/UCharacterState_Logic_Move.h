@@ -18,7 +18,6 @@ public:
 
 inline void UCharacterState_Logic_Move::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enter Move after "));
 }
 
 inline void UCharacterState_Logic_Move::ExitState(FCharacterState& _state)

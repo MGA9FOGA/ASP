@@ -19,7 +19,7 @@ void FFightingStateMachine::Update(FCharacterState& _state, const FFrameInput& _
 	// State-Update ausführen
 	if (def.State.IsValid())
 	{
-		_state.StateTimer += _deltaTime;
+		_state.LogicStateTimer += _deltaTime;
 		def.State->UpdateState(_state, _input, _deltaTime);
 	}
 
@@ -56,7 +56,7 @@ void FFightingStateMachine::ChangeState(FCharacterState& _state, EStates _newSta
 	_state.PreviousLogicState = m_currentState;
 	m_currentState = _newState;
 	_state.LogicState = _newState;
-	_state.StateTimer = 0.f;
+	_state.LogicStateTimer = 0.f;
 
 	// =============================
 	// === Enter new state ===
@@ -74,7 +74,4 @@ void FFightingStateMachine::ChangeState(FCharacterState& _state, EStates _newSta
 
 void FFightingStateMachine::Start(FCharacterState& _state)
 {
-	m_currentState = EStates::IDLE;
-	_state.LogicState = m_currentState;
-	_state.StateTimer = 0.f;
 }

@@ -24,6 +24,7 @@ struct FCharacterState
 	// =============================
 	FVector Position;
 	FVector Velocity;
+	float PreviousVelocityZ = 0.f;
 
 	// =============================
 	// === Groundcheck Flags ===
@@ -31,12 +32,6 @@ struct FCharacterState
 	bool bGrounded = false;
 	bool bJumpRequested = false;
 	bool bHasLeftGround = true;
-
-	// =============================
-	// === Animation Flags ===
-	// =============================
-	bool bAnimLanded = false;
-	bool bAnimJumpStartupFinished = false;
 
 	// =============================
 	// === Movement FLags ===
@@ -73,7 +68,7 @@ struct FCharacterState
 	// === Movement Settings ===
 	// =============================
 	float MoveSpeed = 300.f;
-	float JumpsStrength = 600.f;
+	float JumpsStrength = 500.f;
 	float Gravity = 980.f;
 
 	// =============================
@@ -87,7 +82,8 @@ struct FCharacterState
 	// =============================
 	EStates LogicState = EStates::IDLE;
 	EStates PreviousLogicState = EStates::NONE;
-	float StateTimer = 0.f;
+	float LogicStateTimer = 0.f;
+	float AnimStateTimer = 0.f;
 };
 
 struct FMovementSimulator
@@ -144,6 +140,7 @@ struct FMovementSimulator
 				desiredAxis = 0.f;            
 			}
 		}
+		
 		_state.Velocity.Y = desiredAxis * _state.MoveSpeed;
 		
 		// =============================
@@ -160,20 +157,20 @@ struct FMovementSimulator
 		// =============================
 		// === Gravity ===
 		// =============================
+		_state.PreviousVelocityZ = _state.Velocity.Z;
 		if (!_state.bGrounded)
 			_state.Velocity.Z -= _state.Gravity * _deltaTime;
-
+		
 		// =============================
 		// === Integrate ===
 		// =============================
 		_state.Position += _state.Velocity * _deltaTime;
-
+		
 		// =============================
 		// === Groundcheck ===
 		// =============================
 		if (_state.Position.Z <= 94.5f && !_state.bGrounded)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Ground impulse "));
 			_state.Position.Z = 94.5f;
 			_state.Velocity.Z = 0.f;
 			_state.bGrounded = true;
@@ -184,32 +181,7 @@ struct FMovementSimulator
 		// =============================
 		_state.Position.Y = FMath::Clamp(_state.Position.Y, _state.MinY, _state.MaxY);
 	}
-
-	// =============================
-	// === Pushboxes ===
-	// =============================
-	void ResolvePush(FCharacterState& _a, FCharacterState& _b)
-	{
-		// Nur Bodenkollision berücksichtigen
-		if (!_a.bGrounded || !_b.bGrounded)
-			return;
-
-		float minDist = _a.PushboxHalfWidth + _b.PushboxHalfWidth;
-		float deltaY = _b.Position.Y - _a.Position.Y; // Richtung von a zu b
-		float dist = FMath::Abs(deltaY);
-
-		if (dist >= minDist || dist <= KINDA_SMALL_NUMBER)
-			return;
-
-		float dir = FMath::Sign(deltaY); // +1 wenn b rechts von a, -1 sonst
-
-		// Spieler blockieren: sie dürfen nicht in Richtung des anderen laufen
-		if ((_a.MoveAxis * dir) > 0.f) // a läuft in Richtung b
-			_a.Velocity.Y = 0.f;       // blockiere Vorwärtsbewegung
-		if ((_b.MoveAxis * -dir) > 0.f) // b läuft in Richtung a
-			_b.Velocity.Y = 0.f;    
-	}
-
+	
 	// =============================
 	// === Facing ===
 	// =============================
@@ -272,25 +244,5 @@ struct FCharacterVisual
 	void UpdateAnimation(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
 	{
 		AnimMachine.Update(_state, _input, _deltaTime);
-
-		if (Character.PendingAnimEvents.bLandingFinished)
-		{
-			_state.bAnimLanded = true;
-			Character.PendingAnimEvents.bLandingFinished = false;
-		}
-		//else
-		//{
-		//	_state.bAnimLanded = false;
-		//}
-
-		if (Character.PendingAnimEvents.bJumpStartupFinished)
-		{
-			_state.bAnimJumpStartupFinished = true;
-			Character.PendingAnimEvents.bJumpStartupFinished = false;
-		}
-		//else
-		//{
-		//	_state.bAnimJumpStartupFinished = false;
-		//}
 	}
 };

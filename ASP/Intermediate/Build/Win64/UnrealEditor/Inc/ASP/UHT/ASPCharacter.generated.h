@@ -17,15 +17,15 @@ struct FHitResult;
 #endif
 #define ASP_ASPCharacter_generated_h
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_20_DELEGATE \
+#define FID_ASP_Source_ASP_ASPCharacter_h_19_DELEGATE \
 ASP_API void FOnCustomHit_DelegateWrapper(const FMulticastScriptDelegate& OnCustomHit, FHitResult const& HitResult);
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_21_DELEGATE \
+#define FID_ASP_Source_ASP_ASPCharacter_h_20_DELEGATE \
 ASP_API void FOnCustomOverlap_DelegateWrapper(const FMulticastScriptDelegate& OnCustomOverlap, AActor* OtherActor);
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_31_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_ASPCharacter_h_25_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execOnOverlapEnd); \
 	DECLARE_FUNCTION(execOnHit); \
 	DECLARE_FUNCTION(execOnOverlapBegin); \
@@ -34,7 +34,7 @@ ASP_API void FOnCustomOverlap_DelegateWrapper(const FMulticastScriptDelegate& On
 	DECLARE_FUNCTION(execHandleCustomHit);
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_31_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_ASPCharacter_h_25_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAASPCharacter(); \
 	friend struct Z_Construct_UClass_AASPCharacter_Statics; \
@@ -45,7 +45,7 @@ public: \
 
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_31_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_ASPCharacter_h_25_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	AASPCharacter(AASPCharacter&&); \
@@ -57,13 +57,13 @@ public: \
 	NO_API virtual ~AASPCharacter();
 
 
-#define FID_ASP_Source_ASP_ASPCharacter_h_28_PROLOG
-#define FID_ASP_Source_ASP_ASPCharacter_h_31_GENERATED_BODY \
+#define FID_ASP_Source_ASP_ASPCharacter_h_22_PROLOG
+#define FID_ASP_Source_ASP_ASPCharacter_h_25_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_ASPCharacter_h_31_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_ASPCharacter_h_31_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_ASPCharacter_h_31_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_ASPCharacter_h_25_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_ASPCharacter_h_25_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_ASPCharacter_h_25_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

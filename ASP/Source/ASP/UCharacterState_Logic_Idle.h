@@ -17,7 +17,6 @@ public:
 
 inline void UCharacterState_Logic_Idle::EnterState(FCharacterState& _state,const FFrameInput& _input)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enter idle after "));
 	_state.MoveAxis = 0.f;
 }
 
@@ -56,7 +55,7 @@ inline void UCharacterState_Logic_Idle::UpdateState(FCharacterState& _state, con
 			}
 			break;
 		}
-
+//
 	// =============================
 	// === Facing = -1 -> looking to the left ===
 	// =============================
@@ -85,4 +84,4 @@ inline void UCharacterState_Logic_Idle::UpdateState(FCharacterState& _state, con
 			break;
 		}
 	}
-}
+}//

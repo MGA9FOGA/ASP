@@ -21,11 +21,7 @@ public:
 inline void UCharacterState_Anim_Falling::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
 	UCharacterAnimationBaseState::EnterState(_state, _input);
-	if (_state.bAnimJumpStartupFinished)
-	{
-		_state.bAnimJumpStartupFinished = false;
-		RequestMontage(_state, EStates::FALLING);
-	}
+	RequestMontage(_state, EStates::FALLING);
 }
 
 inline void UCharacterState_Anim_Falling::ExitState(FCharacterState& _state)

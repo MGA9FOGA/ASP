@@ -115,12 +115,6 @@ void UGameManager::FixedGameUpdate60Hz(double _fixedDeltatime)
 	m_movementSimP2.UpdateMovement(newState.P2,newState.P1, _fixedDeltatime);
 
 	// =============================
-	// PUSHBOX
-	// =============================
-	//m_movementSimP1.ResolvePush(newState.P1, newState.P2);
-	//m_movementSimP2.ResolvePush(newState.P2, newState.P1);
-
-	// =============================
 	// FACING
 	// =============================
 	m_movementSimP1.UpdateFacing(newState.P1, newState.P2);
@@ -159,12 +153,7 @@ void UGameManager::RenderUpdate(double _fixedDeltatime)
 	// =============================
 	// RESET ONE FRAME FLAGS
 	// =============================
-	m_currentGameState.P1.bAnimLanded = false;
-	m_currentGameState.P1.bAnimJumpStartupFinished = false;
 	m_currentGameState.P1.AnimCommand = EAnimCommand::None;
-
-	m_currentGameState.P2.bAnimLanded = false;
-	m_currentGameState.P2.bAnimJumpStartupFinished = false;
 	m_currentGameState.P2.AnimCommand = EAnimCommand::None;
 
 	// =============================
@@ -230,6 +219,8 @@ void UGameManager::RegisterPlayer(int32 _playerIndex, AASPCharacter* _character,
 			m_currentGameState.P1.Yaw = _yaw;
 			m_currentGameState.P1.Facing = 1;
 			m_currentGameState.P1.PushboxHalfWidth = m_player1->GetPushBox()->GetHalfWidth();
+			m_movementSimP1.LogicMachine.Start(m_currentGameState.P1);
+			m_visualP1->AnimMachine.Start(m_currentGameState.P1);
 		}
 	}
 	else
@@ -247,6 +238,8 @@ void UGameManager::RegisterPlayer(int32 _playerIndex, AASPCharacter* _character,
 			m_currentGameState.P2.Yaw = _yaw;
 			m_currentGameState.P2.Facing = -1;
 			m_currentGameState.P2.PushboxHalfWidth = m_player2->GetPushBox()->GetHalfWidth();
+			m_movementSimP2.LogicMachine.Start(m_currentGameState.P2);
+			m_visualP2->AnimMachine.Start(m_currentGameState.P2);
 		}
 	}
 }

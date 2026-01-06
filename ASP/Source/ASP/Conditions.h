@@ -1,11 +1,6 @@
 #pragma once
-#include "ASPCharacter.h"
-#include "CustomMoveComponent.h"
-#include "FightingGame_PlayerController.h"
-#include "AnimationStateMachine.h"
 #include "GameManager.h"
-#include "InputTriggers.h"
-#include "StateMachine.h"
+
 
 //Logic
 inline bool IdleToMoving(const FCharacterState _state, const FFrameInput& _input)
@@ -26,6 +21,16 @@ inline bool IdleOrWalkToJump(const FCharacterState _state, const FFrameInput& _i
 		|| _input.Action == EInputAction::JumpRight;
 }
 
+inline int8 GetMoveDirection(const FCharacterState& _state)
+{
+	if (FMath::Abs(_state.Velocity.Y) < 1.f)
+		return 0;
+
+	float dir = _state.Velocity.Y * _state.Facing;
+	return (dir > 0.f) ? 1 : -1;
+}
+
+
 inline bool WalkingToIdle(const FCharacterState _state, const FFrameInput& _input)
 {
 	if (_input.Action == EInputAction::Idle || _input.Action == EInputAction::None ) return true;
@@ -41,12 +46,14 @@ inline bool JumpToIdle(const FCharacterState _state, const FFrameInput& _input)
 //Animation
 inline bool CanTransitionToIdle(const FCharacterState _state, const FFrameInput& _input)
 {
-	return _state.bAnimLanded;
+	return _state.bGrounded;
 }
 
 inline bool CanTransitionToFalling(const FCharacterState _state, const FFrameInput& _input)
 {
-	return _state.Velocity.Z < 0.f || _state.bAnimJumpStartupFinished;
+	return !_state.bGrounded
+		&& _state.PreviousVelocityZ > 0.f
+		&& _state.Velocity.Z <= 0.f;
 }
 
 /*_statemachine.GetCharacter()->GetNoChaosMovementComponent()->GetOwnVelocity().Z < 0.0f || animFSM->GetStartUpJumpedFinished()*/

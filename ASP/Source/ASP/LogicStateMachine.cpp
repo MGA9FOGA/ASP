@@ -29,7 +29,7 @@ void LogicStateMachine::BuildStates()
 		[this](const FCharacterState& _state, const FFrameInput& _input) // FFrameInput statt FInputPacket
 		{
 			return _input.Action == EInputAction::MoveLeft
-				|| _input.Action == EInputAction::MoveRight;
+			|| _input.Action == EInputAction::MoveRight;
 		}
 	));
 	Idle.Transitions.Add(FStateTransition(
@@ -60,8 +60,7 @@ void LogicStateMachine::BuildStates()
 		EStates::IDLE,
 		[this](const FCharacterState& _state, const FFrameInput& _input)
 		{
-			return _input.Action != EInputAction::MoveLeft
-				&& _input.Action != EInputAction::MoveRight;
+			return FMath::Abs(_state.MoveAxis) == 0.f;
 		}
 	));
 	m_stateMap.Add(EStates::MOVING, Move);
@@ -86,9 +85,13 @@ void LogicStateMachine::BuildStates()
 void LogicStateMachine::Update(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
 {
 	FFightingStateMachine::Update(_state, _input, _deltaTime);
-	UE_LOG(LogTemp, Display, TEXT("State %d -> checking transitions with Action %d"),
-	       (int)_state.LogicState,
-	       (int)_input.Action);
+}
+
+void LogicStateMachine::Start(FCharacterState& _state)
+{
+	m_currentState = EStates::IDLE;
+	_state.LogicState = m_currentState;
+	_state.LogicStateTimer = 0.f;
 }
 
 bool LogicStateMachine::HasStateJustChangedTo(const FCharacterState& _state, EStates _targetState) const

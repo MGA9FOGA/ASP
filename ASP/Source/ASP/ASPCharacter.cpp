@@ -1,21 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "ASPCharacter.h"
-
-#include "AnimationStateMachine.h"
 #include "CharacterAnimInstance.h"
-#include "CustomMoveComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Controller.h"
-#include "FightingGame_PlayerController.h"
 #include "FRollbackManager.h"
-#include "GameManager.h"
-#include "StateMachine.h"
-#include "FRollbackManager.h"
-#include "LogicStateMachine.h"
 #include "UPushBoxComponent.h"
-DEFINE_LOG_CATEGORY(LogTemplateCharacter);
+
 
 //////////////////////////////////////////////////////////////////////////
 // AASPCharacter
@@ -113,16 +105,6 @@ void AASPCharacter::OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _
 	}
 }
 
-void AASPCharacter::NotifyAnimLandingFinished()
-{
-	PendingAnimEvents.bLandingFinished = true;
-}
-
-void AASPCharacter::NotifyAnimJumpStartupFinished()
-{
-	PendingAnimEvents.bJumpStartupFinished = true;
-}
-
 void AASPCharacter::ApplyState(const FCharacterRollbackState& _state)
 {
 	SetActorLocation(_state.Position);
@@ -142,12 +124,6 @@ void AASPCharacter::Start()
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[%s] No capsule found!"), *GetOwner()->GetName());
-	}
-	if (UCharacterAnimInstance* anim = Cast<UCharacterAnimInstance>(
-		GetSkeletalMeshComponent()->GetAnimInstance()))
-	{
-		anim->OnLandingEndedNative.BindUObject(this, &AASPCharacter::NotifyAnimLandingFinished);
-		anim->OnJumpStartEndedNative.BindUObject(this, &AASPCharacter::NotifyAnimJumpStartupFinished);
 	}
 	m_forwardVector = GetActorForwardVector();
 }

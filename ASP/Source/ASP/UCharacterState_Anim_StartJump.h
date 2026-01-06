@@ -21,9 +21,7 @@ public:
 inline void UCharacterState_Anim_StartJump::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
 	UCharacterAnimationBaseState::EnterState(_state, _input);
-	_state.bAnimJumpStartupFinished = true;
 	RequestMontage(_state, EStates::STARTJUMP);
-	_state.StateTimer = 0.f;
 }
 
 inline void UCharacterState_Anim_StartJump::ExitState(FCharacterState& _state)

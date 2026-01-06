@@ -22,17 +22,11 @@ public:
 inline void UCharacterState_Anim_Idle::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
 	UCharacterAnimationBaseState::EnterState(_state, _input);
-
-	if (_state.bAnimLanded)
-	{
-		_state.bAnimLanded = false;
-	}
 	RequestMontage(_state, EStates::IDLE);
 }
 
 inline void UCharacterState_Anim_Idle::UpdateState(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
 {
-	
 }
 
 inline void UCharacterState_Anim_Idle::ExitState(FCharacterState& _state)

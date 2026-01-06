@@ -19,7 +19,6 @@ public:
 
 inline void UCharacterState_Logic_Jump::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enter Jump after "));
 	// =============================
 	// === setting Flags ===
 	// =============================

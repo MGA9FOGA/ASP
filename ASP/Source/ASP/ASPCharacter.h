@@ -15,16 +15,10 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
-
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomHit, const FHitResult&, HitResult);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCustomOverlap, AActor*, OtherActor);
 
-struct FPendingAnimEvents
-{
-	bool bLandingFinished = false;
-	bool bJumpStartupFinished = false;
-};
 UCLASS(config=Game)
 class ASP_API AASPCharacter : public AActor
 {
@@ -133,53 +127,7 @@ protected:
 			   const FHitResult& _hit);
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _otherActor,UPrimitiveComponent* _otherComp, int32 _otherBodyIndex);
-
-	void NotifyAnimLandingFinished();
-	void NotifyAnimJumpStartupFinished();
 public:
 	static const FName CharacterMeshName;
 	static const FName CharacterColliderName;
-
-	FPendingAnimEvents PendingAnimEvents;
 };
-
-//old stuff
-
-//	void Start();
-//	virtual void FixedUpdate(double _deltaTime) override;
-//
-//
-//	virtual UCustomMoveComponent* GetNoChaosMovementComponent() const override { return m_movement; }
-//
-//	void Move(float _value) const;
-//	void StopMove() const;
-//	void Jump() const;
-//	
-//
-//
-//	FORCEINLINE LogicStateMachine* GetLogicStateMachine() const { return m_logicStateMachine.get(); }
-//	FORCEINLINE AnimationStateMachine* GetAnimStateMachine() const { return m_animationStateMachine.get(); }
-//	
-//	
-//
-//
-//	
-//
-//	UPROPERTY(VisibleAnywhere)
-//	class UCustomMoveComponent* m_movement;
-//	std::unique_ptr<LogicStateMachine> m_logicStateMachine;
-//	std::unique_ptr<AnimationStateMachine> m_animationStateMachine;
-//	UPROPERTY(EditAnywhere)
-//	float m_jumpStrength = 800.0f;
-//	UPROPERTY(EditAnywhere)
-//	float m_moveSpeed = 300.0f;
-//	UPROPERTY(EditAnywhere)
-//	float m_rotationSpeed = 7.0f;
-//
-//public:
-//	UFUNCTION(BlueprintCallable)
-//	UCapsuleComponent* GetCapsuleComponent() { return Capsule; }
-//
-//	
-//
-

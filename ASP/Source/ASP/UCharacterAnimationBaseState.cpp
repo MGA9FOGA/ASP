@@ -4,11 +4,9 @@
 
 void UCharacterAnimationBaseState::RequestMontage(FCharacterState& _state, EStates _animState)
 {
-	_state.AnimState = _animState;
 	_state.AnimCommand = EAnimCommand::PlayMontage;
 }
 
 void UCharacterAnimationBaseState::EnterState(FCharacterState& _state, const FFrameInput& _input)
 {
-	_state.StateTimer = 0.f;
 }
