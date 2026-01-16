@@ -32,16 +32,9 @@ public:
 	virtual void ChangeState(FCharacterState& _state, EStates _newState, const FFrameInput& _input);
 	virtual void Start(FCharacterState& _state);
 	
-	//Getter
-	FORCEINLINE EStates GetCurrentState() const {return m_currentState;}
 	FORCEINLINE TMap<EStates, FStateDefinition> GetMap() const {return m_stateMap;}
 	
-	//Setter
-	FORCEINLINE void SetCurrentState(EStates _state) {m_currentState = _state;}
-
 protected:
 	//CurrentState
 	TMap<EStates, FStateDefinition> m_stateMap;
-	EStates m_currentState = EStates::NONE;
-
 };

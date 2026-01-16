@@ -15,6 +15,16 @@
 const FName AASPCharacter::CharacterMeshName(TEXT("CharacterMesh"));
 const FName AASPCharacter::CharacterColliderName(TEXT("Collider"));
 
+void AASPCharacter::SetRollbackDebugColor(bool bActive)
+{
+	USkeletalMeshComponent* mesh = GetSkeletalMeshComponent();
+	if (!mesh)
+		return;
+
+	mesh->SetRenderCustomDepth(bActive);
+	mesh->SetCustomDepthStencilValue(bActive ? 2 : 0);
+}
+
 AASPCharacter::AASPCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -105,12 +115,6 @@ void AASPCharacter::OnOverlapEnd(UPrimitiveComponent* _overlappedComp, AActor* _
 	}
 }
 
-void AASPCharacter::ApplyState(const FCharacterRollbackState& _state)
-{
-	SetActorLocation(_state.Position);
-}
-
-
 void AASPCharacter::Start()
 {
 	if (Capsule)
@@ -126,6 +130,11 @@ void AASPCharacter::Start()
 		UE_LOG(LogTemp, Warning, TEXT("[%s] No capsule found!"), *GetOwner()->GetName());
 	}
 	m_forwardVector = GetActorForwardVector();
+
+	if (USkeletalMeshComponent* mesh = GetSkeletalMeshComponent())
+	{
+		OriginalMaterial = mesh->GetMaterial(0);
+	}
 }
 
 void AASPCharacter::HandleCustomHit(const FHitResult& _hit)

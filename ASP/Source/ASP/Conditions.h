@@ -39,7 +39,7 @@ inline bool WalkingToIdle(const FCharacterState _state, const FFrameInput& _inpu
 
 inline bool JumpToIdle(const FCharacterState _state, const FFrameInput& _input)
 {
-	return _state.bGrounded && !_state.bJumpRequested && _state.bHasLeftGround;
+	return _state.bGrounded && !_state.bJumpRequested;
 }
 
 

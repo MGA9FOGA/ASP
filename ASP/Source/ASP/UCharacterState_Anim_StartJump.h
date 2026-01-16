@@ -1,9 +1,9 @@
 #pragma once
-#include "AnimationStateMachine.h"
+#include "AnimationResolver.h"
 #include "UCharacterAnimationBaseState.h"
 #include "UCharacterBaseState.h"
 
-class AnimationStateMachine;
+class AnimationResolver;
 
 class UCharacterState_Anim_StartJump : public UCharacterAnimationBaseState
 {

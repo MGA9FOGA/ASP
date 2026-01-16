@@ -8,38 +8,14 @@
 
 #include "FMovementSimulator.h"
 #include "FRollbackManager.h"
+#include "GameStateTypes.h"
 #include "InputHandler.h"
-
 
 #include "GameManager.generated.h"
 
 class AASPCharacter;
 class AFightingGame_PlayerController;
 class ADynamicCamera;
-
-/* =============================
- * === INPUT PER FRAME ===
- * ============================= */
-struct FFrameInput
-{
-	uint8 Buttons;
-	EInputAction Action;
-};
-
-
-/* =============================
- * === GAME STATE ===
- * ============================= */
-struct FGameState
-{
-	int64 FrameNumber = 0;
-
-	FCharacterState P1;
-	FCharacterState P2;
-
-	FFrameInput P1Input;
-	FFrameInput P2Input;
-};
 
 /* =============================
  * === GAME MANAGER ===
@@ -78,14 +54,10 @@ public:
 	);
 
 	/* =============================
-	 * === ROLLBACK ===
+	 * === Add To Queue ===
 	 * ============================= */
-	void AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet);
-
-	// =============================
-	// === Rollback ===
-	// =============================
-	void RollbackToFrame(int64 _frame);
+	void AddInputToQueue(AFightingGame_PlayerController* _pc, const FInputPacket& _packet);
+	void FixedGameUpdateForRollback(int32 _frame, FGameState& _state);
 
 	/* =============================
 	 * === GETTER ===
@@ -94,9 +66,15 @@ public:
 	FORCEINLINE class AASPCharacter* GetPlayer2() const { return m_player2; }
 	FORCEINLINE class ADynamicCamera* GetCamera() const { return m_camera; }
 	FORCEINLINE double static GetFixedDeltatime() { return FIXED_UPDATE_RATE; }
-	FORCEINLINE int64 GetFrameNumber() const { return FrameNumber; }
+	FORCEINLINE int32 GetFrameNumber() const { return FrameNumber; }
 
 private:
+	bool bDegubRollback = false;
+	FTimerHandle DebugRollbackTimer;
+	TArray<int32> DebugRollbackFrames;
+	int32 DebugRollbackIndex = 0;
+	int32 DebugRollbackCurrentFrame = 0;
+	int32 DebugRollbackTargetFrame = 0;
 	/* =============================
 	 * === FIXED UPDATE ===
 	 * ============================= */
@@ -106,14 +84,17 @@ private:
 	/* =============================
 	 * === SETUP ===
 	 * ============================= */
-	void BeginPlaySetup();
 	void OnWorldInitialization(UWorld* _world, const UWorld::InitializationValues _ivs);
+	void BeginPlaySetup();
 
 	/* =============================
 	 * === INPUT BUILDING ===
 	 * ============================= */
-	void BuildFrameInput(int64 _frame, FGameState& _outState);
-	FFrameInput BuildPlayerInput(AFightingGame_PlayerController* _pc, int64 _frame);
+	void BuildFrameInput(int32 _frame, FGameState& _outState);
+	FFrameInput BuildPlayerInput(AFightingGame_PlayerController* _pc, int32 _frame);
+public:
+	void TriggerDebugRollback(int32 _framesBack);
+	void StepDebugRollback();
 
 	/* =============================
 	* === STATE APPLY ===
@@ -183,12 +164,15 @@ private:
 	 * === INPUT STORAGE ===
 	 * ============================= */
 	TMap<AFightingGame_PlayerController*, TMap<int32, FInputPacket>> m_playerInputQueues;
+	TMap<AFightingGame_PlayerController*, TMap<int32, FStoredFrameInput>> m_inputHistory;
 	
 	/* =============================
 	 * === TIMING ===
 	 * ============================= */
 	double m_accumulatedTime = 0.0f;
 	static constexpr double FIXED_UPDATE_RATE = 1.0f / 60.0f;
-	int64 FrameNumber = 0;
+	int32 FrameNumber = 0;
+	int LastSimulatedFrame = -1;
 };
+
 

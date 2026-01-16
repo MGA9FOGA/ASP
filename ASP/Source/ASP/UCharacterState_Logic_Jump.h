@@ -1,5 +1,6 @@
 #pragma once
 #include "FightingGame_PlayerController.h"
+#include "GameStateTypes.h"
 #include "UCharacterBaseState.h"
 
 
@@ -23,7 +24,6 @@ inline void UCharacterState_Logic_Jump::EnterState(FCharacterState& _state, cons
 	// === setting Flags ===
 	// =============================
 	_state.bJumpRequested = true;
-	_state.bHasLeftGround = false;
 	
 	// =============================
 	// === Locking Jump Direction ===
@@ -60,7 +60,7 @@ inline void UCharacterState_Logic_Jump::EnterState(FCharacterState& _state, cons
 
 inline void UCharacterState_Logic_Jump::ExitState(FCharacterState& _state)
 {
-	_state.bHasLeftGround = false;
+	//_state.bHasLeftGround = false;
 }
 
 inline void UCharacterState_Logic_Jump::UpdateState(FCharacterState& _state, const FFrameInput& _input,

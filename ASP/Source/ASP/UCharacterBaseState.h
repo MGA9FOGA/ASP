@@ -3,12 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InputHandler.h"
 #include "StateMachine.h"
 
 class FFightingStateMachine;
 struct FAnimationMontageState;
-struct FCharacterRollbackState;
 /**
  * 
  */

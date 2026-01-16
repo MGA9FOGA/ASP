@@ -68,6 +68,17 @@ struct Z_Construct_UClass_AFightingGame_PlayerController_Statics
 		{ "ToolTip", "=== Move Input Action ===" },
 #endif
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_RollbackAction_MetaData[] = {
+		{ "AllowPrivateAccess", "true" },
+		{ "Category", "Input" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "// =============================\n// === Rollback Input Action ===\n// =============================\n" },
+#endif
+		{ "ModuleRelativePath", "FightingGame_PlayerController.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "=== Rollback Input Action ===" },
+#endif
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_deadzone_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
 		{ "Category", "Input" },
@@ -94,6 +105,7 @@ struct Z_Construct_UClass_AFightingGame_PlayerController_Statics
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_playerCharacter;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_JumpAction;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_MoveAction;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_RollbackAction;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_m_deadzone;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_gameManager;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
@@ -107,6 +119,7 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_playerCharacter = { "m_playerCharacter", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_playerCharacter), Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_playerCharacter_MetaData), NewProp_m_playerCharacter_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_JumpAction = { "JumpAction", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, JumpAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_JumpAction_MetaData), NewProp_JumpAction_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_MoveAction = { "MoveAction", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, MoveAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MoveAction_MetaData), NewProp_MoveAction_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_RollbackAction = { "RollbackAction", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, RollbackAction), Z_Construct_UClass_UInputAction_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_RollbackAction_MetaData), NewProp_RollbackAction_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_deadzone = { "m_deadzone", nullptr, (EPropertyFlags)0x0040000000000015, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_deadzone), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_deadzone_MetaData), NewProp_m_deadzone_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_gameManager = { "m_gameManager", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFightingGame_PlayerController, m_gameManager), Z_Construct_UClass_UGameManager_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_gameManager_MetaData), NewProp_m_gameManager_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFightingGame_PlayerController_Statics::PropPointers[] = {
@@ -114,6 +127,7 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFighting
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_playerCharacter,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_JumpAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_MoveAction,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_RollbackAction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_deadzone,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFightingGame_PlayerController_Statics::NewProp_m_gameManager,
 };
@@ -159,10 +173,10 @@ AFightingGame_PlayerController::~AFightingGame_PlayerController() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFightingGame_PlayerController, AFightingGame_PlayerController::StaticClass, TEXT("AFightingGame_PlayerController"), &Z_Registration_Info_UClass_AFightingGame_PlayerController, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFightingGame_PlayerController), 1130847185U) },
+		{ Z_Construct_UClass_AFightingGame_PlayerController, AFightingGame_PlayerController::StaticClass, TEXT("AFightingGame_PlayerController"), &Z_Registration_Info_UClass_AFightingGame_PlayerController, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFightingGame_PlayerController), 1775899064U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_1006423163(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_544875337(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_FightingGame_PlayerController_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

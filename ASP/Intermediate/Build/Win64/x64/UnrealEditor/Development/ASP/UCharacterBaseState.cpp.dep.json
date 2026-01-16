@@ -7,15 +7,15 @@
         "Includes": [
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\asp\\definitions.asp.h",
             "d:\\github\\asp\\asp\\source\\asp\\ucharacterbasestate.h",
-            "d:\\github\\asp\\asp\\source\\asp\\inputhandler.h",
             "d:\\github\\asp\\asp\\source\\asp\\statemachine.h",
             "d:\\github\\asp\\asp\\source\\asp\\states.h",
             "d:\\github\\asp\\asp\\source\\asp\\aspcharacter.h",
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\aspcharacter.generated.h",
             "d:\\github\\asp\\asp\\source\\asp\\fightinggame_playercontroller.h",
+            "d:\\github\\asp\\asp\\source\\asp\\inputhandler.h",
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\fightinggame_playercontroller.generated.h",
             "d:\\github\\asp\\asp\\source\\asp\\fmovementsimulator.h",
-            "d:\\github\\asp\\asp\\source\\asp\\animationstatemachine.h",
+            "d:\\github\\asp\\asp\\source\\asp\\animationresolver.h",
             "d:\\github\\asp\\asp\\source\\asp\\logicstatemachine.h",
             "d:\\github\\asp\\asp\\source\\asp\\ucharacteranimationset.h",
             "d:\\github\\asp\\asp\\intermediate\\build\\win64\\unrealeditor\\inc\\asp\\uht\\ucharacteranimationset.generated.h"

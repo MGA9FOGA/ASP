@@ -89,9 +89,9 @@ void LogicStateMachine::Update(FCharacterState& _state, const FFrameInput& _inpu
 
 void LogicStateMachine::Start(FCharacterState& _state)
 {
-	m_currentState = EStates::IDLE;
-	_state.LogicState = m_currentState;
-	_state.LogicStateTimer = 0.f;
+	_state.LogicState = EStates::IDLE;
+	_state.PreviousLogicState = EStates::NONE;
+	_state.LogicStateTimer = 0.0f;
 }
 
 bool LogicStateMachine::HasStateJustChangedTo(const FCharacterState& _state, EStates _targetState) const

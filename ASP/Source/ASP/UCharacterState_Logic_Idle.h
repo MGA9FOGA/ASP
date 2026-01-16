@@ -27,7 +27,6 @@ inline void UCharacterState_Logic_Idle::ExitState(FCharacterState& _state)
 inline void UCharacterState_Logic_Idle::UpdateState(FCharacterState& _state, const FFrameInput& _input,
                                                     float _deltaTime)
 {
-	
 	if (!_state.bGrounded)
 		return;
 

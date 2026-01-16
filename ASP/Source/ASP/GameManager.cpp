@@ -29,6 +29,8 @@ void UGameManager::Initialize(FSubsystemCollectionBase& _collection)
 
 	FrameNumber = 0;
 	m_accumulatedTime = 0.0;
+	m_inputHistory.Empty();
+	m_playerInputQueues.Empty();
 }
 
 void UGameManager::Deinitialize()
@@ -66,12 +68,6 @@ void UGameManager::Tick(float _deltaTime)
 		m_accumulatedTime -= FIXED_UPDATE_RATE;
 	}
 	RenderUpdate(m_accumulatedTime / FIXED_UPDATE_RATE);
-
-	if (m_playerController1 && m_playerController2)
-	{
-		m_playerController1->Update(_deltaTime);
-		m_playerController2->Update(_deltaTime);
-	}
 }
 
 void UGameManager::FixedGameUpdate60Hz(double _fixedDeltatime)
@@ -82,6 +78,11 @@ void UGameManager::FixedGameUpdate60Hz(double _fixedDeltatime)
 	// =============================
 	// INPUT
 	// =============================
+	if (m_playerController1)
+		m_playerController1->CommitInput(FrameNumber);
+
+	if (m_playerController2)
+		m_playerController2->CommitInput(FrameNumber);
 	BuildFrameInput(newState.FrameNumber, newState);
 
 	// =============================
@@ -111,8 +112,8 @@ void UGameManager::FixedGameUpdate60Hz(double _fixedDeltatime)
 	// =============================
 	// MOVEMENT
 	// =============================
-	m_movementSimP1.UpdateMovement(newState.P1,newState.P2, _fixedDeltatime);
-	m_movementSimP2.UpdateMovement(newState.P2,newState.P1, _fixedDeltatime);
+	m_movementSimP1.UpdateMovement(newState.P1, newState.P2, _fixedDeltatime);
+	m_movementSimP2.UpdateMovement(newState.P2, newState.P1, _fixedDeltatime);
 
 	// =============================
 	// FACING
@@ -123,12 +124,13 @@ void UGameManager::FixedGameUpdate60Hz(double _fixedDeltatime)
 	// =============================
 	// SAVE FOR ROLLBACK
 	// =============================
-	//RollbackManager.SaveState(NewState);
+	m_rollbackManager.SaveFrame(FrameNumber, newState);
 
 	// =============================
 	// APPLY
 	// =============================
 	m_currentGameState = newState;
+	LastSimulatedFrame = FrameNumber;
 	FrameNumber++;
 }
 
@@ -137,6 +139,11 @@ void UGameManager::RenderUpdate(double _fixedDeltatime)
 	if (!m_player1 || !m_player2)
 		return;
 
+	if (m_playerController1)
+		m_playerController1->SampleInput();
+
+	if (m_playerController2)
+		m_playerController2->SampleInput();
 
 	if (m_visualP1 && m_visualP2)
 	{
@@ -153,8 +160,8 @@ void UGameManager::RenderUpdate(double _fixedDeltatime)
 	// =============================
 	// RESET ONE FRAME FLAGS
 	// =============================
-	m_currentGameState.P1.AnimCommand = EAnimCommand::None;
-	m_currentGameState.P2.AnimCommand = EAnimCommand::None;
+	m_visualP1->PostVisualUpdate(m_currentGameState.P1);
+	m_visualP2->PostVisualUpdate(m_currentGameState.P2);
 
 	// =============================
 	// Camera Movement
@@ -170,32 +177,132 @@ void UGameManager::CheckBackMovement(FCharacterState& _state) const
 	_state.bCanMoveBackwards = m_camera->characterMaxDistanceAlloToMove();
 }
 
-void UGameManager::BuildFrameInput(int64 _frame, FGameState& _outState)
+void UGameManager::BuildFrameInput(int32 _frame, FGameState& _outState)
 {
 	_outState.P1Input = BuildPlayerInput(m_playerController1, _frame);
 	_outState.P2Input = BuildPlayerInput(m_playerController2, _frame);
 }
 
-FFrameInput UGameManager::BuildPlayerInput(AFightingGame_PlayerController* _pc, int64 _frame)
+FFrameInput UGameManager::BuildPlayerInput(AFightingGame_PlayerController* _pc, int32 _frame)
 {
-	FFrameInput result;
-	result.Buttons = 0;
-	result.Action = EInputAction::None;
+	TMap<int32, FStoredFrameInput>& history = m_inputHistory.FindOrAdd(_pc);
 
-	if (!_pc)
+	// =============================
+	// 1. REAL INPUT
+	// =============================
+	if (const FInputPacket* Packet = GetInputQueueAtFrame(_pc, _frame))
 	{
-		return result;
+		FFrameInput input;
+		input.Buttons = Packet->Buttons;
+		input.Action = CheckForCombo(_pc, _frame);
+
+		history.FindOrAdd(_frame) = {
+			input,
+			false,
+			_frame
+		};
+		return input;
 	}
 
-	const FInputPacket* Packet = GetInputQueueAtFrame(_pc, _frame);
-	if (!Packet)
+	// =============================
+	// 2. Prediction
+	// =============================
+	constexpr int32 MaxPredictionFrames = 130;
+	if (const FStoredFrameInput* last = history.Find(_frame - 1))
 	{
-		return result;
+		const int32 predictedCount = _frame - last->SourceFrame;
+
+		if (predictedCount > MaxPredictionFrames)
+		{
+			UE_LOG(LogTemp, Error,
+			       TEXT(" Prediction limit reached at frame %d"), _frame);
+
+			FFrameInput empty{};
+			history.Add(_frame, {
+				            empty,
+				            false,
+				            _frame
+			            });
+			return empty;
+		}
+
+		FFrameInput predicted = last->Packet;
+		if (!history.Contains(_frame))
+		{
+			UE_LOG(LogTemp, Warning,
+			       TEXT("Predicted frame %d (count %d)"), _frame, predictedCount);
+
+			history.Add(_frame, {
+				            predicted,
+				            true,
+				            _frame
+			            });
+		}
+		return predicted;
 	}
 
-	result.Buttons = Packet->Buttons;
-	result.Action = CheckForCombo(_pc, _frame);
-	return result;
+	// =============================
+	// 1. Default
+	// =============================
+	FFrameInput empty{};
+	return empty;
+}
+
+void UGameManager::TriggerDebugRollback(int32 _framesBack)
+{
+	const int32 current = FrameNumber;
+	const int32 target = FMath::Max(0, current - _framesBack);
+
+	UE_LOG(LogTemp, Warning,
+	       TEXT("[DEBUG] Start rollback from %d to %d"), current, target);
+
+	DebugRollbackCurrentFrame = target;
+	DebugRollbackTargetFrame = current;
+
+	if (!m_rollbackManager.LoadFrame(target, m_currentGameState))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Debug rollback failed"));
+		return;
+	}
+
+	if (m_player1)
+		m_player1->SetRollbackDebugColor(true);
+
+	GetWorld()->GetTimerManager().SetTimer(
+		DebugRollbackTimer,
+		this,
+		&UGameManager::StepDebugRollback,
+		0.5f,
+		true
+	);
+}
+
+void UGameManager::StepDebugRollback()
+{
+	if (DebugRollbackCurrentFrame >= DebugRollbackTargetFrame)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(DebugRollbackTimer);
+
+		if (m_player1)
+			m_player1->SetRollbackDebugColor(false);
+
+		ApplyGameStateToActors(m_currentGameState);
+
+		UE_LOG(LogTemp, Warning, TEXT("[DEBUG] Rollback finished"));
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning,
+	       TEXT("[DEBUG] Re-sim frame %d"), DebugRollbackCurrentFrame);
+
+	FixedGameUpdateForRollback(
+		DebugRollbackCurrentFrame,
+		m_currentGameState
+	);
+
+	ApplyGameStateToActors(m_currentGameState);
+
+	DebugRollbackCurrentFrame++;
 }
 
 void UGameManager::RegisterPlayer(int32 _playerIndex, AASPCharacter* _character,
@@ -220,7 +327,6 @@ void UGameManager::RegisterPlayer(int32 _playerIndex, AASPCharacter* _character,
 			m_currentGameState.P1.Facing = 1;
 			m_currentGameState.P1.PushboxHalfWidth = m_player1->GetPushBox()->GetHalfWidth();
 			m_movementSimP1.LogicMachine.Start(m_currentGameState.P1);
-			m_visualP1->AnimMachine.Start(m_currentGameState.P1);
 		}
 	}
 	else
@@ -239,32 +345,103 @@ void UGameManager::RegisterPlayer(int32 _playerIndex, AASPCharacter* _character,
 			m_currentGameState.P2.Facing = -1;
 			m_currentGameState.P2.PushboxHalfWidth = m_player2->GetPushBox()->GetHalfWidth();
 			m_movementSimP2.LogicMachine.Start(m_currentGameState.P2);
-			m_visualP2->AnimMachine.Start(m_currentGameState.P2);
 		}
 	}
 }
 
-void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _playerController, const FInputPacket& _packet)
+void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _pc, const FInputPacket& _packet)
 {
-	TMap<int32, FInputPacket>& playerMap = m_playerInputQueues.FindOrAdd(_playerController);
+	TMap<int32, FInputPacket>& playerMap = m_playerInputQueues.FindOrAdd(_pc);
+	TMap<int32, FStoredFrameInput>& history = m_inputHistory.FindOrAdd(_pc);
 	playerMap.Add(_packet.FrameNumber, _packet);
 
-	const int32 MaxHistory = 120; // 2 Sekunden bei 60fps
+	if (_packet.FrameNumber > LastSimulatedFrame)
+	{
+		return;
+	}
+
+	const FStoredFrameInput* stored = history.Find(_packet.FrameNumber);
+
+	if (!stored)
+		return;
+
+	if (stored->bPredicted &&
+		stored->Packet.Buttons != _packet.Buttons)
+	{
+		FFrameInput input;
+		input.Buttons = _packet.Buttons;
+		input.Action = CheckForCombo(_pc, _packet.FrameNumber);
+		
+		FStoredFrameInput& entry = history[_packet.FrameNumber];
+		entry.Packet = input;      
+		entry.bPredicted = false;
+		
+		UE_LOG(LogTemp, Warning, TEXT("[DEBUG] Rollbacked frame %d"), _packet.FrameNumber);
+		m_rollbackManager.RollbackToFrame(
+			_packet.FrameNumber,
+			FrameNumber,
+			m_currentGameState,
+			[this, history](int32 _simFrame, FGameState& _state)
+			{
+				FixedGameUpdateForRollback(_simFrame, _state);
+			}
+		);
+	}
+
+	// Cleanup
+	const int32 MaxHistory = 130;
 	const int32 minFrame = _packet.FrameNumber - MaxHistory;
 
-	TArray<int32> keysToRemove;
-	for (const auto& Elem : playerMap)
+	for (auto It = playerMap.CreateIterator(); It; ++It)
 	{
-		if (Elem.Key < minFrame)
+		if (It.Key() < minFrame)
 		{
-			keysToRemove.Add(Elem.Key);
+			It.RemoveCurrent();
 		}
 	}
 
-	for (int32 Key : keysToRemove)
+	for (auto It = history.CreateIterator(); It; ++It)
 	{
-		playerMap.Remove(Key);
+		if (It.Key() < minFrame)
+		{
+			It.RemoveCurrent();
+		}
 	}
+}
+
+
+void UGameManager::FixedGameUpdateForRollback(int32 _frame, FGameState& _state)
+{
+	// Input bauen
+	BuildFrameInput(_frame, _state);
+
+	// =============================
+	// Character Movelimit
+	// =============================
+	if (m_camera)
+	{
+		if (m_player1)
+		{
+			CheckBackMovement(_state.P1);
+		}
+		if (m_player2)
+		{
+			CheckBackMovement(_state.P2);
+		}
+	}
+
+	// Logic Update
+	m_movementSimP1.UpdateLogic(_state.P1, _state.P1Input, FIXED_UPDATE_RATE);
+	m_movementSimP2.UpdateLogic(_state.P2, _state.P2Input, FIXED_UPDATE_RATE);
+
+	// Movement
+	m_movementSimP1.UpdateMovement(_state.P1, _state.P2, FIXED_UPDATE_RATE);
+	m_movementSimP2.UpdateMovement(_state.P2, _state.P1, FIXED_UPDATE_RATE);
+
+	// Facing
+	m_movementSimP1.UpdateFacing(_state.P1, _state.P2);
+	m_movementSimP2.UpdateFacing(_state.P2, _state.P1);
+	
 }
 
 const FInputPacket* UGameManager::GetInputQueueAtFrame(AFightingGame_PlayerController* _pc, int _frameNumber) const

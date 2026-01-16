@@ -2,11 +2,10 @@
 	"RemapUnityFiles": 
 	{
 		"Module.ASP.cpp.obj": [
-			"ASPCharacter.gen.cpp.obj",
 			"ASPGameMode.gen.cpp.obj",
+			"CharacterAnimInstance.gen.cpp.obj",
 			"CustomMoveComponent.gen.cpp.obj",
 			"DynamicCamera.gen.cpp.obj",
-			"FightingGame_PlayerController.gen.cpp.obj",
 			"GameManager.gen.cpp.obj",
 			"MoveableInterface.gen.cpp.obj",
 			"States.gen.cpp.obj",
@@ -16,24 +15,25 @@
 			"PerModuleInline.gen.cpp.obj",
 			"ASP.cpp.obj",
 			"ASPGameMode.cpp.obj",
+			"CharacterAnimInstance.cpp.obj",
 			"CustomMoveComponent.cpp.obj",
 			"DynamicCamera.cpp.obj",
-			"FightingGame_PlayerController.cpp.obj",
-			"FRollbackManager.cpp.obj",
 			"InputHandler.cpp.obj",
+			"LogicStateMachine.cpp.obj",
 			"MoveableInterface.cpp.obj",
-			"UCharacterBaseState.cpp.obj",
+			"StateMachine.cpp.obj",
+			"UCharacterAnimationBaseState.cpp.obj",
 			"UFighting_GameGameInstance.cpp.obj",
 			"UPushBoxComponent.cpp.obj",
 			"ASP.init.gen.cpp.obj",
-			"CharacterAnimInstance.gen.cpp.obj",
+			"ASPCharacter.gen.cpp.obj",
+			"FightingGame_PlayerController.gen.cpp.obj",
 			"AnimationStateMachine.cpp.obj",
 			"ASPCharacter.cpp.obj",
-			"CharacterAnimInstance.cpp.obj",
+			"FightingGame_PlayerController.cpp.obj",
+			"FRollbackManager.cpp.obj",
 			"GameManager.cpp.obj",
-			"LogicStateMachine.cpp.obj",
-			"StateMachine.cpp.obj",
-			"UCharacterAnimationBaseState.cpp.obj"
+			"UCharacterBaseState.cpp.obj"
 		]
 	}
 }

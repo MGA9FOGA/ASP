@@ -1,10 +1,10 @@
 #pragma once
 #include "UCharacterAnimationBaseState.h"
-#include "AnimationStateMachine.h"
+#include "AnimationResolver.h"
 #include "UCharacterAnimationBaseState.h"
 #include "UCharacterBaseState.h"
 
-class AnimationStateMachine;
+class AnimationResolver;
 
 class UCharacterState_Anim_MoveFwd : public UCharacterAnimationBaseState
 {

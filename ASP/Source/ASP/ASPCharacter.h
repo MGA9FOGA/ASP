@@ -25,6 +25,11 @@ class ASP_API AASPCharacter : public AActor
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UMaterialInterface> OriginalMaterial;
+	void SetRollbackDebugColor(bool bActive);
+	
 	AASPCharacter();
 	// =============================
 	// === Start ===
@@ -35,11 +40,6 @@ public:
 	// === Tick ===
 	// =============================
 	virtual void Tick(float _deltaSeconds) override;
-
-	// ===================================
-	// === Apply State from Simulaiont ===
-	// ===================================
-	void ApplyState(const FCharacterRollbackState& _state);
 
 	// =============================
 	// === Facing/Rotation ===

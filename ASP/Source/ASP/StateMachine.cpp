@@ -6,22 +6,22 @@
 #include "UCharacterBaseState.h"
 
 
-
 FFightingStateMachine::FFightingStateMachine()
 {
 }
 
 void FFightingStateMachine::Update(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
 {
-	if (!m_stateMap.Contains(_state.LogicState)) return;
+	_state.LogicStateTimer += _deltaTime;
+	
+	if (!m_stateMap.Contains(_state.LogicState))
+		return;
+	
 	auto& def = m_stateMap[_state.LogicState];
+	
+	_state.LogicStateTimer += _deltaTime;
+	def.State->UpdateState(_state, _input, _deltaTime);
 
-	// State-Update ausführen
-	if (def.State.IsValid())
-	{
-		_state.LogicStateTimer += _deltaTime;
-		def.State->UpdateState(_state, _input, _deltaTime);
-	}
 
 	for (const FStateTransition& transition : def.Transitions)
 	{
@@ -35,40 +35,19 @@ void FFightingStateMachine::Update(FCharacterState& _state, const FFrameInput& _
 
 void FFightingStateMachine::ChangeState(FCharacterState& _state, EStates _newState, const FFrameInput& _input)
 {
-	if (_newState == m_currentState)
+	if (_state.LogicState == _newState)
 		return;
 
-	// =============================
-	// === Exit old state ===
-	// =============================
-	if (m_stateMap.Contains(m_currentState))
-	{
-		auto& oldDef = m_stateMap[m_currentState];
-		if (oldDef.State.IsValid())
-		{
-			oldDef.State->ExitState(_state);
-		}
-	}
+	if (!m_stateMap.Contains(_newState))
+		return;
 
-	// =============================
-	// === Switch state ===
-	// =============================
-	_state.PreviousLogicState = m_currentState;
-	m_currentState = _newState;
+	_state.PreviousLogicState = _state.LogicState;
 	_state.LogicState = _newState;
 	_state.LogicStateTimer = 0.f;
 
-	// =============================
-	// === Enter new state ===
-	// =============================
-	if (m_stateMap.Contains(_newState))
-	{
-		auto& newDef = m_stateMap[_newState];
-		if (newDef.State.IsValid())
-		{
-			newDef.State->EnterState(_state, _input);
-		}
-	}
+
+	m_stateMap[_state.PreviousLogicState].State->ExitState(_state);
+	m_stateMap[_newState].State->EnterState(_state, _input);
 }
 
 

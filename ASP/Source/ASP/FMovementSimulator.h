@@ -1,6 +1,6 @@
 #pragma once
 #include "CoreMinimal.h"
-#include "AnimationStateMachine.h"
+#include "AnimationResolver.h"
 #include "LogicStateMachine.h"
 #include "StateMachine.h"
 #include "States.h"
@@ -31,8 +31,7 @@ struct FCharacterState
 	// =============================
 	bool bGrounded = false;
 	bool bJumpRequested = false;
-	bool bHasLeftGround = true;
-
+	
 	// =============================
 	// === Movement FLags ===
 	// =============================
@@ -54,7 +53,6 @@ struct FCharacterState
 	// =============================
 	float MoveAxis = .0f;
 	float JumpAxis = .0f;
-	bool bJumpPressed = false;
 
 	// =============================
 	// === Animation State ===
@@ -68,8 +66,8 @@ struct FCharacterState
 	// === Movement Settings ===
 	// =============================
 	float MoveSpeed = 300.f;
-	float JumpsStrength = 500.f;
-	float Gravity = 980.f;
+	float JumpsStrength = 550.f;
+	float Gravity = 1180.f;
 
 	// =============================
 	// === Stage bounds ===
@@ -83,7 +81,6 @@ struct FCharacterState
 	EStates LogicState = EStates::IDLE;
 	EStates PreviousLogicState = EStates::NONE;
 	float LogicStateTimer = 0.f;
-	float AnimStateTimer = 0.f;
 };
 
 struct FMovementSimulator
@@ -134,15 +131,15 @@ struct FMovementSimulator
 
 		if (_state.bGrounded && _other.bGrounded && dist < minDist)
 		{
-			float dir = FMath::Sign(deltaY); 
-			if (desiredAxis * dir > 0.f)      
+			float dir = FMath::Sign(deltaY);
+			if (desiredAxis * dir > 0.f)
 			{
-				desiredAxis = 0.f;            
+				desiredAxis = 0.f;
 			}
 		}
-		
+
 		_state.Velocity.Y = desiredAxis * _state.MoveSpeed;
-		
+
 		// =============================
 		// === Jump ===
 		// =============================
@@ -150,7 +147,10 @@ struct FMovementSimulator
 		{
 			_state.Velocity.Z = _state.JumpsStrength;
 			_state.bGrounded = false;
-			_state.bHasLeftGround = true;
+			_state.bJumpRequested = false;
+		}
+		else if (_state.bGrounded)
+		{
 			_state.bJumpRequested = false;
 		}
 
@@ -160,12 +160,12 @@ struct FMovementSimulator
 		_state.PreviousVelocityZ = _state.Velocity.Z;
 		if (!_state.bGrounded)
 			_state.Velocity.Z -= _state.Gravity * _deltaTime;
-		
+
 		// =============================
 		// === Integrate ===
 		// =============================
 		_state.Position += _state.Velocity * _deltaTime;
-		
+
 		// =============================
 		// === Groundcheck ===
 		// =============================
@@ -175,13 +175,13 @@ struct FMovementSimulator
 			_state.Velocity.Z = 0.f;
 			_state.bGrounded = true;
 		}
-
+		
 		// =============================
 		// === Clamp to Stage ===
 		// =============================
 		_state.Position.Y = FMath::Clamp(_state.Position.Y, _state.MinY, _state.MaxY);
 	}
-	
+
 	// =============================
 	// === Facing ===
 	// =============================
@@ -200,15 +200,15 @@ struct FMovementSimulator
 	}
 };
 
-class AnimationStateMachine;
+class AnimationResolver;
 
 struct FCharacterVisual
 {
-	AnimationStateMachine AnimMachine;
+	AnimationResolver AnimResolver;
 	AASPCharacter& Character;
 
 	FCharacterVisual(const LogicStateMachine& _machine, AASPCharacter& _inCharacter)
-		: AnimMachine(_machine), Character(_inCharacter)
+		: AnimResolver(), Character(_inCharacter)
 	{
 	}
 
@@ -219,30 +219,33 @@ struct FCharacterVisual
 		Character.SetActorRotation(FRotator(0, _state.Yaw, 0));
 	}
 
+	void PostVisualUpdate (FCharacterState& _state)
+	{
+		_state.AnimCommand = EAnimCommand::None;
+	}
+	
 	void ApplyAnimation(const FCharacterState& _state)
 	{
+		UAnimInstance* anim = Character.GetSkeletalMeshComponent()->GetAnimInstance();
+		if (!anim) return;
+
 		if (_state.AnimCommand != EAnimCommand::PlayMontage)
-		{
 			return;
-		}
 
 		UCharacterAnimationSet* animationSet = Character.GetAnimationSet();
 		if (!animationSet) return;
 
 		UAnimMontage* montage = animationSet->MontageMap.FindRef(_state.AnimState);
 		if (!montage) return;
-
-		if (UAnimInstance* anim = Character.GetSkeletalMeshComponent()->GetAnimInstance())
+		
+		if (anim->GetCurrentActiveMontage() != montage)
 		{
-			if (!anim->Montage_IsPlaying(montage))
-			{
-				anim->Montage_Play(montage, _state.AnimPlayRate);
-			}
+			anim->Montage_Play(montage, _state.AnimPlayRate);
 		}
 	}
 
 	void UpdateAnimation(FCharacterState& _state, const FFrameInput& _input, float _deltaTime)
 	{
-		AnimMachine.Update(_state, _input, _deltaTime);
+		AnimResolver.Update(_state, _input, _deltaTime);
 	}
 };

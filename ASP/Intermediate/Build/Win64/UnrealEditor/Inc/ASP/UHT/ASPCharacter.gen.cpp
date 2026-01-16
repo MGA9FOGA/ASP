@@ -24,6 +24,7 @@ COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_UCapsuleComponent_NoRegister();
+ENGINE_API UClass* Z_Construct_UClass_UMaterialInterface_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_UPrimitiveComponent_NoRegister();
 ENGINE_API UClass* Z_Construct_UClass_USkeletalMeshComponent_NoRegister();
 ENGINE_API UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
@@ -497,6 +498,11 @@ struct Z_Construct_UClass_AASPCharacter_Statics
 		{ "IncludePath", "ASPCharacter.h" },
 		{ "ModuleRelativePath", "ASPCharacter.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_OriginalMaterial_MetaData[] = {
+		{ "AllowPrivateAccess", "true" },
+		{ "Category", "Camera" },
+		{ "ModuleRelativePath", "ASPCharacter.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Mesh_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
 		{ "Category", "Character" },
@@ -576,6 +582,7 @@ struct Z_Construct_UClass_AASPCharacter_Statics
 		{ "ModuleRelativePath", "ASPCharacter.h" },
 	};
 #endif // WITH_METADATA
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_OriginalMaterial;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Mesh;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Capsule;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_PushBox;
@@ -603,6 +610,7 @@ struct Z_Construct_UClass_AASPCharacter_Statics
 	};
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_OriginalMaterial = { "OriginalMaterial", nullptr, (EPropertyFlags)0x0114000000020015, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, OriginalMaterial), Z_Construct_UClass_UMaterialInterface_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OriginalMaterial_MetaData), NewProp_OriginalMaterial_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_Mesh = { "Mesh", nullptr, (EPropertyFlags)0x01240800000a001d, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, Mesh), Z_Construct_UClass_USkeletalMeshComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Mesh_MetaData), NewProp_Mesh_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_Capsule = { "Capsule", nullptr, (EPropertyFlags)0x01240800000a001d, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, Capsule), Z_Construct_UClass_UCapsuleComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Capsule_MetaData), NewProp_Capsule_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_PushBox = { "PushBox", nullptr, (EPropertyFlags)0x01240800000a001d, UECodeGen_Private::EPropertyGenFlags::Object | UECodeGen_Private::EPropertyGenFlags::ObjectPtr, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, PushBox), Z_Construct_UClass_UPushBoxComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PushBox_MetaData), NewProp_PushBox_MetaData) };
@@ -615,6 +623,7 @@ const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_AAS
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_OnCustomBeginOverlap = { "OnCustomBeginOverlap", nullptr, (EPropertyFlags)0x0020080010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, OnCustomBeginOverlap), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomBeginOverlap_MetaData), NewProp_OnCustomBeginOverlap_MetaData) }; // 6881770
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_AASPCharacter_Statics::NewProp_OnCustomEndOverlap = { "OnCustomEndOverlap", nullptr, (EPropertyFlags)0x0020080010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AASPCharacter, OnCustomEndOverlap), Z_Construct_UDelegateFunction_ASP_OnCustomOverlap__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCustomEndOverlap_MetaData), NewProp_OnCustomEndOverlap_MetaData) }; // 6881770
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AASPCharacter_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_OriginalMaterial,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_Mesh,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_Capsule,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AASPCharacter_Statics::NewProp_PushBox,
@@ -668,10 +677,10 @@ AASPCharacter::~AASPCharacter() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AASPCharacter, AASPCharacter::StaticClass, TEXT("AASPCharacter"), &Z_Registration_Info_UClass_AASPCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AASPCharacter), 4156846159U) },
+		{ Z_Construct_UClass_AASPCharacter, AASPCharacter::StaticClass, TEXT("AASPCharacter"), &Z_Registration_Info_UClass_AASPCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AASPCharacter), 863534762U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_2610662512(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_2088900566(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_ASPCharacter_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

@@ -127,13 +127,13 @@
     <ClCompile Include="..\..\Source\ASP\StateMachine.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\States.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterAnimationBaseState.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterAnimationBaseState.h">
-      <Filter>Source\ASP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ASP\UCharacterAnimationSet.cpp">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterAnimationSet.h">
@@ -154,7 +154,10 @@
     <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Landing.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_Move.h">
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_MoveBwd.h">
+      <Filter>Source\ASP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_MoveFwd.h">
       <Filter>Source\ASP</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ASP\UCharacterState_Anim_StartJump.h">

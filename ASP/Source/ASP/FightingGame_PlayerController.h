@@ -42,6 +42,8 @@ public:
 	// ===pushes input packets to GameManager ===
 	// =============================
 	void Update(float _deltatime);
+	void SampleInput();
+	void CommitInput(int32 _frame);
 	
 	// =============================
 	// === Player input handlers ===
@@ -58,6 +60,7 @@ public:
 	void OnAttack2Released();
 	void OnPressedBlock();
 	void OnBlockReleased();
+	void OnRollbackPressed();
 
 	// =============================
 	// === set ref to Character(cosmetic) ===
@@ -90,7 +93,9 @@ private:
 
 	int m_playerID;
 	
-
+	FRawInput m_raw;
+	int32 m_lastSentFrame = -1;
+	
 	// =============================
 	// === Jump Input Action ===
 	// =============================
@@ -102,6 +107,13 @@ private:
 	// =============================
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
+
+	// =============================
+	// === Rollback Input Action ===
+	// =============================
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* RollbackAction;
+	bool bDebugRollbackPressed = false;
 
 	// =============================
 	// === Deadzone ===
