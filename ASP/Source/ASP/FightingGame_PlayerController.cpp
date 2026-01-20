@@ -177,7 +177,7 @@ void AFightingGame_PlayerController::CommitInput(int32 _frame)
 	// ==============================
 	// 4. HOLDING BACK INPUT 
 	// ==============================
-	constexpr int32 FakeLagFrames = 120;
+	constexpr int32 FakeLagFrames = 20;
 
 	if (currentFrame == HoldInputUntilFrame)
 	{
@@ -201,8 +201,11 @@ void AFightingGame_PlayerController::CommitInput(int32 _frame)
 		);
 
 		m_gameManager->AddInputToQueue(this, latePacket);
-
 		HoldInputUntilFrame = -1;
+
+		FInputPacket packet(currentFrame, encoded, 0, 0);
+		m_gameManager->AddInputToQueue(this, packet);
+		
 		return;
 	}
 

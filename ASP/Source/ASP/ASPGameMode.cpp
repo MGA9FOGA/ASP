@@ -92,6 +92,7 @@ void AASPGameMode::StartOrder()
 	m_gameManager->RegisterPlayer(m_playerController1->GetPlayerID(), m_player1, m_playerController1, m_player1Position, m_player1Position.Y);
 	m_gameManager->RegisterPlayer(m_playerController2->GetPlayerID(), m_player2, m_playerController2, m_player2Position, m_player2Position.Y);
 	
+	
 	UE_LOG(LogTemp, Warning, TEXT("PC1 Local: %d"), m_playerController1->IsLocalController());
 	UE_LOG(LogTemp, Warning, TEXT("PC2 Local: %d"), m_playerController2->IsLocalController());
 

@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define ASP_ASPGameMode_generated_h
 
-#define FID_ASP_Source_ASP_ASPGameMode_h_16_INCLASS_NO_PURE_DECLS \
+#define FID_ASP_Source_ASP_ASPGameMode_h_17_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAASPGameMode(); \
 	friend struct Z_Construct_UClass_AASPGameMode_Statics; \
@@ -23,7 +23,7 @@ public: \
 	DECLARE_SERIALIZER(AASPGameMode)
 
 
-#define FID_ASP_Source_ASP_ASPGameMode_h_16_ENHANCED_CONSTRUCTORS \
+#define FID_ASP_Source_ASP_ASPGameMode_h_17_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	AASPGameMode(AASPGameMode&&); \
@@ -35,12 +35,12 @@ public: \
 	ASP_API virtual ~AASPGameMode();
 
 
-#define FID_ASP_Source_ASP_ASPGameMode_h_13_PROLOG
-#define FID_ASP_Source_ASP_ASPGameMode_h_16_GENERATED_BODY \
+#define FID_ASP_Source_ASP_ASPGameMode_h_14_PROLOG
+#define FID_ASP_Source_ASP_ASPGameMode_h_17_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_ASP_Source_ASP_ASPGameMode_h_16_INCLASS_NO_PURE_DECLS \
-	FID_ASP_Source_ASP_ASPGameMode_h_16_ENHANCED_CONSTRUCTORS \
+	FID_ASP_Source_ASP_ASPGameMode_h_17_INCLASS_NO_PURE_DECLS \
+	FID_ASP_Source_ASP_ASPGameMode_h_17_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

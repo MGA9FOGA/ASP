@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "ASPGameMode.generated.h"
 
+class ADebugStateActor;
 class UGameManager;
 class AASPCharacter;
 class AFightingGame_PlayerController;

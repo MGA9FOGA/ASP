@@ -44,6 +44,11 @@ struct Z_Construct_UClass_UGameManager_Statics
 		{ "ToolTip", "* === GAME MANAGER ===\n* =============================" },
 #endif
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_bDebugRollbackOnDesync_MetaData[] = {
+		{ "AllowPrivateAccess", "TRUE" },
+		{ "Category", "GameManager" },
+		{ "ModuleRelativePath", "GameManager.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_m_playerController1_MetaData[] = {
 		{ "Category", "GameManager" },
 #if !UE_BUILD_SHIPPING
@@ -77,6 +82,8 @@ struct Z_Construct_UClass_UGameManager_Statics
 #endif
 	};
 #endif // WITH_METADATA
+	static void NewProp_m_bDebugRollbackOnDesync_SetBit(void* Obj);
+	static const UECodeGen_Private::FBoolPropertyParams NewProp_m_bDebugRollbackOnDesync;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_playerController1;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_playerController2;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_m_player1;
@@ -89,12 +96,18 @@ struct Z_Construct_UClass_UGameManager_Statics
 	};
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
+void Z_Construct_UClass_UGameManager_Statics::NewProp_m_bDebugRollbackOnDesync_SetBit(void* Obj)
+{
+	((UGameManager*)Obj)->m_bDebugRollbackOnDesync = 1;
+}
+const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UGameManager_Statics::NewProp_m_bDebugRollbackOnDesync = { "m_bDebugRollbackOnDesync", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(UGameManager), &Z_Construct_UClass_UGameManager_Statics::NewProp_m_bDebugRollbackOnDesync_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_bDebugRollbackOnDesync_MetaData), NewProp_m_bDebugRollbackOnDesync_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameManager_Statics::NewProp_m_playerController1 = { "m_playerController1", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGameManager, m_playerController1), Z_Construct_UClass_AFightingGame_PlayerController_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_playerController1_MetaData), NewProp_m_playerController1_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameManager_Statics::NewProp_m_playerController2 = { "m_playerController2", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGameManager, m_playerController2), Z_Construct_UClass_AFightingGame_PlayerController_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_playerController2_MetaData), NewProp_m_playerController2_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameManager_Statics::NewProp_m_player1 = { "m_player1", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGameManager, m_player1), Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_player1_MetaData), NewProp_m_player1_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameManager_Statics::NewProp_m_player2 = { "m_player2", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGameManager, m_player2), Z_Construct_UClass_AASPCharacter_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_player2_MetaData), NewProp_m_player2_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UGameManager_Statics::NewProp_m_camera = { "m_camera", nullptr, (EPropertyFlags)0x0040000000000001, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGameManager, m_camera), Z_Construct_UClass_ADynamicCamera_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_m_camera_MetaData), NewProp_m_camera_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UGameManager_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameManager_Statics::NewProp_m_bDebugRollbackOnDesync,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameManager_Statics::NewProp_m_playerController1,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameManager_Statics::NewProp_m_playerController2,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGameManager_Statics::NewProp_m_player1,
@@ -142,10 +155,10 @@ UGameManager::~UGameManager() {}
 struct Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UGameManager, UGameManager::StaticClass, TEXT("UGameManager"), &Z_Registration_Info_UClass_UGameManager, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGameManager), 1790776216U) },
+		{ Z_Construct_UClass_UGameManager, UGameManager::StaticClass, TEXT("UGameManager"), &Z_Registration_Info_UClass_UGameManager, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGameManager), 1744016970U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_742254564(TEXT("/Script/ASP"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_967130296(TEXT("/Script/ASP"),
 	Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ASP_Source_ASP_GameManager_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

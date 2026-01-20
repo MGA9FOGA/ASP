@@ -3,7 +3,6 @@
 
 #include "GameManager.h"
 #include "ASPCharacter.h"
-
 #include "DynamicCamera.h"
 #include "FightingGame_PlayerController.h"
 
@@ -61,6 +60,15 @@ void UGameManager::Tick(float _deltaTime)
 	if (!GetWorld() || !GetWorld()->IsGameWorld())
 		return;
 
+	if (m_bDebugRollbackOnDesync)
+	{
+		for (auto It = BeforeRollbackStates.CreateIterator(); It; ++It)
+		{
+			SpawnSnapshotDebug(It.Key(), It.Value(), true, false);
+		}
+		m_bDebugRollbackOnDesync = false;
+	}
+	
 	m_accumulatedTime += _deltaTime;
 	while (m_accumulatedTime >= FIXED_UPDATE_RATE)
 	{
@@ -207,7 +215,7 @@ FFrameInput UGameManager::BuildPlayerInput(AFightingGame_PlayerController* _pc, 
 	// =============================
 	// 2. Prediction
 	// =============================
-	constexpr int32 MaxPredictionFrames = 130;
+	constexpr int32 MaxPredictionFrames = 30;
 	if (const FStoredFrameInput* last = history.Find(_frame - 1))
 	{
 		const int32 predictedCount = _frame - last->SourceFrame;
@@ -246,63 +254,6 @@ FFrameInput UGameManager::BuildPlayerInput(AFightingGame_PlayerController* _pc, 
 	// =============================
 	FFrameInput empty{};
 	return empty;
-}
-
-void UGameManager::TriggerDebugRollback(int32 _framesBack)
-{
-	const int32 current = FrameNumber;
-	const int32 target = FMath::Max(0, current - _framesBack);
-
-	UE_LOG(LogTemp, Warning,
-	       TEXT("[DEBUG] Start rollback from %d to %d"), current, target);
-
-	DebugRollbackCurrentFrame = target;
-	DebugRollbackTargetFrame = current;
-
-	if (!m_rollbackManager.LoadFrame(target, m_currentGameState))
-	{
-		UE_LOG(LogTemp, Error, TEXT("Debug rollback failed"));
-		return;
-	}
-
-	if (m_player1)
-		m_player1->SetRollbackDebugColor(true);
-
-	GetWorld()->GetTimerManager().SetTimer(
-		DebugRollbackTimer,
-		this,
-		&UGameManager::StepDebugRollback,
-		0.5f,
-		true
-	);
-}
-
-void UGameManager::StepDebugRollback()
-{
-	if (DebugRollbackCurrentFrame >= DebugRollbackTargetFrame)
-	{
-		GetWorld()->GetTimerManager().ClearTimer(DebugRollbackTimer);
-
-		if (m_player1)
-			m_player1->SetRollbackDebugColor(false);
-
-		ApplyGameStateToActors(m_currentGameState);
-
-		UE_LOG(LogTemp, Warning, TEXT("[DEBUG] Rollback finished"));
-		return;
-	}
-
-	UE_LOG(LogTemp, Warning,
-	       TEXT("[DEBUG] Re-sim frame %d"), DebugRollbackCurrentFrame);
-
-	FixedGameUpdateForRollback(
-		DebugRollbackCurrentFrame,
-		m_currentGameState
-	);
-
-	ApplyGameStateToActors(m_currentGameState);
-
-	DebugRollbackCurrentFrame++;
 }
 
 void UGameManager::RegisterPlayer(int32 _playerIndex, AASPCharacter* _character,
@@ -371,17 +322,24 @@ void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _pc, const FI
 		FFrameInput input;
 		input.Buttons = _packet.Buttons;
 		input.Action = CheckForCombo(_pc, _packet.FrameNumber);
-		
+
 		FStoredFrameInput& entry = history[_packet.FrameNumber];
-		entry.Packet = input;      
+		entry.Packet = input;
 		entry.bPredicted = false;
 		
 		UE_LOG(LogTemp, Warning, TEXT("[DEBUG] Rollbacked frame %d"), _packet.FrameNumber);
+
+		for (const auto& Pair : m_rollbackManager.GetFrameSnapshots())
+		{
+			BeforeRollbackStates.Add(Pair.Key, Pair.Value.GameState);
+		}
+		
+		m_bDebugRollbackOnDesync = true;
 		m_rollbackManager.RollbackToFrame(
 			_packet.FrameNumber,
 			FrameNumber,
 			m_currentGameState,
-			[this, history](int32 _simFrame, FGameState& _state)
+			[this](int32 _simFrame, FGameState& _state)
 			{
 				FixedGameUpdateForRollback(_simFrame, _state);
 			}
@@ -389,7 +347,7 @@ void UGameManager::AddInputToQueue(AFightingGame_PlayerController* _pc, const FI
 	}
 
 	// Cleanup
-	const int32 MaxHistory = 130;
+	const int32 MaxHistory = 30;
 	const int32 minFrame = _packet.FrameNumber - MaxHistory;
 
 	for (auto It = playerMap.CreateIterator(); It; ++It)
@@ -441,7 +399,10 @@ void UGameManager::FixedGameUpdateForRollback(int32 _frame, FGameState& _state)
 	// Facing
 	m_movementSimP1.UpdateFacing(_state.P1, _state.P2);
 	m_movementSimP2.UpdateFacing(_state.P2, _state.P1);
-	
+
+	m_rollbackManager.SaveFrame(_frame, _state);
+
+	SpawnSnapshotDebug(_frame, _state, false, false);
 }
 
 const FInputPacket* UGameManager::GetInputQueueAtFrame(AFightingGame_PlayerController* _pc, int _frameNumber) const
@@ -483,6 +444,60 @@ EInputAction UGameManager::CheckForCombo(AFightingGame_PlayerController* _pc, in
 	if (recentActions.Num() == 0)
 		return EInputAction::Idle;
 	return recentActions.Last();
+}
+
+void UGameManager::SpawnSnapshotDebug(int32 _frame, const FGameState& _state, bool _bool, bool _bIsLogicstate)
+{
+	if (!m_cachedWorld.IsValid()) return;
+	
+	FVector Pos = _state.P1.Position;
+	
+	FColor Color = (_bIsLogicstate) ? GetColorForState(_state.P1.LogicState) : GetColorForState(_state.P1.AnimState);
+
+	if (m_playerController1)
+	{
+		if (TMap<int32, FStoredFrameInput>* History =
+			m_inputHistory.Find(m_playerController1))
+		{
+			if (const FStoredFrameInput* Input = History->Find(_frame))
+			{
+				if (Input->bPredicted)
+				{
+					Color = FColor::Red; 
+				}
+			}
+		}
+	}
+	if (_bool)
+	{
+		DrawDebugPoint(
+			m_cachedWorld.Get(),
+			Pos + FVector(5.f, 0.f, 0.f),
+			15.f,
+			Color,
+			true,
+			30.f
+		);
+	}
+	DrawDebugPoint(
+		m_cachedWorld.Get(),
+		Pos,
+		15.f,
+		Color,
+		true,
+		30.f
+	);
+
+	//Pos = _state.P2.Position + FVector(0, 0, _frame * 5.f);
+	//Color = FColor::MakeFromHSV8(_frame * 10 % 255, 200, 255);
+	//DrawDebugPoint(
+	//	m_cachedWorld.Get(),
+	//	Pos,
+	//	15.f,
+	//	Color,
+	//	true,
+	//	30.f
+	//);
 }
 
 void UGameManager::ApplyGameStateToActors(const FGameState& _state)

@@ -9,7 +9,7 @@ void FRollbackManager::SaveFrame(int32 _frame, const FGameState& _gameState)
 
 	snapshot.RNGSeed = FMath::Rand();
 
-	m_history.Add(_frame, snapshot);
+	m_history.Contains(_frame) ? m_history[_frame] = snapshot : m_history.Add(_frame, snapshot);
 
 	const int32 minFrame = _frame - MaxStoredFrames;
 	//CreateIterator = create the Iterator of the map

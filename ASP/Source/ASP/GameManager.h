@@ -13,6 +13,7 @@
 
 #include "GameManager.generated.h"
 
+class ADebugStateActor;
 class AASPCharacter;
 class AFightingGame_PlayerController;
 class ADynamicCamera;
@@ -69,12 +70,6 @@ public:
 	FORCEINLINE int32 GetFrameNumber() const { return FrameNumber; }
 
 private:
-	bool bDegubRollback = false;
-	FTimerHandle DebugRollbackTimer;
-	TArray<int32> DebugRollbackFrames;
-	int32 DebugRollbackIndex = 0;
-	int32 DebugRollbackCurrentFrame = 0;
-	int32 DebugRollbackTargetFrame = 0;
 	/* =============================
 	 * === FIXED UPDATE ===
 	 * ============================= */
@@ -93,8 +88,6 @@ private:
 	void BuildFrameInput(int32 _frame, FGameState& _outState);
 	FFrameInput BuildPlayerInput(AFightingGame_PlayerController* _pc, int32 _frame);
 public:
-	void TriggerDebugRollback(int32 _framesBack);
-	void StepDebugRollback();
 
 	/* =============================
 	* === STATE APPLY ===
@@ -114,6 +107,10 @@ public:
 
 private:
 
+	UPROPERTY(EditAnywhere,meta = (AllowPrivateAccess=true))
+	bool m_bDebugRollbackOnDesync = false;
+	void SpawnSnapshotDebug(int32 _frame, const FGameState& _state, bool _bool, bool _bIsLogicstate);
+	TMap<int32, FGameState> BeforeRollbackStates;
 	/* =============================
 	 * Core State
 	 * ============================= */

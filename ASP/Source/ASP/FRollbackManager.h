@@ -29,8 +29,9 @@ public:
 		TFunctionRef<void(int32, FGameState&)> _simulateFrame
 	);
 
+	TMap<int32, FFrameSnapshot> GetFrameSnapshots() const{return m_history;}
 private:
 	TMap<int32, FFrameSnapshot> m_history;
-	static constexpr int32 MaxStoredFrames = 130;//7
+	static constexpr int32 MaxStoredFrames = 30;//7
 	
 };
